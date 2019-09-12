@@ -1,0 +1,166 @@
+2019-09-10 19:41:08.308  INFO 10612 --- [main] c.d.dongnimall.DongniMallApplication     : Starting DongniMallApplication on LAPTOP-S5O42F9A with PID 10612 (C:\Users\56979\IdeaProjects\dongniMall\target\classes started by 56979 in C:\Users\56979\IdeaProjects\dongniMall)
+2019-09-10 19:41:08.311  INFO 10612 --- [main] c.d.dongnimall.DongniMallApplication     : No active profile set, falling back to default profiles: default
+2019-09-10 19:41:09.050  WARN 10612 --- [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.dongni.dongnimall]' package. Please check your configuration.
+2019-09-10 19:41:09.593  INFO 10612 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8081 (http)
+2019-09-10 19:41:09.617  INFO 10612 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-09-10 19:41:09.617  INFO 10612 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.24]
+2019-09-10 19:41:09.736  INFO 10612 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-09-10 19:41:09.736  INFO 10612 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1382 ms
+2019-09-10 19:41:09.966  INFO 10612 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-09-10 19:41:10.302  INFO 10612 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8081 (http) with context path ''
+2019-09-10 19:41:10.306  INFO 10612 --- [main] c.d.dongnimall.DongniMallApplication     : Started DongniMallApplication in 2.497 seconds (JVM running for 4.084)
+2019-09-10 19:45:47.161  INFO 10612 --- [Thread-8] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2019/09/10-19:45 [main] INFO  com.dongni.dongnimall.DongniMallApplication- Starting DongniMallApplication on LAPTOP-S5O42F9A with PID 5968 (C:\Users\56979\IdeaProjects\dongniMall\target\classes started by 56979 in C:\Users\56979\IdeaProjects\dongniMall)
+2019/09/10-19:45 [main] INFO  com.dongni.dongnimall.DongniMallApplication- No active profile set, falling back to default profiles: default
+2019/09/10-19:45 [main] WARN  org.mybatis.spring.mapper.ClassPathMapperScanner- No MyBatis mapper was found in '[com.dongni.dongnimall]' package. Please check your configuration.
+2019/09/10-19:45 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer- Tomcat initialized with port(s): 8081 (http)
+2019/09/10-19:45 [main] INFO  org.apache.catalina.core.StandardService- Starting service [Tomcat]
+2019/09/10-19:45 [main] INFO  org.apache.catalina.core.StandardEngine- Starting Servlet engine: [Apache Tomcat/9.0.24]
+2019/09/10-19:45 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]- Initializing Spring embedded WebApplicationContext
+2019/09/10-19:45 [main] INFO  org.springframework.web.context.ContextLoader- Root WebApplicationContext: initialization completed in 1077 ms
+2019/09/10-19:45 [main] INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor- Initializing ExecutorService 'applicationTaskExecutor'
+2019/09/10-19:45 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer- Tomcat started on port(s): 8081 (http) with context path ''
+2019/09/10-19:45 [main] INFO  com.dongni.dongnimall.DongniMallApplication- Started DongniMallApplication in 2.023 seconds (JVM running for 2.995)
+2019-09-10-19:48 [main] INFO  com.dongni.dongnimall.DongniMallApplication- Starting DongniMallApplication on LAPTOP-S5O42F9A with PID 32376 (C:\Users\56979\IdeaProjects\dongniMall\target\classes started by 56979 in C:\Users\56979\IdeaProjects\dongniMall)
+2019-09-10-19:48 [main] INFO  com.dongni.dongnimall.DongniMallApplication- No active profile set, falling back to default profiles: default
+2019-09-10-19:48 [main] WARN  org.mybatis.spring.mapper.ClassPathMapperScanner- No MyBatis mapper was found in '[com.dongni.dongnimall]' package. Please check your configuration.
+2019-09-10-19:48 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer- Tomcat initialized with port(s): 8081 (http)
+2019-09-10-19:48 [main] INFO  org.apache.catalina.core.StandardService- Starting service [Tomcat]
+2019-09-10-19:48 [main] INFO  org.apache.catalina.core.StandardEngine- Starting Servlet engine: [Apache Tomcat/9.0.24]
+2019-09-10-19:48 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]- Initializing Spring embedded WebApplicationContext
+2019-09-10-19:48 [main] INFO  org.springframework.web.context.ContextLoader- Root WebApplicationContext: initialization completed in 1170 ms
+2019-09-10-19:48 [main] INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor- Initializing ExecutorService 'applicationTaskExecutor'
+2019-09-10-19:48 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer- Tomcat started on port(s): 8081 (http) with context path ''
+2019-09-10-19:48 [main] INFO  com.dongni.dongnimall.DongniMallApplication- Started DongniMallApplication in 2.076 seconds (JVM running for 3.011)
+2019-09-10-19:53 [main] INFO  com.dongni.dongnimall.DongniMallApplication- Starting DongniMallApplication on LAPTOP-S5O42F9A with PID 11156 (C:\Users\56979\IdeaProjects\dongniMall\target\classes started by 56979 in C:\Users\56979\IdeaProjects\dongniMall)
+2019-09-10-19:53 [main] INFO  com.dongni.dongnimall.DongniMallApplication- No active profile set, falling back to default profiles: default
+2019-09-10-19:53 [main] WARN  org.mybatis.spring.mapper.ClassPathMapperScanner- No MyBatis mapper was found in '[com.dongni.dongnimall]' package. Please check your configuration.
+2019-09-10-19:53 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer- Tomcat initialized with port(s): 8081 (http)
+2019-09-10-19:53 [main] INFO  org.apache.catalina.core.StandardService- Starting service [Tomcat]
+2019-09-10-19:53 [main] INFO  org.apache.catalina.core.StandardEngine- Starting Servlet engine: [Apache Tomcat/9.0.24]
+2019-09-10-19:53 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]- Initializing Spring embedded WebApplicationContext
+2019-09-10-19:53 [main] INFO  org.springframework.web.context.ContextLoader- Root WebApplicationContext: initialization completed in 1912 ms
+2019-09-10-19:53 [main] INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor- Initializing ExecutorService 'applicationTaskExecutor'
+2019-09-10-19:53 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer- Tomcat started on port(s): 8081 (http) with context path ''
+2019-09-10-19:53 [main] INFO  com.dongni.dongnimall.DongniMallApplication- Started DongniMallApplication in 3.33 seconds (JVM running for 4.78)
+2019-09-10-19:56 [main] INFO  com.dongni.dongnimall.DongniMallApplication- Starting DongniMallApplication on LAPTOP-S5O42F9A with PID 31492 (C:\dongni2019\dongniMall\src\dongniMall\target\classes started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-19:56 [main] INFO  com.dongni.dongnimall.DongniMallApplication- No active profile set, falling back to default profiles: default
+2019-09-10-19:56 [main] WARN  org.mybatis.spring.mapper.ClassPathMapperScanner- No MyBatis mapper was found in '[com.dongni.dongnimall]' package. Please check your configuration.
+2019-09-10-19:56 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer- Tomcat initialized with port(s): 8081 (http)
+2019-09-10-19:56 [main] INFO  org.apache.catalina.core.StandardService- Starting service [Tomcat]
+2019-09-10-19:56 [main] INFO  org.apache.catalina.core.StandardEngine- Starting Servlet engine: [Apache Tomcat/9.0.24]
+2019-09-10-19:56 [main] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]- Initializing Spring embedded WebApplicationContext
+2019-09-10-19:56 [main] INFO  org.springframework.web.context.ContextLoader- Root WebApplicationContext: initialization completed in 1590 ms
+2019-09-10-19:56 [main] INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor- Initializing ExecutorService 'applicationTaskExecutor'
+2019-09-10-19:56 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer- Tomcat started on port(s): 8081 (http) with context path ''
+2019-09-10-19:56 [main] INFO  com.dongni.dongnimall.DongniMallApplication- Started DongniMallApplication in 2.848 seconds (JVM running for 3.854)
+2019-09-10-20:15 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 26680 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:15 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:15 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 5.553 seconds (JVM running for 7.581)
+2019-09-10-20:15 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:15 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:15 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:15 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
+2019-09-10-20:19 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 21684 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:19 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:19 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.752 seconds (JVM running for 4.827)
+2019-09-10-20:19 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:19 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:19 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:19 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
+2019-09-10-20:21 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 26864 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:21 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:21 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.429 seconds (JVM running for 4.689)
+2019-09-10-20:21 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:21 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:21 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:21 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
+2019-09-10-20:29 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 15708 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:29 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:29 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.324 seconds (JVM running for 4.364)
+2019-09-10-20:29 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:30 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 3636 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:30 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:30 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.497 seconds (JVM running for 4.547)
+2019-09-10-20:30 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:30 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:30 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:30 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
+2019-09-10-20:31 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 27432 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:31 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:31 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.383 seconds (JVM running for 4.534)
+2019-09-10-20:31 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:31 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:31 [main] INFO  p6spy-  Consume Time：12 ms 2019-09-10 20:31:13
+ Execute SQL：SELECT id,name,create_date FROM bill_shop
+
+2019-09-10-20:31 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:31 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
+2019-09-10-20:35 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 30148 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:35 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:35 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.703 seconds (JVM running for 4.942)
+2019-09-10-20:38 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 25372 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:38 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:38 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.33 seconds (JVM running for 4.351)
+2019-09-10-20:38 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:38 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:38 [main] INFO  p6spy-  Consume Time：18 ms 2019-09-10 20:38:12
+ Execute SQL：SELECT COUNT(1) FROM bill_shop
+
+2019-09-10-20:38 [main] INFO  p6spy-  Consume Time：0 ms 2019-09-10 20:38:12
+ Execute SQL：select * from bill_shop LIMIT 1,1
+
+2019-09-10-20:38 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:38 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
+2019-09-10-20:39 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 17332 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:39 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:39 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.407 seconds (JVM running for 4.405)
+2019-09-10-20:39 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:39 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:39 [main] INFO  p6spy-  Consume Time：16 ms 2019-09-10 20:39:04
+ Execute SQL：SELECT COUNT(1) FROM bill_shop
+
+2019-09-10-20:39 [main] INFO  p6spy-  Consume Time：0 ms 2019-09-10 20:39:04
+ Execute SQL：select * from bill_shop LIMIT 2,1
+
+2019-09-10-20:39 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:39 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
+2019-09-10-20:39 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 27596 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:39 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:39 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.765 seconds (JVM running for 4.873)
+2019-09-10-20:39 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:39 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:39 [main] INFO  p6spy-  Consume Time：26 ms 2019-09-10 20:39:24
+ Execute SQL：SELECT COUNT(1) FROM bill_shop
+
+2019-09-10-20:39 [main] INFO  p6spy-  Consume Time：0 ms 2019-09-10 20:39:24
+ Execute SQL：select * from bill_shop LIMIT 2,2
+
+2019-09-10-20:39 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:39 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
+2019-09-10-20:41 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 21388 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:41 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:41 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.615 seconds (JVM running for 4.583)
+2019-09-10-20:41 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:41 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:41 [main] INFO  p6spy-  Consume Time：19 ms 2019-09-10 20:41:42
+ Execute SQL：SELECT COUNT(1) FROM bill_shop WHERE name = '1'
+
+2019-09-10-20:41 [main] INFO  p6spy-  Consume Time：0 ms 2019-09-10 20:41:42
+ Execute SQL：select * from bill_shop where name='1' LIMIT 2,2
+
+2019-09-10-20:41 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:41 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
+2019-09-10-20:42 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Starting DongniMallApplicationTests on LAPTOP-S5O42F9A with PID 29436 (started by 56979 in C:\dongni2019\dongniMall\src\dongniMall)
+2019-09-10-20:42 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- No active profile set, falling back to default profiles: default
+2019-09-10-20:42 [main] INFO  com.dongni.dongnimall.DongniMallApplicationTests- Started DongniMallApplicationTests in 3.381 seconds (JVM running for 4.401)
+2019-09-10-20:42 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Starting...
+2019-09-10-20:42 [main] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Start completed.
+2019-09-10-20:42 [main] INFO  p6spy-  Consume Time：22 ms 2019-09-10 20:42:20
+ Execute SQL：SELECT COUNT(1) FROM bill_shop WHERE name = '1'
+
+2019-09-10-20:42 [main] INFO  p6spy-  Consume Time：0 ms 2019-09-10 20:42:20
+ Execute SQL：select * from bill_shop where name='1' LIMIT 0,2
+
+2019-09-10-20:42 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown initiated...
+2019-09-10-20:42 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource- HikariPool-1 - Shutdown completed.
