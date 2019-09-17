@@ -1,0 +1,149 @@
+{
+  "clearInfo": {
+    "clearUrl": "api/clear.json"
+  },
+  "homeInfo": {
+    "title": "首页",
+    "icon": "fa fa-home",
+    "href": "page/welcome.html"
+  },
+  "logoInfo": {
+    "title": "智选后台管理系统",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": {
+    "0": {
+      "child": [
+        {
+          "title": "首页管理",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "轮播大图管理",
+              "href": "page/banner.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "推荐小图管理",
+              "href": "page/small-image.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "菜单管理",
+          "href": "",
+          "icon": "fa fa-bars",
+          "target": "_self",
+          "child": [
+            {
+              "title": "菜单目录管理",
+              "href": "page/page3.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "新闻资讯管理",
+              "href": "",
+              "icon": "fa fa-tachometer",
+              "target": "_self",
+              "child": [
+                {
+                  "title": "最新文章管理",
+                  "href": "page/page4.html",
+                  "icon": "fa fa-tachometer",
+                  "target": "_self"
+                }
+              ]
+            },
+            {
+              "title": "宣传模版管理",
+              "href": "page/page5.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "教学视频管理",
+              "href": "page/teach-video.html",
+              "icon": "fa fa-video-camera",
+              "target": "_self"
+            },{
+              "title": "配方交易管理",
+              "href": "page/page7.html",
+              "icon": "fa fa-gears",
+              "target": "_self"
+            },{
+              "title": "底料商城管理",
+              "href": "page/page8.html",
+              "icon": "fa fa-gears",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "留言管理",
+          "href": "page/leave-message.html",
+          "icon": "fa fa-envelope-o",
+          "target": "_self"
+        },
+        {
+          "title": "交易记录管理",
+          "href": "page/page10.html",
+          "icon": "fa fa-credit-card",
+          "target": "_self"
+        },
+        {
+          "title": "用户管理",
+          "href": "",
+          "icon": "fa fa-user-circle-o",
+          "target": "_self",
+          "child": [
+            {
+              "title": "普通用户管理",
+              "href": "page/page11.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "管理员管理",
+              "href": "page/manager.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "系统管理",
+          "href": "",
+          "icon": "fa fa-cogs",
+          "target": "_self",
+          "child": [
+            {
+              "title": "系统状态管理",
+              "href": "page/page14.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "版权信息管理",
+              "href": "page/page15.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "logo维护管理",
+              "href": "page/page16.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

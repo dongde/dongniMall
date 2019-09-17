@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.LeaveMessageMapper">
+    <sql id="leave_message_col">
+       id,content,user_id,recipient_id,create_time,verify
+   </sql>
+    <insert id="insertLeaveMessage" parameterType="com.dongni.dongnimall.pojo.LeaveMessageDO">
+        insert into leave_message (<include refid="leave_message_col"></include>)
+        values(#{leaveMessageDO.id},#{leaveMessageDO.content},#{leaveMessageDO.user_id},#{leaveMessageDO.recipient_id},#{leaveMessageDO.create_time},#{leaveMessageDO.verify})
+    </insert>
+
+    <select id="selectLeaveMessageListByRecipientId" parameterType="String" resultType="com.dongni.dongnimall.pojo.LeaveMessageDO">
+        select
+        <include refid="leave_message_col"></include>
+        from leave_message
+        where recipient_id=#{recipient_id} and verify=1
+        order by create_time desc
+    </select>
+
+    <select id="selectLeaveMessageList" resultType="com.dongni.dongnimall.pojo.LeaveMessageDO">
+        select
+        <include refid="leave_message_col"></include>
+        from leave_message
+        order by create_time desc
+    </select>
+
+    <delete id="deleteById" parameterType="String">
+        delete from leave_message
+        where id = #{id}
+    </delete>
+
+    <update id="updateLeaveMessage">
+        update leave_message
+        set verify = #{verify}
+        where id=#{id}
+    </update>
+</mapper>

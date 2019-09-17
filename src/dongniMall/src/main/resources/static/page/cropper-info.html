@@ -1,0 +1,54 @@
+<div>
+
+</div>
+
+<script>
+    var html = "<link rel=\"stylesheet\" href=\"../js/lay-module/cropper/cropper.css\">\n" +
+        "<div class=\"layui-fluid showImgEdit\" style=\"display: none;\padding:30px;\">\n" +
+        "    <div class=\"layui-form-item\">\n" +
+        "        <div class=\"layui-input-inline layui-btn-container\" style=\"width: auto;\">\n" +
+        "            <label for=\"cropper_avatarImgUpload\" class=\"layui-btn layui-btn-primary\">\n" +
+        "                <i class=\"layui-icon\">&#xe67c;</i>选择图片\n" +
+        "            </label>\n" +
+        "            <input class=\"layui-upload-file\" id=\"cropper_avatarImgUpload\" type=\"file\" value=\"选择图片\" name=\"file\">\n" +
+        "        </div>\n" +
+        "        <div class=\"layui-form-mid layui-word-aux\">请上传图片进行头像截取，完成后保存修改即可</div>\n" +
+        "    </div>\n" +
+        "    <div class='imageContainer' hidden>\n" +
+        "    <div class=\"layui-row layui-col-space15\">\n" +
+        "        <div >\n" +
+        "            <div class=\"readyimg\" style=\"height:200px;background-color: rgb(247, 247, 247);\">\n" +
+        "                <img src=\"\" >\n" +
+        "            </div>\n" +
+        "        </div>\n" +
+        "    </div>\n" +
+        "    <div class=\"layui-row layui-col-space15\">\n" +
+        "            <div class=\"layui-row\">\n" +
+        "                <div class=\"layui-col-xs9\">\n" +
+        "                    <button type=\"button\" class=\"layui-btn layui-icon layui-icon-left\" cropper-event=\"rotate\" data-option=\"-15\" title=\"Rotate -90 degrees\"> 向左旋转</button>\n" +
+        "                    <button type=\"button\" class=\"layui-btn layui-icon layui-icon-right\" cropper-event=\"rotate\" data-option=\"15\" title=\"Rotate 90 degrees\"> 向右旋转</button>\n" +
+        "                </div>\n" +
+        "                <div class=\"layui-col-xs3\" style=\"text-align: right;\">\n" +
+        "                    <button type=\"button\" class=\"layui-btn layui-icon layui-icon-refresh\" cropper-event=\"reset\" title=\"重置图片\">&nbsp;复位</button>\n" +
+        "                </div>\n" +
+        "            </div>\n" +
+        "    </div>\n" +
+        "</div>\n" +
+        "   <div class=\"layui-form-item\" style='margin-top: 30px'>\n" +
+        "        <label class=\"layui-form-label\">链接地址：</label>\n" +
+        "        <div class=\"layui-input-block\">\n" +
+        "            <input type=\"text\" id=\"url\" lay-verify=\"url\" autocomplete=\"off\" placeholder=\"url\"\n" +
+        "                   class=\"layui-input\">\n" +
+        "        </div>\n" +
+        "    </div>\n" +
+        "    <div class=\"layui-form-item distance\">\n" +
+        "        <div class=\"layui-input-block\">\n" +
+        "            <button class=\"layui-btn\" type=\"submit\"cropper-event=\"confirmSave\" lay-submit=\"\" lay-filter=\"demo1\" cropper-event=\"confirmSave\"\n" +
+        "                    id=\"upload\">立即上传\n" +
+        "            </button>\n" +
+        "            <button type=\"reset\" class=\"layui-btn layui-btn-primary\">重置</button>\n" +
+        "        </div>\n" +
+        "    </div>\n" +
+        "</div>";
+
+</script>

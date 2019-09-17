@@ -1,0 +1,24 @@
+package com.dongni.dongnimall.dao;
+
+import com.dongni.dongnimall.pojo.LeaveMessageDO;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * @author cengshuai on 2019-09-16.
+ * @version 1.0
+ */
+@Repository
+public interface LeaveMessageMapper {
+    void insertLeaveMessage(LeaveMessageDO leaveMessageDO);
+
+    List<LeaveMessageDO> selectLeaveMessageListByRecipientId(String recipient_id);
+
+    List<LeaveMessageDO> selectLeaveMessageList();
+
+    void deleteById(String id);
+
+    void updateLeaveMessage(@Param("id") String id, @Param("verify") Integer verify);
+}

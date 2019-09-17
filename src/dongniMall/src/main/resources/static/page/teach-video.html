@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>teach-video</title>
+</head>
+<style>
+    .top-btn {
+        margin-left: 10px;
+        margin-bottom: 0 !important;
+    }
+</style>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <table class="layui-hide" id="teach-video-table" lay-filter="teach-video-table"></table>
+    </div>
+</div>
+</body>
+<!-- 表格顶部按钮-->
+<script type="text/html" id="toolbar">
+    <div>
+        标题：
+        <div class="layui-inline">
+            <input class="layui-input" name="searchTitle" id="searchTitle" placeholder="请输入标题" autocomplete="off">
+        </div>
+        <button class="layui-btn layui-btn-sm top-btn" lay-event="search" data-type="search">搜索</button>
+
+        <button class="layui-btn layui-btn-sm top-btn" lay-event="addTeachVideo" id="addTeachVideo">添加视频</button>
+    </div>
+</script>
+
+<!-- 操作栏-->
+<script type="text/html" id="bar">
+
+    <a id="state" class="layui-btn layui-btn layui-btn-xs" lay-event="modify" style='text-decoration:none;'>修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style='text-decoration:none;'>删除</a>
+</script>
+<!-- 缩略图-->
+<script type="text/html" id="templet-thumbnail">
+    <a lay-event="pic_show" target="_blank" href="{{d.cover}}"><img alt="" style="width: 100%;height: 100%"
+                                                                    src="{{d.cover}}"></a>
+</script>
+<script src="../js/lay-module/cropper/my-render.js" type="text/javascript"></script>
+<script>
+    layui.use(['table', 'cropper'], function () {
+            var table = layui.table
+                , cropper = layui.cropper
+                , $ = layui.jquery;
+
+            /**
+             * 渲染表格
+             */
+            table.render({
+                elem: '#teach-video-table'
+                , url: '/menu/queryTeachVideoList'
+                , toolbar: '#toolbar'
+                , title: '教学视频数据表'
+                , cellMinWidth: 80
+                , height: 'full-160'
+                , cols: [[
+                    {field: 'id', title: 'ID', fixed: 'left', unresize: true, align: 'center', hide: true}
+                    , {field: 'title', title: '视频标题', unresize: true, align: 'center'}
+                    , {field: 'videoUrl', title: '视频链接', unresize: true, align: 'center'}
+                    , {
+                        field: 'cover',
+                        title: '视频封面',
+                        templet: '#templet-thumbnail',
+                        unresize: true,
+                        align: 'center',
+                        hide: true
+                    }
+                    , {field: 'introduction', title: '简介', unresize: true, align: 'center', hide: true}
+                    , {field: 'content', title: '内容', unresize: true, align: 'center', hide: true}
+                    , {field: 'create_time', title: '上传时间', sort: true, unresize: true, align: 'center'}
+                    , {field: 'counts', title: '访问次数', sort: true, unresize: true, align: 'center', width: 105}
+                    , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center', width: 150}
+                ]]
+                , page: true
+                , limit: 10
+            });
+
+            /**
+             * 头工具栏事件
+             */
+            table.on('toolbar(teach-video-table)', function (obj) {
+                switch (obj.event) {
+                    case 'search':
+                        table.reload('teach-video-table', {
+                            page: {
+                                curr: 1
+                                //重新从第 1 页开始
+                            },
+                            where: {
+                                title: $("#searchTitle").val().trim()
+                            }
+                        });
+                        break;
+                    case 'addTeachVideo':
+                        layer.open({
+                            type: 2,
+                            title: '添加视频',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: ['900px', '650px'],
+                            offset: 'auto',
+                            content: '/page/teach-video-info.html' //iframe的url，no代表不显示滚动条
+                        });
+                        break;
+                }
+            });
+            /**
+             * 监听行工具事件
+             */
+            table.on('tool(teach-video-table)', function (obj) {
+                var data = obj.data;
+                switch (obj.event) {
+                    case 'del':
+                        layer.confirm('确定删除？', function (index) {
+                            deleteTeachVideo(data.id);
+                            layer.close(index);
+                        });
+                        break;
+                    case 'modify':
+                        layer.open({
+                            type: 2,
+                            title: '修改视频',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: ['900px', '650px'],
+                            offset: 'auto',
+                            content: '/page/teach-video-info.html', //iframe的url，no代表不显示滚动条
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                body.contents().find("#id").val(obj.data.id);
+                                body.contents().find("#title").val(obj.data.title);
+                                body.contents().find("#videoUrl").val(obj.data.videoUrl);
+                                body.contents().find("#introduction").val(obj.data.introduction);
+                                body.contents().find("#content").val(obj.data.content);
+                                body.contents().find(".imageBorderForUpdate").removeAttr("hidden");
+                                body.contents().find("#imageForUpdate").attr("src",obj.data.cover);
+                            }
+                        });
+                        break;
+                }
+            });
+
+            //根据ID删除行
+            function deleteTeachVideo(id) {
+                $.ajax({
+                    method: 'POST',
+                    url: '/menu/removeTeachVideo',
+                    data: {
+                        'id': id
+                    },
+                    success: function (res) {
+                        if (res.status === 200) {
+                            layer.msg("删除成功");
+                            table.reload('teach-video-table', {
+                                page: {
+                                    curr: 1
+                                    //重新从第 1 页开始
+                                }
+                            });
+                        } else {
+                            layer.msg(res.msg)
+                        }
+                    },
+                    error: function () {
+                        layer.msg("删除出错");
+                    }
+                })
+            }
+        }
+    );
+</script>
+
+</html>
