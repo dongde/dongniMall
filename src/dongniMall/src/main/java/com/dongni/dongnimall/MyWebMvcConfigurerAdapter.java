@@ -17,7 +17,10 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
                 .addResourceLocations("file:/Users/cengshuai/intellij_workspace/bannerImages/")
                 .addResourceLocations("file:/Users/cengshuai/intellij_workspace/smallImages/")
                 .addResourceLocations("file:/Users/cengshuai/intellij_workspace/videoCovers/")
+                .addResourceLocations("file:/Users/cengshuai/intellij_workspace/codeImage/")
+                .addResourceLocations("file:/Users/cengshuai/intellij_workspace/codeImage/")
                 .addResourceLocations("file:/Users/cengshuai/intellij_workspace/codeImage/");
+
 
     }
 }
