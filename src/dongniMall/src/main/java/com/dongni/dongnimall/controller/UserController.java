@@ -120,15 +120,15 @@ public class UserController extends BaseController {
 
     @RequestMapping("/addUser")
     public JsonResult addUser(String phone, String name, String gender, String address, String email, String postal_code, String password) {
-        if (StringUtils.isBlank(phone) || StringUtils.isBlank(name) || StringUtils.isBlank(address) || StringUtils.isBlank(email) || StringUtils.isBlank(postal_code) || StringUtils.isBlank(password) || StringUtils.isBlank(gender)){
+        if (StringUtils.isBlank(phone) || StringUtils.isBlank(name) || StringUtils.isBlank(address) || StringUtils.isBlank(email) || StringUtils.isBlank(postal_code) || StringUtils.isBlank(password) || StringUtils.isBlank(gender)) {
             return JsonResult.errorMsg("用户信息不能有空值！");
         }
         UserDO userDO = new UserDO();
         userDO.setPhone(phone);
         userDO.setName(name);
-        if (gender.equals("男")){
+        if (gender.equals("男")) {
             userDO.setGender(0);
-        } else if (gender.equals("女")){
+        } else if (gender.equals("女")) {
             userDO.setGender(1);
         }
         userDO.setAddress(address);
@@ -140,13 +140,13 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping("/queryUserList")
-    public PageData queryUserList(Integer page,Integer limit){
-        return userService.queryUserList(page,limit);
+    public PageData queryUserList(Integer page, Integer limit) {
+        return userService.queryUserList(page, limit);
     }
 
     @RequestMapping("/removeUser")
-    public JsonResult removeUser(@RequestParam("phones[]") String[] phones){
-        if (phones.length==0){
+    public JsonResult removeUser(@RequestParam("phones[]") String[] phones) {
+        if (phones.length == 0) {
             return JsonResult.errorMsg("删除内容为空");
         }
         userService.removeUser(Arrays.asList(phones));
@@ -154,21 +154,32 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping("/modifyUser")
-    public JsonResult modifyUser(String phone,String oldPassword,String newPassword,String againPassword){
-        if(StringUtils.isBlank(phone)||StringUtils.isBlank(oldPassword)||StringUtils.isBlank(newPassword)||StringUtils.isBlank(againPassword)){
+    public JsonResult modifyUser(String phone, String oldPassword, String newPassword, String name, String gender, String email, String address, String postal_code) {
+        if (StringUtils.isBlank(phone)) {
             return JsonResult.errorMsg("修改错误");
-        }if(!newPassword.equals(againPassword)){
-            return JsonResult.errorMsg("两次密码不一致");
-        } else{
-            if(userService.queryUserByPhoneAndPassword(phone,MD5Util.getMD5(oldPassword))!=null){
-                UserDO userDO = new UserDO();
-                userDO.setPassword(newPassword);
-                userDO.setPhone(phone);
-                userService.modifyUser(userDO);
-                return JsonResult.ok();
-            }else{
-                return JsonResult.errorMsg("原密码错误");
+        } else {
+            UserDO userDO = new UserDO();
+            userDO.setPhone(phone);
+            userDO.setName(name);
+            if (StringUtils.isNotBlank(gender)) {
+                if (gender.equals("男")) {
+                    userDO.setGender(0);
+                } else if (gender.equals("女")) {
+                    userDO.setGender(1);
+                }
             }
+            userDO.setAddress(address);
+            userDO.setEmail(email);
+            userDO.setPostal_code(postal_code);
+            if (StringUtils.isNotBlank(oldPassword) && StringUtils.isNotBlank(newPassword)) {
+                if (userService.queryUserByPhoneAndPassword(phone, MD5Util.getMD5(oldPassword)) != null) {
+                    userDO.setPassword(MD5Util.getMD5(newPassword));
+                } else {
+                    return JsonResult.errorMsg("原密码错误");
+                }
+            }
+            userService.modifyUser(userDO);
+            return JsonResult.ok();
         }
     }
 }

@@ -26,9 +26,6 @@
     <update id="updateUser" parameterType="com.dongni.dongnimall.pojo.UserDO">
         update `user`
         <set>
-            <if test="userDO.phone!=null and userDO.phone!=''">
-                phone=#{userDO.phone},
-            </if>
             <if test="userDO.name!=null and userDO.name!=''">
                 name=#{userDO.name},
             </if>
@@ -51,6 +48,7 @@
                 create_time=#{userDO.create_time},
             </if>
         </set>
+        where phone=#{userDO.phone}
     </update>
     <select id="selectUserByPhoneAndPassword" resultType="com.dongni.dongnimall.pojo.UserDO">
         select <include refid="user_col"></include>

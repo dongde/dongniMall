@@ -18,7 +18,7 @@ public interface UserMapper {
 
     List<UserDO> selectUserList();
 
-    void updateUser(UserDO userDO);
+    void updateUser(@Param("userDO") UserDO userDO);
 
-    UserDO selectUserByPhoneAndPassword(@Param("phone") String phone, @Param("phone") String password);
+    UserDO selectUserByPhoneAndPassword(@Param("phone") String phone, @Param("password") String password);
 }
