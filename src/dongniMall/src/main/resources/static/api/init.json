@@ -55,7 +55,7 @@
               "child": [
                 {
                   "title": "最新文章管理",
-                  "href": "page/page4.html",
+                  "href": "page/newsInformation.html",
                   "icon": "fa fa-tachometer",
                   "target": "_self"
                 }
@@ -63,7 +63,7 @@
             },
             {
               "title": "宣传模版管理",
-              "href": "page/page5.html",
+              "href": "page/publicityTemplate.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -79,7 +79,7 @@
               "target": "_self"
             },{
               "title": "底料商城管理",
-              "href": "page/page8.html",
+              "href": "page/baseManager.html",
               "icon": "fa fa-gears",
               "target": "_self"
             }

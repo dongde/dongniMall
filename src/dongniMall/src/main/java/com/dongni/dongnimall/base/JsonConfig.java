@@ -1,3 +1,4 @@
+/*
 package com.dongni.dongnimall.base;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -17,9 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+*/
 /**
  * JSON前后端转换器
- */
+ *//*
+
 @Configuration
 public class JsonConfig extends WebMvcConfigurationSupport {
     @Override
@@ -48,3 +51,4 @@ public class JsonConfig extends WebMvcConfigurationSupport {
         converters.add(jackson2HttpMessageConverter);
     }
 }
+*/

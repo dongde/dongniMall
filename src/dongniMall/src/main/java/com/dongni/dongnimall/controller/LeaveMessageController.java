@@ -28,7 +28,6 @@ public class LeaveMessageController {
 
     @RequestMapping("/addLeaveMessage")
     public JsonResult addLeaveMessage(String content, String user_id, String recipient_id) {
-        System.out.println("222222");
         if (StringUtils.isBlank(user_id) || StringUtils.isBlank(recipient_id)) {
             return JsonResult.errorMsg("留言出错");
         }
