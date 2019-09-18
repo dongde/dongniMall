@@ -22,7 +22,14 @@
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="modify" style='text-decoration:none;'>编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style='text-decoration:none;'>删除</a>
 </script>
-
+<!-- 性别-->
+<script type="text/html" id="templet-gender">
+    {{#  if(d.gender == 0){  }}
+    <span class="label">男</span>
+    {{#  } else if(d.gender == 1){ }}
+    <span class="label">女</span>
+    {{#  } }}
+</script>
 <script>
     layui.use('table', function () {
         var table = layui.table
@@ -42,7 +49,7 @@
                 {type: 'checkbox', fixed: 'left', align: 'center'}
                 , {field: 'phone', title: '用户账号', unresize: true, align: 'center'}
                 , {field: 'name', title: '用户昵称', templet: '#templet-thumbnail', unresize: true, align: 'center'}
-                , {field: 'gender', title: '性别', unresize: true, align: 'center'}
+                , {field: 'gender', title: '性别', unresize: true, templet: "#templet-gender", align: 'center'}
                 , {field: 'email', title: '邮箱', unresize: true, align: 'center'}
                 , {field: 'address', title: '收货地址', unresize: true, align: 'center'}
                 , {field: 'postal_code', title: '邮政编码', hide: true, unresize: true, align: 'center'}
@@ -87,7 +94,6 @@
                     break;
             }
         });
-
 
 
         //根据ID删除行

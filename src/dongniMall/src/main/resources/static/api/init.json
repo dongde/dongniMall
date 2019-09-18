@@ -49,21 +49,13 @@
             },
             {
               "title": "新闻资讯管理",
-              "href": "",
+              "href": "page/page4.html",
               "icon": "fa fa-tachometer",
-              "target": "_self",
-              "child": [
-                {
-                  "title": "最新文章管理",
-                  "href": "page/newsInformation.html",
-                  "icon": "fa fa-tachometer",
-                  "target": "_self"
-                }
-              ]
+              "target": "_self"
             },
             {
               "title": "宣传模版管理",
-              "href": "page/publicityTemplate.html",
+              "href": "page/page5.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -79,7 +71,7 @@
               "target": "_self"
             },{
               "title": "底料商城管理",
-              "href": "page/baseManager.html",
+              "href": "page/page8.html",
               "icon": "fa fa-gears",
               "target": "_self"
             }
@@ -92,8 +84,8 @@
           "target": "_self"
         },
         {
-          "title": "交易记录管理",
-          "href": "page/page10.html",
+          "title": "订单管理",
+          "href": "page/order.html",
           "icon": "fa fa-credit-card",
           "target": "_self"
         },
@@ -105,7 +97,7 @@
           "child": [
             {
               "title": "普通用户管理",
-              "href": "page/page11.html",
+              "href": "page/user.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
