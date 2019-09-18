@@ -92,8 +92,8 @@
           "target": "_self"
         },
         {
-          "title": "交易记录管理",
-          "href": "page/page10.html",
+          "title": "订单管理",
+          "href": "page/order.html",
           "icon": "fa fa-credit-card",
           "target": "_self"
         },

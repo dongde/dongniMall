@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.UserMapper">
+    <sql id="user_col">
+        phone,name,gender,address,email,postal_code,password,create_time
+    </sql>
+    <insert id="insertUser" parameterType="com.dongni.dongnimall.pojo.UserDO">
+        insert into user(<include refid="user_col"></include>)
+        values
+        (#{userDO.phone},#{userDO.gender},#{userDO.address},#{userDO.email},#{userDO.postal_code},#{userDO.password},#{userDO.create_time})
+    </insert>
+
+    <delete id="deleteUser" parameterType="String">
+        delete from user
+        where phone=#{phone}
+    </delete>
+
+    <select id="selectUserList" resultType="com.dongni.dongnimall.pojo.UserDO">
+        select <include refid="user_col"></include>
+        from user
+    </select>
+
+    <update id="updateUser" parameterType="com.dongni.dongnimall.pojo.UserDO">
+        update user
+        <set>
+            <if test="userDO.phone!=null and userDO.phone!=''">
+                phone=#{userDO.phone},
+            </if>
+            <if test="userDO.name!=null and userDO.name!=''">
+                name=#{userDO.name},
+            </if>
+            <if test="userDO.gender!=null">
+                gender=#{userDO.gender},
+            </if>
+            <if test="userDO.address!=null and userDO.address!=''">
+                address=#{userDO.address},
+            </if>
+            <if test="userDO.email!=null and userDO.email!=''">
+                email=#{userDO.email},
+            </if>
+            <if test="userDO.postal_code!=null and userDO.postal_code!=''">
+                postal_code=#{userDO.postal_code},
+            </if>
+            <if test="userDO.password!=null and userDO.password!=''">
+                password=#{userDO.password},
+            </if>
+            <if test="userDO.create_time!=null and userDO.create_time!=''">
+                create_time=#{userDO.create_time},
+            </if>
+        </set>
+    </update>
+</mapper>
