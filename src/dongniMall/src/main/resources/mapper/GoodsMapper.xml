@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.GoodsMapper">
+    <sql id="goods_col">
+        order_number,goods_name,goods_img,goods_count,subtotal
+    </sql>
+    <insert id="insertGoods" parameterType="com.dongni.dongnimall.pojo.GoodsDO">
+        insert into goods(<include refid="goods_col"></include>)
+        values
+        (#{goodsDO.order_number},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_count},#{goodsDO.subtotal})
+    </insert>
+
+    <delete id="deleteGoods" parameterType="String">
+        delete from goods
+        where order_number=#{order_number}
+    </delete>
+
+    <select id="selectGoods" parameterType="String" resultType="com.dongni.dongnimall.pojo.GoodsDO">
+        select <include refid="goods_col"></include>
+        from goods
+        where order_number=#{order_number}
+    </select>
+</mapper>

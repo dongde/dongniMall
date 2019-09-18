@@ -88,8 +88,13 @@
                 switch (obj.event) {
                     case 'delAll':
                         layer.confirm('确定删除？', function (index) {
-                            var type = $(this).data('type');
-                            active[type] ? active[type].call(this) : '';
+                            var checkStatus = table
+                                .checkStatus('banner-table'), data = checkStatus.data;
+                            var ids = [];
+                            for (var i = 0; i < data.length; i++) {
+                                ids.push(data[i]["id"]);
+                            }
+                            deleteBanners(ids);
                             layer.close(index);
                         });
                         break;
@@ -186,32 +191,6 @@
                         break;
                 }
             });
-
-            /**
-             * 刷新数据表
-             * @type {{reload: reload, delALl: delALl}}
-             */
-            var active = {
-                reload: function () {
-                    //执行重载
-                    table.reload('banner-table', {
-                        page: {
-                            curr: 1
-                            //重新从第 1 页开始
-                        }
-                    });
-
-                },
-                delALl: function () { //获取选中数据
-                    var checkStatus = table
-                        .checkStatus('banner-table'), data = checkStatus.data;
-                    var ids = [];
-                    for (var i = 0; i < data.length; i++) {
-                        ids.push(data[i]["id"]);
-                    }
-                    deleteBanners(ids);
-                }
-            };
 
             //根据ID删除行
             function deleteBanners(ids) {
