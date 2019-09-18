@@ -5,23 +5,26 @@
         phone,name,gender,address,email,postal_code,password,create_time
     </sql>
     <insert id="insertUser" parameterType="com.dongni.dongnimall.pojo.UserDO">
-        insert into user(<include refid="user_col"></include>)
+        insert into `user`(<include refid="user_col"></include>)
         values
         (#{userDO.phone},#{userDO.gender},#{userDO.address},#{userDO.email},#{userDO.postal_code},#{userDO.password},#{userDO.create_time})
     </insert>
 
-    <delete id="deleteUser" parameterType="String">
-        delete from user
-        where phone=#{phone}
+    <delete id="deleteUser">
+        delete from `user`
+        where phone in
+        <foreach collection="list" index="index" item="phone" open="(" separator="," close=")">
+            #{phone}
+        </foreach>
     </delete>
 
     <select id="selectUserList" resultType="com.dongni.dongnimall.pojo.UserDO">
         select <include refid="user_col"></include>
-        from user
+        from `user`
     </select>
 
     <update id="updateUser" parameterType="com.dongni.dongnimall.pojo.UserDO">
-        update user
+        update `user`
         <set>
             <if test="userDO.phone!=null and userDO.phone!=''">
                 phone=#{userDO.phone},
@@ -49,4 +52,9 @@
             </if>
         </set>
     </update>
+    <select id="selectUserByPhoneAndPassword" resultType="com.dongni.dongnimall.pojo.UserDO">
+        select <include refid="user_col"></include>
+        from `user`
+        where phone=#{phone} and password=#{password}
+    </select>
 </mapper>

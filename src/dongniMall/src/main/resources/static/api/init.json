@@ -49,17 +49,9 @@
             },
             {
               "title": "新闻资讯管理",
-              "href": "",
+              "href": "page/page4.html",
               "icon": "fa fa-tachometer",
-              "target": "_self",
-              "child": [
-                {
-                  "title": "最新文章管理",
-                  "href": "page/page4.html",
-                  "icon": "fa fa-tachometer",
-                  "target": "_self"
-                }
-              ]
+              "target": "_self"
             },
             {
               "title": "宣传模版管理",
@@ -105,7 +97,7 @@
           "child": [
             {
               "title": "普通用户管理",
-              "href": "page/page11.html",
+              "href": "page/user.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
