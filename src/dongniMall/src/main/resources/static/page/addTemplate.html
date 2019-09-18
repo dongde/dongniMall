@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>最新文章管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js" charset="utf-8"></script>
+    <link rel="icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+
+    <style>
+        .imageSize{
+            height: 150px;
+            width: 150px;
+        }
+        #topSet{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" type="multipart">
+    <div class="layui-form-item" id="topSet">
+        <label class="layui-form-label">模板名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="templateName" lay-verify="templateName" autocomplete="off" placeholder="请输入模板名称"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板类型</label>
+        <div class="layui-input-block">
+            <input type="radio" name="templateType" value="菜单" title="菜单" checked="">
+            <input type="radio" name="templateType" value="传单" title="传单">
+            <input type="radio" name="templateType" value="海报" title="海报">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-inline">
+            <input type="number" name="price" lay-verify="price" placeholder="单价" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">单位：元</div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">模板图片</label>
+        <div class="layui-input-inline uploadHeadImage">
+            <button type="button" class="layui-btn" id="uploadImage">上传图片</button>
+            <div class="layui-upload-list" id="hide" style="display:none;">
+                <img class="imageSize" id="upload">
+                <p id="errupload"></p>
+            </div>
+        </div>
+    </div>
+
+
+    <input type="text" style="display: none" name="image" id="urlSubmit" >
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">图文描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容" name="description" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formSubmint" id="commit">添加模板</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    layui.use(['form','upload',"layer", "element"],function () {
+        var form = layui.form,
+            ayer = layui.layer,
+            $ = layui.jquery;
+            element = layui.element;
+            upload = layui.upload;
+
+
+        //监听提交
+        form.on('submit(formSubmint)', function(data){
+            console.log(data);
+            var loading = layer.load(0,{shade:false});
+            $.ajax({
+                url:"/add/template",
+                data:data.field,
+                success:function (res) {
+                    if(res.status==200){
+                        layer.msg('添加成功', {
+                            icon: 1,//提示的样式
+                            time: 1000, //2秒关闭（如果不配置，默认是3秒）//设置后不需要自己写定时关闭了，单位是毫秒
+                            end: function () {
+                                layer.close(loading);
+                                window.parent.location.reload();
+                            }
+                        });
+
+                    }else {
+                        layer.msg(res.msg, {
+                            icon: 5,//提示的样式
+                            time: 2000, //2秒关闭（如果不配置，默认是3秒）//设置后不需要自己写定时关闭了，单位是毫秒
+                            end: function () {
+                                layer.close(loading);
+                                window.location.reload();
+                            }
+                        });
+
+                    }
+                }
+            });
+            return false;
+        });
+        //图片上传
+        var uploadInst = upload.render({
+            elem: '#uploadImage'
+            , url: '/list/uploadBanner'
+            , size: 5000
+            ,acceptMime:'image/*'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                $("#hide").css("display","block");
+                obj.preview(function (index, file, result) {
+                    $('#upload').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code!= 0) {
+                    return layer.msg('上传失败');
+                }
+                //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台
+                document.getElementById("urlSubmit").value = res.data.url;
+                //上传成功
+
+                /*   console.log(res.data.src);*/
+                var errupload = $('#errupload');
+                errupload.html('<span style="color: #8f8f8f;">上传成功!!!</span>');
+
+            }
+            , error: function () {
+                var errupload = $('#errupload');
+                errupload.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                errupload.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+        element.init();
+
+
+        form.render();
+    });
+</script>
+
+
+
+
+
+</body>
+</html>
+
+
