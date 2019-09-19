@@ -3,26 +3,29 @@ package com.dongni.dongnimall.manager;
 import com.dongni.dongnimall.pojo.GoodsDO;
 import com.dongni.dongnimall.vo.PageData;
 
+import java.util.List;
+
 /**
  * @author cengshuai on 2019-09-17.
  * @version 1.0
  */
 public interface GoodsService {
     /**
-     * @Description: 添加商品信息
      * @param goodsDO
+     * @Description: 添加商品信息
      */
     void addGoods(GoodsDO goodsDO);
 
     /**
-     * @Description: 删除购买的商品信息
      * @param order_number
+     * @Description: 删除购买的商品信息
      */
     void removeGoods(String order_number);
 
     /**
-     * @Description: 查询购买的商品信息
+     * @param order_number
      * @return
+     * @Description: 查询购买的商品信息
      */
-    PageData queryGoods(Integer page,Integer pageSize,String order_number);
+    List<GoodsDO> queryGoods(String order_number);
 }

@@ -2,6 +2,7 @@ package com.dongni.dongnimall.dao;
 
 import com.dongni.dongnimall.pojo.OrderDO;
 import com.dongni.dongnimall.vo.OrderVO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface OrderMapper {
 
     List<OrderDO> selectOrderList();
 
-    void updateOrder(OrderDO orderDO);
+    void updateOrder(@Param("orderDO") OrderDO orderDO);
 }

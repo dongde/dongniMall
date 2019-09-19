@@ -31,16 +31,23 @@ public interface UserService {
     PageData queryUserList(Integer page, Integer pageSize);
 
     /**
+     * @param phone
+     * @return
+     * @Description: 根据手机号查询用户信息
+     */
+    UserDO queryUserByPhone(String phone);
+
+    /**
      * @param userDO
      * @Description: 修改用户信息
      */
     void modifyUser(UserDO userDO);
 
     /**
-     * @Description: 验证用户密码是否正确
      * @param phone
      * @param password
      * @return
+     * @Description: 验证用户密码是否正确
      */
-    UserDO queryUserByPhoneAndPassword(String phone,String password);
+    UserDO queryUserByPhoneAndPassword(String phone, String password);
 }

@@ -52,4 +52,9 @@ public class UserServiceImpl implements UserService {
     public UserDO queryUserByPhoneAndPassword(String phone, String password) {
         return userMapper.selectUserByPhoneAndPassword(phone,password);
     }
+
+    @Override
+    public UserDO queryUserByPhone(String phone) {
+        return userMapper.selectUserByPhone(phone);
+    }
 }

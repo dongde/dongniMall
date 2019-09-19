@@ -144,6 +144,16 @@ public class UserController extends BaseController {
         return userService.queryUserList(page, limit);
     }
 
+    @RequestMapping("/queryUserByPhone")
+    public JsonResult queryUserByPhone(String phone) {
+        UserDO userDO = userService.queryUserByPhone(phone);
+        System.out.println(userDO);
+        if (userDO == null) {
+            return JsonResult.errorMsg("查询信息出错");
+        }
+        return JsonResult.ok(userDO);
+    }
+
     @RequestMapping("/removeUser")
     public JsonResult removeUser(@RequestParam("phones[]") String[] phones) {
         if (phones.length == 0) {

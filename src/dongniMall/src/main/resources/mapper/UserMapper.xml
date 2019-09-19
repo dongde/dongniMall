@@ -4,6 +4,9 @@
     <sql id="user_col">
         phone,name,gender,address,email,postal_code,password,create_time
     </sql>
+    <sql id="logistics_user_col">
+        phone,name,address,postal_code
+    </sql>
     <insert id="insertUser" parameterType="com.dongni.dongnimall.pojo.UserDO">
         insert into `user`(<include refid="user_col"></include>)
         values
@@ -19,8 +22,16 @@
     </delete>
 
     <select id="selectUserList" resultType="com.dongni.dongnimall.pojo.UserDO">
-        select <include refid="user_col"></include>
+        select
+        <include refid="user_col"></include>
         from `user`
+    </select>
+
+    <select id="selectUserByPhone" parameterType="String" resultType="com.dongni.dongnimall.pojo.UserDO">
+        select
+        <include refid="logistics_user_col"></include>
+        from `user`
+        where phone=#{phone}
     </select>
 
     <update id="updateUser" parameterType="com.dongni.dongnimall.pojo.UserDO">
@@ -51,7 +62,8 @@
         where phone=#{userDO.phone}
     </update>
     <select id="selectUserByPhoneAndPassword" resultType="com.dongni.dongnimall.pojo.UserDO">
-        select <include refid="user_col"></include>
+        select
+        <include refid="user_col"></include>
         from `user`
         where phone=#{phone} and password=#{password}
     </select>

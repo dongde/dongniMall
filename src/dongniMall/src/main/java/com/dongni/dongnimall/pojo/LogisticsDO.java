@@ -16,6 +16,8 @@ public class LogisticsDO implements Serializable {
     private String order_number;
     //配送方式
     private Integer delivery_method;
+    //创建时间
+    private String create_time;
 
     public String getLogistics_number() {
         return logistics_number;
@@ -39,5 +41,13 @@ public class LogisticsDO implements Serializable {
 
     public void setDelivery_method(Integer delivery_method) {
         this.delivery_method = delivery_method;
+    }
+
+    public String getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 }
