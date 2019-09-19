@@ -1,7 +1,7 @@
 package com.dongni.dongnimall.controller;
 
 import com.dongni.dongnimall.common.ImageFileUploadUtil;
-import com.dongni.dongnimall.manager.BaseTrade;
+import com.dongni.dongnimall.manager.BaseTradeService;
 import com.dongni.dongnimall.manager.NewsService;
 import com.dongni.dongnimall.manager.PublicityTemplateService;
 import com.dongni.dongnimall.pojo.BaseStore;
@@ -31,7 +31,7 @@ public class InsertArticleController {
     private PublicityTemplateService publicityTemplateService;
 
     @Autowired
-    private BaseTrade baseTrade;
+    private BaseTradeService baseTradeService;
 
     //添加文章
     @RequestMapping("article")
@@ -79,15 +79,15 @@ public class InsertArticleController {
     }
 
     //添加底料
-    @RequestMapping("trade")
-    public JsonResult insertTrade(String tradeName, String tradeType, Float price, String tradeURL, MultipartFile file) {
+    @RequestMapping("addAndUpdateTrade")
+    public JsonResult insertTrade(Integer id,String tradeName, String tradeType, Float price, String tradeURL, MultipartFile file) {
         if ("".equals(tradeName) || "".equals(tradeType) || price == null || "".equals(tradeURL) || file == null) {
             JsonResult.errorMsg("数据不能为空");
         }
+
         String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
-        System.out.println(DBpath);
         BaseStore baseStore = new BaseStore();
-        baseStore.setImageURL(DBpath);
+        baseStore.setImageURL("http://localhost:8081" + DBpath);
         baseStore.setPrice(price);
         baseStore.setTradeName(tradeName);
         baseStore.setTradeType(tradeType);
@@ -96,8 +96,14 @@ public class InsertArticleController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         baseStore.setUpdateTime(dateString);
-        baseTrade.insertTrade(baseStore);
-        return JsonResult.ok();
+        if(id==null){
+            baseTradeService.insertTrade(baseStore);
+            return JsonResult.ok();
+        }else {
+            baseStore.setId(id);
+            baseTradeService.updateTrade(baseStore);
+            return JsonResult.ok();
+        }
     }
 
 }

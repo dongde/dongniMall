@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BaseTradeImpl implements BaseTrade {
+public class BaseTradeServiceImpl implements BaseTradeService {
 
 
     @Autowired
@@ -21,7 +21,7 @@ public class BaseTradeImpl implements BaseTrade {
     @Override
     public PageData selectAllTrade(Integer page, Integer limit, String tradeName, String tradeType) {
         PageHelper.startPage(page, limit);
-        List<BaseStore> baseStores = baseTradeMapper.selectAllTrade();
+        List<BaseStore> baseStores = baseTradeMapper.selectAllTrade(tradeName,tradeType);
         PageInfo<BaseStore> pageInfo = new PageInfo<>(baseStores);
         PageData pageData = new PageData();
         if(baseStores!=null) {
@@ -42,5 +42,20 @@ public class BaseTradeImpl implements BaseTrade {
     @Override
     public void insertTrade(BaseStore baseStore) {
         baseTradeMapper.insertTrade(baseStore);
+    }
+
+    @Override
+    public void deleteByID(Integer id) {
+        baseTradeMapper.deleteTrade(id);
+    }
+
+    @Override
+    public BaseStore selectByID(Integer id) {
+        return baseTradeMapper.selectByID(id);
+    }
+
+    @Override
+    public void updateTrade(BaseStore baseStore) {
+        baseTradeMapper.updateTrade(baseStore);
     }
 }

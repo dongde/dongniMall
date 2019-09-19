@@ -11,8 +11,10 @@ public interface BaseTradeMapper {
     /**
      * 查询所有底料信息
      * @return
+     * @param tradeName
+     * @param tradeType
      */
-    List<BaseStore> selectAllTrade();
+    List<BaseStore> selectAllTrade(@Param("tradeName") String tradeName, @Param("tradeType") String tradeType);
 
     /**
      * 增加一个底料
@@ -24,7 +26,7 @@ public interface BaseTradeMapper {
      * 修改货物信息
      * @param baseStore
      */
-    void updateTrade(BaseStore baseStore);
+    void updateTrade(@Param("baseStore") BaseStore baseStore);
 
     /**
      * 删除一个底料信息
@@ -32,5 +34,10 @@ public interface BaseTradeMapper {
      */
     void deleteTrade(@Param("id") Integer id);
 
-
+    /**
+     * 通过id查询
+     * @param id
+     * @return
+     */
+    BaseStore selectByID(@Param("id") Integer id);
 }

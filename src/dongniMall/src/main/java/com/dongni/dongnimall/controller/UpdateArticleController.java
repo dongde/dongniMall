@@ -1,29 +1,24 @@
 package com.dongni.dongnimall.controller;
 
+import com.dongni.dongnimall.common.ImageFileUploadUtil;
+import com.dongni.dongnimall.manager.BaseTradeService;
 import com.dongni.dongnimall.manager.NewsService;
 import com.dongni.dongnimall.manager.PublicityTemplateService;
 import com.dongni.dongnimall.pojo.NewsInformation;
 import com.dongni.dongnimall.pojo.PublicityTemplate;
 import com.dongni.dongnimall.vo.EditUploadDTO;
 import com.dongni.dongnimall.vo.JsonResult;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
-import static com.dongni.dongnimall.controller.BaseController.IMAGE_SAVE_PATH;
+import static com.dongni.dongnimall.controller.BaseController.TRADE_SAVE_PATH;
 
 /**
  * 更新
@@ -36,7 +31,8 @@ public class UpdateArticleController {
     private NewsService newsService;
     @Autowired
     private PublicityTemplateService publicityTemplateService;
-
+    @Autowired
+    private BaseTradeService baseTradeService;
     //修改文章
     @RequestMapping("update")
     public JsonResult update(Integer id, String title, String source, String summary, String content){
@@ -64,58 +60,14 @@ public class UpdateArticleController {
     @RequestMapping("/uploadBanner")
     public EditUploadDTO uploadBanner(MultipartFile file) {
 
+        String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
+
         Map<String,String> map = new HashMap<>();
-        if (file != null) {
-
-            FileOutputStream fileOutputStream = null;
-            InputStream fileInputStream = null;
-            //获取文件名
-            String fileName = file.getOriginalFilename();
-            if (StringUtils.isNotBlank(fileName)) {
-                //生成数据库存储的路径
-                String randomStr = UUID.randomUUID().toString();
-                String pathDB = "/" + randomStr + fileName.substring(0, fileName.indexOf(".")) + ".jpg";
-                //生成文件本地存储路径
-                String filePath = IMAGE_SAVE_PATH + fileName;
-                String imageURL = "http://localhost:8080/"+fileName;
-                map.put("src",imageURL);
-                //创建本地文件
-                File newFile = new File(filePath);
-
-                if (newFile.getParentFile() != null || newFile.getParentFile().isDirectory()) {
-                    //创建父文件夹
-                    newFile.getParentFile().mkdirs();
-                }
-                try {
-                    fileInputStream = file.getInputStream();
-                    fileOutputStream = new FileOutputStream(newFile);
-                    IOUtils.copy(fileInputStream, fileOutputStream);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (fileInputStream != null) {
-                        try {
-                            fileInputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (fileOutputStream != null) {
-                        try {
-                            fileOutputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-
-
-        } else {
-            return EditUploadDTO.errorMessage("上传出错");
-        }
-
+        String imageURL = "http://localhost:8081/"+DBpath;
+        System.out.println(imageURL);
+        map.put("src",imageURL);
         return EditUploadDTO.ok(map);
+
 
     }
 
@@ -129,8 +81,11 @@ public class UpdateArticleController {
 
 
 
+    //修改模板
     @RequestMapping("updateTemplate")
     public JsonResult updateTemplate(Integer id, String templateName, String templateType, Float price, String image, String description){
+        System.out.println(templateName+templateType);
+        System.out.println(price+"***"+image);
         if(id==null){
             return JsonResult.errorMsg("更新出错");
         }else if("".equals(templateName)||"".equals(templateType)||price==null||"".equals(description)){
@@ -156,10 +111,44 @@ public class UpdateArticleController {
         return JsonResult.ok();
     }
 
+    /*//修改底料
+    @RequestMapping("updateBase")
+    public JsonResult updateBase(Integer id,String tradeName,String tradeType,Float price,String tradeURL,MultipartFile file){
+        System.out.println(id+tradeName);
+        System.out.println(file);
+        if ("".equals(tradeName) || "".equals(tradeType) || price == null || "".equals(tradeURL) || file == null) {
+            JsonResult.errorMsg("数据不能为空");
+        }
+        String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
+        BaseStore baseStore = baseTradeService.selectByID(id);
+        baseStore.setImageURL("http://localhost:8081"+DBpath);
+        baseStore.setTradeName(tradeName);
+        baseStore.setTradeType(tradeType);
+        baseStore.setPrice(price);
+        baseStore.setTradeURL(tradeURL);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(new Date());
+        baseStore.setUpdateTime(dateString);
+        baseTradeService.updateTrade(baseStore);
+        return JsonResult.ok();
+
+    }*/
+
+
+
+
+
     //删除模板
     @RequestMapping("deleteTemplate")
     public JsonResult deleteTemplate(Integer id){
         publicityTemplateService.deleteByID(id);
+        return JsonResult.ok();
+    }
+
+    //删除底料信息
+    @RequestMapping("deleteBase")
+    public JsonResult deleteBase(Integer id){
+        baseTradeService.deleteByID(id);
         return JsonResult.ok();
     }
 

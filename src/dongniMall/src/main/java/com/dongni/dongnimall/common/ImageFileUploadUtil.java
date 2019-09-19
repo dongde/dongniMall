@@ -25,7 +25,6 @@ public class ImageFileUploadUtil {
         if (StringUtils.isNotBlank(fileName)) {
             //生成数据库存储的路径
             String randomStr = UUID.randomUUID().toString();
-            System.out.println(fileName);
             pathDB = "/" + randomStr + fileName.substring(0, fileName.indexOf(".")) + ".jpg";
             //生成文件本地存储路径
             String filePath = imagePath + pathDB;

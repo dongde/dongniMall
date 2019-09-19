@@ -29,7 +29,7 @@
     </style>
 </head>
 <body>
-<form class="layui-form" type="multipart">
+<form class="layui-form" type="multipart" style="padding-top: 20px">
     <div class="layui-form-item" id="topSet">
         <label class="layui-form-label">模板名称</label>
         <div class="layui-input-block">
@@ -93,8 +93,8 @@
 
         //监听提交
         form.on('submit(formSubmint)', function(data){
-            console.log(data);
             var loading = layer.load(0,{shade:false});
+            console.log(data.field);
             $.ajax({
                 url:"/add/template",
                 data:data.field,
@@ -138,12 +138,14 @@
                 });
             }
             , done: function (res) {
+
                 //如果上传失败
                 if (res.code!= 0) {
                     return layer.msg('上传失败');
                 }
+
                 //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台
-                document.getElementById("urlSubmit").value = res.data.url;
+                $("#urlSubmit").val(res.data.src);
                 //上传成功
 
                 /*   console.log(res.data.src);*/

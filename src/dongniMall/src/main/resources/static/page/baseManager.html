@@ -33,7 +33,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">商品名称：</label>
             <div class="layui-input-inline">
-                <input type="text" autocomplete="off" id="titles" class="layui-input">
+                <input type="text" autocomplete="off" id="tradeName" class="layui-input">
             </div>
         </div>
 
@@ -41,6 +41,7 @@
             <label class="layui-form-label">类型：</label>
             <div class="layui-input-inline">
                 <select name="tradeType" id="tradeType" lay-verify="required">
+                    <option value="" selected="selected"></option>
                     <option value="火锅底料">火锅底料</option>
                     <option value="美蛙鱼头底料">美蛙鱼头底料</option>
                     <option value="串串底料">串串底料</option>
@@ -98,6 +99,101 @@
                 }
             });
         });
+
+
+        //查找
+        $('#findBySource').on('click',function(){
+            var tradeName = $("#tradeName").val();
+            var tradeType = $("#tradeType").val();
+            table.reload('baselist', {
+                url:'/showTradeList'
+                ,where: {
+                    tradeName: tradeName
+                    , tradeType: tradeType
+                },
+                page: {
+                    curr: 1
+                }
+            });
+
+
+        });
+
+        //重置
+        $('#reloadSource').on('click',function(){
+            $("#tradeName").val(null);
+            $("#tradeType").get(0).selected=true;
+            table.reload('baselist', {
+                url:'/showTradeList'
+                ,where: {
+                    tradeName: null
+                    , tradeType: null
+                },
+                page: {
+                    curr: 1
+                }
+            });
+        });
+
+        //监听行工具事件
+        table.on('tool(baselist)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            if(layEvent === 'del'){ //删除
+                layer.confirm('真的删除行么', function(index){
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                    deleteListObject(data.id);
+                });
+            } else if(layEvent === 'edit') { //编辑
+                layer.open({
+                    type: 2,
+                    title: '修改底料',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['80%', '80%'],
+                    offset: 'auto',
+                    content: '/page/addBaseTrade.html', //iframe的url，no代表不显示滚动条
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#id").val(obj.data.id);
+                        body.contents().find("#tradeName").val(obj.data.tradeName);
+                        body.contents().find("#tradeType").val(obj.data.tradeType);
+                        body.contents().find("#price").val(obj.data.price);
+                        body.contents().find("#baseURL").val(obj.data.tradeURL);
+                        body.contents().find("#updateImage").css("display","block");
+                        body.contents().find("#updateload").attr("src",obj.data.imageURL);
+                    }
+                });
+            }
+
+        });
+
+        //删除所选行数据
+        function deleteListObject(id){
+            if (id === null) {
+                layer.msg("请选择删除内容!");
+            }
+            $.ajax({
+                data:{"id":id},
+                url:"list/deleteBase",
+                success:function (res) {
+                    console.log(res.status);
+                    if(res.status == 200){
+                        layer.msg("删除成功！");
+                        window.location.reload();
+                        table.reload('baselist', {
+                            page: {
+                                curr: 1
+                                //重新从第 1 页开始
+                            }
+                        });
+                    }
+                }
+            })
+        }
+
 
 
         table.render({

@@ -1,6 +1,6 @@
 package com.dongni.dongnimall.controller;
 
-import com.dongni.dongnimall.manager.BaseTrade;
+import com.dongni.dongnimall.manager.BaseTradeService;
 import com.dongni.dongnimall.manager.NewsService;
 import com.dongni.dongnimall.manager.PublicityTemplateService;
 import com.dongni.dongnimall.vo.PageData;
@@ -16,7 +16,7 @@ public class ArticleAndTemplateListPageController {
 
 
     @Autowired
-    private BaseTrade baseTrade;
+    private BaseTradeService baseTradeService;
     @Autowired
     private NewsService newsService;
     @Autowired
@@ -41,7 +41,7 @@ public class ArticleAndTemplateListPageController {
     //底料商品总览
     @RequestMapping("/showTradeList")
     public PageData tradeList(Integer page, Integer limit, String tradeName, String tradeType){
-        return baseTrade.selectAllTrade(page,limit,tradeName,tradeType);
+        return baseTradeService.selectAllTrade(page,limit,tradeName,tradeType);
     }
 
 

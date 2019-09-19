@@ -76,7 +76,6 @@
         table.on('tool(templateList)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event参数对应的值）
-
             if(layEvent === 'del'){ //删除
                 layer.confirm('真的删除行么', function(index){
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
@@ -86,20 +85,20 @@
                 });
             } else if(layEvent === 'edit') { //编辑
 
-                //存入数据到localstorage
+                /*//存入数据到localstorage
                 localStorage.setItem("id",data.id);
                 localStorage.setItem("templateName",data.templateName);
                 localStorage.setItem("templateType",data.templateType);
                 localStorage.setItem("price",data.price);
                 localStorage.setItem("image",data.image);
-                localStorage.setItem("description",data.textDescription);
+                localStorage.setItem("description",data.textDescription);*/
                 layer.open({
                     //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 2,
                     title: "修改模板信息",
                     area: ['80%', '80%'],
                     id:"",
-                    content: ['/page/updateTemplate.html'],
+                    content: ['/page/addTemplate.html'],
                     success: function(res){
                         if(res.status == 200){
                             layer.msg("添加成功！");
