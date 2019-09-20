@@ -3,18 +3,22 @@ package com.dongni.dongnimall.controller;
 import com.dongni.dongnimall.manager.GoodsService;
 import com.dongni.dongnimall.manager.LogisticsService;
 import com.dongni.dongnimall.manager.OrderService;
+import com.dongni.dongnimall.pojo.GoodsDO;
 import com.dongni.dongnimall.pojo.LogisticsDO;
 import com.dongni.dongnimall.pojo.OrderDO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author cengshuai on 2019-09-17.
@@ -36,15 +40,20 @@ public class OrderController {
     }
 
     @RequestMapping("/addOrder")
-    public JsonResult addOrder(String order_number, String user_phone, BigDecimal payment_amount) {
-        if (StringUtils.isBlank(order_number) || StringUtils.isBlank(user_phone) || payment_amount == null) {
+    public JsonResult addOrder(String user_phone, BigDecimal payment_amount, @RequestBody List<GoodsDO> goodsList) {
+        if (StringUtils.isBlank(user_phone) || payment_amount == null || goodsList.size() == 0) {
             return JsonResult.errorMsg("创建订单出错");
         }
+        String order_number = UUID.randomUUID().toString();
         OrderDO orderDO = new OrderDO();
         orderDO.setOrder_number(order_number);
         orderDO.setUser_phone(user_phone);
         orderDO.setPayment_amount(payment_amount);
         orderService.addOrder(orderDO);
+        for (GoodsDO goodsDO : goodsList) {
+            goodsDO.setOrder_number(order_number);
+        }
+        goodsService.addGoods(goodsList);
         return JsonResult.ok();
     }
 
@@ -63,8 +72,8 @@ public class OrderController {
     }
 
     @RequestMapping("/removeOrder")
-    public JsonResult removeOrder(String order_number){
-        if(StringUtils.isBlank(order_number)){
+    public JsonResult removeOrder(String order_number) {
+        if (StringUtils.isBlank(order_number)) {
             return JsonResult.errorMsg("删除订单出错");
         }
         orderService.removeOrder(order_number);
@@ -72,6 +81,7 @@ public class OrderController {
         goodsService.removeGoods(order_number);
         return JsonResult.ok();
     }
+
 
     @RequestMapping("/queryLogistics")
     public JsonResult queryLogistics(String order_number) {

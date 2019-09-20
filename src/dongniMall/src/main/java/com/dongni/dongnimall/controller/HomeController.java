@@ -77,6 +77,10 @@ public class HomeController extends BaseController {
         if (StringUtils.isBlank(id) || status == null) {
             return JsonResult.errorMsg("修改出错");
         } else {
+            Integer maxCount = bannerService.queryBannerUsedCount();
+            if (maxCount >= MAX_BANNER_COUNT) {
+                return JsonResult.errorMsg("轮播图使用已达上限");
+            }
             BannerDO bannerDO = new BannerDO();
             bannerDO.setId(id);
             if (status == 1) {
@@ -135,6 +139,10 @@ public class HomeController extends BaseController {
         if (StringUtils.isBlank(id) || status == null) {
             return JsonResult.errorMsg("修改出错");
         } else {
+            Integer maxCount = smallImageService.querySmallImageUsedCount();
+            if (maxCount >= MAX_SMALL_IMAGES_COUNT) {
+                return JsonResult.errorMsg("小图使用已达上限");
+            }
             SmallImageDO smallImageDO = new SmallImageDO();
             smallImageDO.setId(id);
             if (status == 1) {
