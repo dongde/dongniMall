@@ -11,6 +11,12 @@
         order by create_time desc
     </select>
 
+    <select id="selectSmallImageUsedCount" resultType="Integer">
+        select count(*)
+        from smallImage
+        where is_used=1
+    </select>
+
     <insert id="insertSmallImage" parameterType="com.dongni.dongnimall.pojo.SmallImageDO">
         insert into smallImage(<include refid="small_image_col"></include>)
         values (#{smallImageDO.id},#{smallImageDO.smallImage_img},#{smallImageDO.is_used},#{smallImageDO.url},#{smallImageDO.description},#{smallImageDO.create_time})

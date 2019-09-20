@@ -15,6 +15,8 @@ import java.util.List;
 public interface BannerMapper {
     List<BannerDO> selectBannerList();
 
+    Integer selectBannerUsedCount();
+
     void insertBanner(@Param("bannerDO") BannerDO bannerDO);
 
     void deleteBanner(List<String> ids);

@@ -102,23 +102,23 @@
 
                                     $.ajax({
                                         method: 'POST',
-                                        url: "/order/queryLogistics",
+                                        url: "/order/queryGoods",
                                         data: {
                                             order_number: data.order_number
                                         },
-                                        success: function (logisticsRes) {
-                                            if (logisticsRes.status === 200) {
-                                                logistics = logisticsRes.data;
+                                        success: function (goodsRes) {
+                                            if (goodsRes.status === 200) {
+                                                goods = goodsRes.data;
 
                                                 $.ajax({
                                                     method: 'POST',
-                                                    url: "/order/queryGoods",
+                                                    url: "/order/queryLogistics",
                                                     data: {
                                                         order_number: data.order_number
                                                     },
-                                                    success: function (goodsRes) {
-                                                        if (goodsRes.status === 200) {
-                                                            goods = goodsRes.data;
+                                                    success: function (logisticsRes) {
+                                                        if (logisticsRes.status === 200) {
+                                                            logistics = logisticsRes.data;
                                                             layer.open({
                                                                 type: 2,
                                                                 title: '订单详情',
@@ -226,7 +226,7 @@
                                                     }
                                                 });
                                             } else {
-                                                layer.msg(logisticsRes.msg);
+                                                layer.msg(goodsRes.msg);
                                             }
                                         },
                                         error: function () {

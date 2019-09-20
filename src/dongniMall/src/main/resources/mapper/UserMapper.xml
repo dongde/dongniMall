@@ -25,6 +25,13 @@
         select
         <include refid="user_col"></include>
         from `user`
+        where 1=1
+        <if test="phone!=null and phone!=''">
+            and phone like '%' #{phone} '%'
+        </if>
+        <if test="name!=null and name!=''">
+            and name like '%' #{name} '%'
+        </if>
     </select>
 
     <select id="selectUserByPhone" parameterType="String" resultType="com.dongni.dongnimall.pojo.UserDO">

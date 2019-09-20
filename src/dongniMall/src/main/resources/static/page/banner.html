@@ -70,12 +70,18 @@
                 , height: 'full-160'
                 , cols: [[
                     {type: 'checkbox', fixed: 'left', align: 'center'}
-                    , {field: 'id', title: 'ID', fixed: 'left', unresize: true, align: 'center'}
                     , {field: 'banner_img', title: '图片缩略图', templet: '#templet-thumbnail', unresize: true, align: 'center'}
                     , {field: 'url', title: '链接地址', unresize: true, align: 'center'}
-                    , {field: 'create_time', title: '上传时间', sort: true, unresize: true, align: 'center'}
-                    , {field: 'is_used', title: '使用状态', templet: '#templet-state', unresize: true, align: 'center'}
-                    , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center'}
+                    , {field: 'create_time', title: '上传时间', sort: true, unresize: true, align: 'center', width: 200}
+                    , {
+                        field: 'is_used',
+                        title: '使用状态',
+                        templet: '#templet-state',
+                        unresize: true,
+                        align: 'center',
+                        width: 150
+                    }
+                    , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center', width: 150}
                 ]]
                 , page: true
                 , limit: 10
@@ -100,17 +106,17 @@
                         break;
                     case 'addBanner':
                         var render = myRender;
-                        render("/home/uploadBanner",table);
-                    // layer.open({
-                    //     type: 2,
-                    //     title: '上传轮播图',
-                    //     shadeClose: true,
-                    //     shade: 0.8,
-                    //     area: ['800px', '500px'],
-                    //     offset: 'auto',
-                    //     content: '/page/banner-info2.html' //iframe的url，no代表不显示滚动条
-                    // });
-                    break;
+                        render("/home/uploadBanner", table);
+                        // layer.open({
+                        //     type: 2,
+                        //     title: '上传轮播图',
+                        //     shadeClose: true,
+                        //     shade: 0.8,
+                        //     area: ['800px', '500px'],
+                        //     offset: 'auto',
+                        //     content: '/page/banner-info2.html' //iframe的url，no代表不显示滚动条
+                        // });
+                        break;
                 }
             });
             /**
@@ -147,7 +153,7 @@
                                         layer.msg("取消成功");
                                     } else {
                                         layer.close(index);
-                                        layer.msg("取消失败");
+                                        layer.msg(res.msg);
                                     }
                                 },
                                 error: function () {
@@ -179,7 +185,7 @@
                                         layer.msg("使用成功");
                                     } else {
                                         layer.close(index);
-                                        layer.msg("使用失败");
+                                        layer.msg(res.msg);
                                     }
                                 },
                                 error: function () {

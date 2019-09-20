@@ -28,7 +28,7 @@ public interface UserService {
      * @return
      * @Description: 查询用户列表
      */
-    PageData queryUserList(Integer page, Integer pageSize);
+    PageData queryUserList(Integer page, Integer pageSize,String phone,String name);
 
     /**
      * @param phone

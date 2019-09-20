@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Repository
 public interface GoodsMapper {
-    void insertGoods(GoodsDO goodsDO);
+    void insertGoods(List<GoodsDO> goodsList);
 
     void deleteGoods(String order_number);
 

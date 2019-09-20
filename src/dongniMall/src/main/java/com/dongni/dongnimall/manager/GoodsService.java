@@ -11,10 +11,10 @@ import java.util.List;
  */
 public interface GoodsService {
     /**
-     * @param goodsDO
+     * @param goodsList
      * @Description: 添加商品信息
      */
-    void addGoods(GoodsDO goodsDO);
+    void addGoods(List<GoodsDO> goodsList);
 
     /**
      * @param order_number

@@ -4,10 +4,12 @@
     <sql id="goods_col">
         order_number,goods_name,goods_img,goods_price,goods_count,subtotal
     </sql>
-    <insert id="insertGoods" parameterType="com.dongni.dongnimall.pojo.GoodsDO">
+    <insert id="insertGoods" parameterType="java.util.List">
         insert into goods(<include refid="goods_col"></include>)
         values
-        (#{goodsDO.order_number},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_count},#{goodsDO.subtotal})
+        <foreach collection="list" index="index" open="(" separator="," close=")" item="goodsDO">
+            (#{goodsDO.order_number},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_count},#{goodsDO.subtotal})
+        </foreach>
     </insert>
 
     <delete id="deleteGoods" parameterType="String">
@@ -16,7 +18,8 @@
     </delete>
 
     <select id="selectGoods" parameterType="String" resultType="com.dongni.dongnimall.pojo.GoodsDO">
-        select <include refid="goods_col"></include>
+        select
+        <include refid="goods_col"></include>
         from goods
         where order_number=#{order_number}
     </select>

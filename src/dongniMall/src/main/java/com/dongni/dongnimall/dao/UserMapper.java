@@ -16,7 +16,7 @@ public interface UserMapper {
 
     void deleteUser(List<String> phones);
 
-    List<UserDO> selectUserList();
+    List<UserDO> selectUserList(@Param("phone") String phone,@Param("name") String name);
 
     UserDO selectUserByPhone(String phone);
 

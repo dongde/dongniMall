@@ -20,8 +20,8 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private GoodsMapper goodsMapper;
     @Override
-    public void addGoods(GoodsDO goodsDO) {
-        goodsMapper.insertGoods(goodsDO);
+    public void addGoods(List<GoodsDO> goodsList) {
+        goodsMapper.insertGoods(goodsList);
     }
 
     @Override
