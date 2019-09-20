@@ -7,6 +7,10 @@ package com.dongni.dongnimall.controller;
 public class BaseController {
     //登录界面验证码图片保存路径
     public static final String CODE_IMAGE_PATH = "/Users/cengshuai/intellij_workspace/codeImage/code.jpg";
+    //轮播图数量上限
+    public static final Integer MAX_BANNER_COUNT = 6;
+    //小图数量上限
+    public static final Integer MAX_SMALL_IMAGES_COUNT = 4;
     //轮播图保存路径
     public static final String BANNER_IMAGES_PATH = "/Users/cengshuai/intellij_workspace/bannerImages";
     //推荐小图保存路径

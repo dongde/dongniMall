@@ -16,9 +16,11 @@ public interface UserMapper {
 
     void deleteUser(List<String> phones);
 
-    List<UserDO> selectUserList();
+    List<UserDO> selectUserList(@Param("phone") String phone,@Param("name") String name);
 
-    void updateUser(UserDO userDO);
+    UserDO selectUserByPhone(String phone);
 
-    UserDO selectUserByPhoneAndPassword(@Param("phone") String phone, @Param("phone") String password);
+    void updateUser(@Param("userDO") UserDO userDO);
+
+    UserDO selectUserByPhoneAndPassword(@Param("phone") String phone, @Param("password") String password);
 }

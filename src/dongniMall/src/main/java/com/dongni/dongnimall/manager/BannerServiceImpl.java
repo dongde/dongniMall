@@ -37,6 +37,11 @@ public class BannerServiceImpl implements BannerService {
         return pageData;
     }
 
+    @Override
+    public Integer queryBannerUsedCount() {
+        return bannerMapper.selectBannerUsedCount();
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void addBanner(BannerDO bannerDO) {

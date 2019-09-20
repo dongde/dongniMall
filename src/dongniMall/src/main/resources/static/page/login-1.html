@@ -144,7 +144,7 @@
                     <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码"
                            autocomplete="off" class="layui-input verification captcha" value="">
                     <div class="captcha-img">
-                        <img id="captchaPic">
+                        <img id="captchaPic" src="">
                         <a onclick="getCode()">看不清，换一张</a>
                     </div>
                 </div>
@@ -164,18 +164,20 @@
 <script>
     // 粒子线条背景
     $(document).ready(function () {
+        getCode();
         $('.layui-container').particleground({
             dotColor: '#5cbdaa',
             lineColor: '#5cbdaa'
         });
-        getCode();
     });
     layui.use(['form'], function () {
         var form = layui.form,
             layer = layui.layer;
 
         // 登录过期的时候，跳出ifram框架
-        if (top.location != self.location) top.location = self.location;
+        if (top.location != self.location) {
+            top.location = self.location;
+        }
 
 
         // 进行登录操作
@@ -204,8 +206,10 @@
                 success: function (res) {
                     if (res.status === 200) {
                         //设置当前登录用户
-                        window.localStorage.setItem("currentManagerInfo",JSON.stringify(res.data));
-                        layer.msg('登录成功', function () {
+                        window.localStorage.setItem("currentManagerInfo", JSON.stringify(res.data));
+                        layer.msg('登录成功', {
+                            time: 1000
+                        }, function () {
                             window.location = '/index.html';
                         });
                     } else {
@@ -222,7 +226,6 @@
             method: "GET",
             url: "/getCode",
             success: function (res) {
-                console.log(res);
                 $("#captchaPic").attr("src", res.codeUrl + "?time=" + new Date().getTime());
                 window.localStorage.setItem("code", res.code);
             }

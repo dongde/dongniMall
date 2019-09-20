@@ -21,15 +21,16 @@
     <update id="updateOrder" parameterType="com.dongni.dongnimall.pojo.OrderDO">
         update `order`
         <set>
-            <if test="orderDO.payment_method != null and orderDO.payment_method != ''">
+            <if test="orderDO.payment_method != null">
                 payment_method = #{orderDO.payment_method},
             </if>
-            <if test="orderDO.order_status != null and orderDO.order_status != ''">
+            <if test="orderDO.order_status != null">
                 order_status = #{orderDO.order_status},
             </if>
             <if test="orderDO.complete_time != null and orderDO.complete_time != ''">
                 complete_time = #{orderDO.complete_time}
             </if>
         </set>
+        where order_number=#{orderDO.order_number}
     </update>
 </mapper>

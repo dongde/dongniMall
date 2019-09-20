@@ -11,6 +11,12 @@
         order by create_time desc
     </select>
 
+    <select id="selectBannerUsedCount" resultType="Integer">
+        select count(*)
+        from banner
+        where is_used=1
+    </select>
+
     <insert id="insertBanner" parameterType="com.dongni.dongnimall.pojo.BannerDO">
         insert into banner(<include refid="banner_col"></include>)
         values (#{bannerDO.id},#{bannerDO.banner_img},#{bannerDO.is_used},#{bannerDO.url},#{bannerDO.create_time})

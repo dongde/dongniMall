@@ -44,6 +44,6 @@ public class orderServiceImpl implements OrderService {
 
     @Override
     public void modifyOrder(OrderDO orderDO) {
-
+        orderMapper.updateOrder(orderDO);
     }
 }

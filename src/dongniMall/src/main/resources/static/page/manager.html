@@ -46,9 +46,8 @@
             , cellMinWidth: 80
             , height: 'full-160'
             , cols: [[
-                {field: 'id', title: 'ID', fixed: 'left', unresize: true, align: 'center'}
-                , {field: 'name', title: '管理员名', templet: '#templet-thumbnail', unresize: true, align: 'center'}
-                , {field: 'create_time', title: '上传时间', sort: true, unresize: true, align: 'center'}
+                {field: 'name', title: '管理员名', templet: '#templet-thumbnail', unresize: true, align: 'center'}
+                , {field: 'create_time', title: '注册时间', sort: true, unresize: true, align: 'center'}
                 , {field: 'password', title: '密码', hide: true, unresize: true}
                 , {
                     field: 'permission',
@@ -81,21 +80,15 @@
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         body.contents().find("#isHidden").attr('hidden', true);
-                        body.contents().find("#modules").html("");
-                        body.contents().find('.layui-anim').html("");
                         //如果当前登录管理员权限为一级，则可添加一级和二级管理员，否则只能添加二级
-                        switch (currentManagerObj.permission) {
-                            case 1 :
-                                body.contents().find("#modules").html(' <option value="1">一级权限</option><option value="2">二级权限</option>');
-                                body.contents().find('.layui-anim').html('<dd lay-value="1" class="layui-this">一级权限</dd><dd lay-value="2" class>二级权限</dd>');
-                                body.contents().find(".layui-select-title > input").val("一级权限");
-                                break;
-                            case 2:
-                                body.contents().find("#modules").html('<option value="2">二级权限</option>');
-                                body.contents().find('.layui-anim').html('<dd lay-value="2" class="layui-this">二级权限</dd>');
-                                body.contents().find(".layui-select-title > input").val("二级权限");
-                                break;
+                        if (currentManagerObj.permission === 2) {
+                            var Select1 = 'dd[lay-value=1]';
+                            var Select = 'dd[lay-value=2]'; //设置要选择的值 --option的value
+                            body.contents().find("#modules").html('<option value="2">二级权限</option>');
+                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select1).remove();
+                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
                         }
+
                     }
                 });
             }
@@ -134,30 +127,30 @@
                                 var body = layer.getChildFrame('body', index);
                                 body.contents().find("#managerName").val(obj.data.name);
                                 body.contents().find("#id").val(obj.data.id);
-                                body.contents().find("#modules").html("");
-                                body.contents().find('.layui-anim').html("");
                                 console.log("当前权限等级：" + obj.data.permission);
                                 switch (currentManagerObj.permission) {
                                     //当前登录管理员权限为一级，可以修改管理员权限为一级或二级
                                     case 1:
                                         switch (obj.data.permission) {
                                             case 1:
-                                                body.contents().find("#modules").append(' <option value="1" selected="selected">一级权限</option><option value="2">二级权限</option>');
-                                                body.contents().find('.layui-anim').append('<dd lay-value="1" class="layui-this">一级权限</dd><dd lay-value="2">二级权限</dd>');
-                                                body.contents().find(".layui-select-title > input").val("一级权限");
+                                                var Select = 'dd[lay-value=1]'; //设置要选择的值 --option的value
+                                                body.contents().find("#modules").html('<option value="1">一级权限</option><option value="2">二级权限</option>');
+                                                body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
                                                 break;
                                             case 2:
-                                                body.contents().find("#modules").append(' <option value="1" >一级权限</option><option value="2" selected="selected">二级权限</option>');
-                                                body.contents().find('.layui-anim').append('<dd lay-value="1">一级权限</dd><dd lay-value="2" class="layui-this">二级权限</dd>');
-                                                body.contents().find(".layui-select-title > input").val("二级权限");
+                                                var Select = 'dd[lay-value=2]'; //设置要选择的值 --option的value
+                                                body.contents().find("#modules").html('<option value="1">一级权限</option><option value="2">二级权限</option>');
+                                                body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
                                                 break;
                                         }
                                         break;
                                     //当前登录管理员权限为二级，只能修改管理员权限为二级
                                     case 2:
-                                        body.contents().find("#modules").append('<option value="2" selected="selected">二级权限</option>');
-                                        body.contents().find('.layui-anim').append('<dd lay-value="2" class="layui-this">二级权限</dd>');
-                                        body.contents().find(".layui-select-title > input").val("二级权限");
+                                        var Select1 = 'dd[lay-value=1]';
+                                        var Select = 'dd[lay-value=2]'; //设置要选择的值 --option的value
+                                        body.contents().find("#modules").html('<option value="2">二级权限</option>');
+                                        body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select1).remove();
+                                        body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
                                         break;
                                 }
                             }
@@ -169,31 +162,6 @@
             }
         });
 
-        /**
-         * 刷新数据表
-         * @type {{reload: reload, delALl: delALl}}
-         */
-        var active = {
-            reload: function () {
-                //执行重载
-                table.reload('banner-table', {
-                    page: {
-                        curr: 1
-                        //重新从第 1 页开始
-                    }
-                });
-
-            },
-            delALl: function () { //获取选中数据
-                var checkStatus = table
-                    .checkStatus('banner-table'), data = checkStatus.data;
-                var ids = [];
-                for (var i = 0; i < data.length; i++) {
-                    ids.push(data[i]["id"]);
-                }
-                deleteBanners(ids);
-            }
-        };
 
         //根据ID删除行
         function deleteManager(id) {

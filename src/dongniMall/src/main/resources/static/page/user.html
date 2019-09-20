@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <title>user</title>
 </head>
+<style>
+    .layui-input{
+        height: 30px;
+    }
+    .top-btn {
+        margin-left: 10px;
+        margin-bottom: 0 !important;
+    }
+</style>
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
@@ -13,13 +22,22 @@
 </body>
 <!-- 表格顶部按钮-->
 <script type="text/html" id="toolbar">
-    <div class="layui-btn-container">
+
+        账号：
+        <div class="layui-inline">
+            <input class="layui-input" name="searchPhone" id="searchPhone" placeholder="请输入账号" autocomplete="off">
+        </div>
+        昵称：
+        <div class="layui-inline">
+            <input class="layui-input" name="searchName" id="searchName" placeholder="请输入昵称" autocomplete="off">
+        </div>
+        <button class="layui-btn layui-btn-sm top-btn" lay-event="search" data-type="search">搜索</button>
         <button class="layui-btn layui-btn-sm" lay-event="delAll" data-type="delAll">批量删除</button>
-    </div>
+
 </script>
 <!-- 操作栏-->
 <script type="text/html" id="bar">
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="modify" style='text-decoration:none;'>编辑</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="modify" style='text-decoration:none;'>修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style='text-decoration:none;'>删除</a>
 </script>
 <!-- 性别-->
@@ -64,17 +82,30 @@
          * 头工具栏事件
          */
         table.on('toolbar(user-table)', function (obj) {
-            if (obj.event === "delAll") {
-                layer.confirm('确定删除？', function (index) {
-                    var checkStatus = table
-                        .checkStatus('user-table'), data = checkStatus.data;
-                    var phones = [];
-                    for (var i = 0; i < data.length; i++) {
-                        phones.push(data[i]["phone"]);
-                    }
-                    deleteUsers(phones);
-                    layer.close(index);
-                });
+            switch (obj.event) {
+                case "delAll":
+                    layer.confirm('确定删除？', function (index) {
+                        var checkStatus = table
+                            .checkStatus('user-table'), data = checkStatus.data;
+                        var phones = [];
+                        for (var i = 0; i < data.length; i++) {
+                            phones.push(data[i]["phone"]);
+                        }
+                        deleteUsers(phones);
+                        layer.close(index);
+                    });
+                    break;
+                case "search":
+                    table.reload('user-table', {
+                        page: {
+                            curr: 1
+                            //重新从第 1 页开始
+                        },
+                        where: {
+                            phone: $("#searchPhone").val().trim(),
+                            name: $("#searchName").val().trim()
+                        }
+                    });
             }
         });
         /**
@@ -83,8 +114,20 @@
         table.on('tool(user-table)', function (obj) {
             var data = obj.data;
             switch (obj.event) {
-                case 'edit':
-
+                case 'modify':
+                    layer.open({
+                        type: 2,
+                        title: '修改用户信息',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['800px', '500px'],
+                        offset: 'auto',
+                        content: '/page/user-info.html',//iframe的url，no代表不显示滚动条
+                        success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.contents().find("#phone").val(obj.data.phone);
+                        }
+                    });
                     break;
                 case 'del':
                     layer.confirm('确定删除？', function (index) {

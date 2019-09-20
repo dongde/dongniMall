@@ -17,6 +17,8 @@ public class GoodsDO implements Serializable {
     private String goods_name;
     //商品图片
     private String goods_img;
+    //单价
+    private BigDecimal goods_price;
     //商品数量
     private Integer goods_count;
     //商品小计
@@ -44,6 +46,14 @@ public class GoodsDO implements Serializable {
 
     public void setGoods_img(String goods_img) {
         this.goods_img = goods_img;
+    }
+
+    public BigDecimal getGoods_price() {
+        return goods_price;
+    }
+
+    public void setGoods_price(BigDecimal goods_price) {
+        this.goods_price = goods_price;
     }
 
     public Integer getGoods_count() {

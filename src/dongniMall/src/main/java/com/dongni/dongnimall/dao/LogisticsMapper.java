@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.dao;
 
 import com.dongni.dongnimall.pojo.LogisticsDO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 @Repository
 public interface LogisticsMapper {
-    void insertLogistics(LogisticsDO logisticsDO);
+    void insertLogistics(@Param("logisticsDO") LogisticsDO logisticsDO);
 
     void deleteLogistics(String order_number);
 

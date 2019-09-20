@@ -5,8 +5,12 @@
     <title>smallImage</title>
     <style>
         .layui-table-cell {
-            height: 70px !important;
-            line-height: 70px !important;
+            height: 60px !important;
+            line-height: 60px !important;
+        }
+
+        .layui-table img {
+            max-width: 144px !important;
         }
     </style>
 </head>
@@ -65,7 +69,6 @@
             , height: 'full-160'
             , cols: [[
                 {type: 'checkbox', fixed: 'left', align: 'center'}
-                , {field: 'id', title: 'ID', fixed: 'left', unresize: true, align: 'center'}
                 , {
                     field: 'smallImage_img',
                     title: '图片缩略图',
@@ -75,9 +78,9 @@
                 }
                 , {field: 'url', title: '链接地址', unresize: true, align: 'center'}
                 , {field: 'description', title: '图片说明', unresize: true, align: 'center'}
-                , {field: 'create_time', title: '上传时间', sort: true, unresize: true, align: 'center'}
-                , {field: 'is_used', title: '使用状态', templet: '#templet-state', unresize: true, align: 'center'}
-                , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center'}
+                , {field: 'create_time', title: '上传时间', sort: true, unresize: true, align: 'center', width: 200}
+                , {field: 'is_used', title: '使用状态', templet: '#templet-state', unresize: true, align: 'center',width:150}
+                , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center' ,width:150}
             ]]
             , page: true
             , limit: 10
@@ -146,7 +149,7 @@
                                     layer.msg("取消成功");
                                 } else {
                                     layer.close(index);
-                                    layer.msg("取消失败");
+                                    layer.msg(res.msg);
                                 }
                             },
                             error: function () {
@@ -178,7 +181,7 @@
                                     layer.msg("使用成功");
                                 } else {
                                     layer.close(index);
-                                    layer.msg("使用失败");
+                                    layer.msg(res.msg);
                                 }
                             },
                             error: function () {

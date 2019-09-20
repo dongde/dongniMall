@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>logistics-info</title>
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <style>
+        form {
+            padding: 50px;
+        }
+
+        .readOnly {
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form ">
+    <div class="layui-form-item">
+        <label class="layui-form-label">订单编号：</label>
+        <div class="layui-input-block">
+            <input type="text" id="order_number" name="order_number" lay-verify="order_number" readonly="readonly"
+                   class="layui-input readOnly">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">收货人：</label>
+        <div class="layui-input-block">
+            <input type="text" id="userName" name="userName" lay-verify="userName" readonly="readonly"
+                   class="layui-input readOnly">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号：</label>
+        <div class="layui-input-block">
+            <input type="text" id="userPhone" name="userPhone" lay-verify="userPhone" readonly="readonly"
+                   class="layui-input readOnly">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮政编码：</label>
+        <div class="layui-input-block">
+            <input type="text" id="userPostalCode" name="userPostalCode" lay-verify="userPostalCode" readonly="readonly"
+                   class="layui-input readOnly">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">收获地址：</label>
+        <div class="layui-input-block">
+            <input type="text" id="userAddress" name="userAddress" lay-verify="userAddress" readonly="readonly"
+                   class="layui-input readOnly">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">配送方式：</label>
+        <div class="layui-input-inline">
+            <select id="delivery_method" name="delivery_method" lay-verify="required" lay-search="">
+                <option value="">请选择物流公司</option>
+                <option value="0">申通</option>
+                <option value="1">顺丰</option>
+                <option value="2">中通</option>
+                <option value="3">圆通</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">物流单号：</label>
+        <div class="layui-input-block">
+            <input type="text" id="logistics_number" name="logistics_number" lay-verify="logistics_number"
+                   autocomplete="off"
+                   placeholder="请输入物流单号"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" id="submit" type="button">立即提交</button>
+        </div>
+    </div>
+</form>
+</body>
+<script src="../lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script src="../jquery/jquery.js" charset="utf-8"></script>
+<script>
+    layui.use('form', function () {
+        $("#submit").on('click', function () {
+            var order_number = $("#order_number").val();
+            var delivery_method = $("#delivery_method").val();
+            var logistics_number = $("#logistics_number").val().trim();
+            if (delivery_method === "" || delivery_method === undefined) {
+                layer.msg("请选择配送方式");
+            } else if (logistics_number === "") {
+                layer.msg("请填写物流单号");
+            } else {
+                $.ajax({
+                    method: 'POST',
+                    data: {
+                        order_number: order_number,
+                        delivery_method: delivery_method,
+                        logistics_number: logistics_number
+                    },
+                    url: "/order/addLogistics",
+                    success: function (res) {
+                        if(res.status===200){
+                            parent.layui.table.reload('order-table', {page: {curr: 1}});
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            layer.msg("修改成功");
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                })
+            }
+        })
+    });
+</script>
+</html>
