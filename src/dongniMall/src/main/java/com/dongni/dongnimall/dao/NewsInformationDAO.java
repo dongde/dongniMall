@@ -53,11 +53,12 @@ public interface NewsInformationDAO {
      * @param newsInformation
      * @param id
      */
-    @Update("update newsinformation set title=#{newsInformation.title}," +
-            "source=#{newsInformation.source}," +
-            "summary=#{newsInformation.summary}," +
-            "content=#{newsInformation.content}," +
-            "updateTime=#{newsInformation.updateTime} where id = #{id}")
+    @Update("update newsInformation set title=#{newsInformation.title}" +
+            ",source=#{newsInformation.source}" +
+            ",summary=#{newsInformation.summary}" +
+            ",content=#{newsInformation.content}" +
+            ",imageUrl=#{newsInformation.imageURL}"+
+            ",updateTime=#{newsInformation.updateTime} where id = #{id}")
     void updateNews(@Param("newsInformation") NewsInformation newsInformation, @Param("id") Integer id);
 
     /**

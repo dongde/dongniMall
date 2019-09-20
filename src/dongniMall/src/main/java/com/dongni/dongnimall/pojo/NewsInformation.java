@@ -67,6 +67,18 @@ public class NewsInformation implements Serializable {
     public String getUpdateTime() {
         return updateTime;
     }
+    @Override
+    public String toString() {
+        return "NewsInformation{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", source='" + source + '\'' +
+                ", imageURL='" + imageURL + '\'' +
+                ", summary='" + summary + '\'' +
+                ", content='" + content + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                '}';
+    }
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;

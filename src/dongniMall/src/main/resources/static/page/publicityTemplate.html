@@ -85,33 +85,25 @@
                 });
             } else if(layEvent === 'edit') { //编辑
 
-                /*//存入数据到localstorage
-                localStorage.setItem("id",data.id);
-                localStorage.setItem("templateName",data.templateName);
-                localStorage.setItem("templateType",data.templateType);
-                localStorage.setItem("price",data.price);
-                localStorage.setItem("image",data.image);
-                localStorage.setItem("description",data.textDescription);*/
                 layer.open({
-                    //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 2,
-                    title: "修改模板信息",
+                    title: '修改底料',
+                    shadeClose: true,
+                    shade: 0.8,
                     area: ['80%', '80%'],
-                    id:"",
-                    content: ['/page/addTemplate.html'],
-                    success: function(res){
-                        if(res.status == 200){
-                            layer.msg("添加成功！");
-                            table.reload('templateList', {
-                                page: {
-                                    curr: 1
-                                    //重新从第 1 页开始
-                                }
-                            });
+                    offset: 'auto',
+                    content: '/page/addTemplate.html', //iframe的url，no代表不显示滚动条
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#id").val(obj.data.id);
+                        body.contents().find("#templateName").val(obj.data.templateName);
+                        body.contents().find("#templateType").val(obj.data.templateType);
+                        body.contents().find("#price").val(obj.data.price);
+                        body.contents().find("#updateImage").css("display","block");
+                        body.contents().find("#updateload").attr("src",obj.data.image);
+                        body.contents().find("#description").val(obj.data.textDescription);
 
-                        }
-
-                    }//引用的弹出层的页面层的方式加载修改界面表单
+                    }
                 });
             }
 

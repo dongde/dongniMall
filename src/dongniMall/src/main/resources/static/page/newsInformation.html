@@ -68,13 +68,12 @@
             layer = layui.layer,
             $ = layui.jquery;
 
-        var localStorage = window.localStorage;
-
 
 
         //监听行工具事件
         table.on('tool(userList)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
+
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             if(layEvent === 'del'){ //删除
                 layer.confirm('真的删除行么', function(index){
@@ -84,37 +83,27 @@
                     deleteListObject(data.id);
                 });
             } else if(layEvent === 'edit') { //编辑
-                //存入数据到localstorage
-                localStorage.setItem("id",data.id);
-                localStorage.setItem("title",data.title);
-                localStorage.setItem("source",data.source);
-                localStorage.setItem("summary",data.summary);
-                localStorage.setItem("imageUrl",data.imageURL);
-                localStorage.setItem("content",data.content);
-
-
                 layer.open({
-                    //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                     type: 2,
-                    title: "修改文章信息",
+                    title: '修改文章',
+                    shadeClose: true,
+                    shade: 0.8,
                     area: ['80%', '80%'],
-                    id:"",
-                    content: ['/page/updateNews.html'],
-                    success: function(res){
-                        if(res.status == 200){
-                            layer.msg("添加成功！");
-                            table.reload('userList', {
-                                page: {
-                                    curr: 1
-                                    //重新从第 1 页开始
-                                }
-                            });
+                    offset: 'auto',
+                    content: '/page/addNews.html', //iframe的url，no代表不显示滚动条
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#id").val(obj.data.id);
+                        body.contents().find("#title").val(obj.data.title);
+                        body.contents().find("#source").val(obj.data.source);
+                        body.contents().find("#summary").val(obj.data.summary);
+                        body.contents().find("#updateImage").css("display","block");
+                        body.contents().find("#updateload").attr("src",obj.data.imageURL);
+                        body.contents().find("#contents").val(obj.data.content);
 
-                        }
-
-                        }//引用的弹出层的页面层的方式加载修改界面表单
-                    });
-                }
+                    }
+                });
+            }
 
         });
 

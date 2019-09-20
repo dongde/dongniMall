@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>最新文章管理</title>
+    <title>模板管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -30,10 +30,18 @@
 </head>
 <body>
 <form class="layui-form" type="multipart" style="padding-top: 20px">
+
+    <div class="layui-form-item" hidden>
+        <label class="layui-form-label">ID：</label>
+        <div class="layui-input-block">
+            <input type="text" id="id" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
     <div class="layui-form-item" id="topSet">
         <label class="layui-form-label">模板名称</label>
         <div class="layui-input-block">
-            <input type="text" name="templateName" lay-verify="templateName" autocomplete="off" placeholder="请输入模板名称"
+            <input type="text"  id="templateName" name="templateName" lay-verify="templateName" autocomplete="off" placeholder="请输入模板名称"
                    class="layui-input">
         </div>
     </div>
@@ -49,7 +57,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">价格</label>
         <div class="layui-input-inline">
-            <input type="number" name="price" lay-verify="price" placeholder="单价" autocomplete="off" class="layui-input">
+            <input type="number" id="price" name="price" lay-verify="price" placeholder="单价" autocomplete="off" class="layui-input">
         </div>
         <div class="layui-form-mid layui-word-aux">单位：元</div>
     </div>
@@ -60,24 +68,23 @@
             <button type="button" class="layui-btn" id="uploadImage">上传图片</button>
             <div class="layui-upload-list" id="hide" style="display:none;">
                 <img class="imageSize" id="upload">
-                <p id="errupload"></p>
+            </div>
+            <div class="layui-upload-list" id="updateImage" style="display: none">
+                <img class="imageSize" id="updateload">
             </div>
         </div>
     </div>
 
-
-    <input type="text" style="display: none" name="image" id="urlSubmit" >
-
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">图文描述</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入内容" name="description" class="layui-textarea"></textarea>
+            <textarea placeholder="请输入内容" id="description" name="description" class="layui-textarea"></textarea>
         </div>
     </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="formSubmint" id="commit">添加模板</button>
+            <button class="layui-btn" type="button" id="formSubmit">添加模板</button>
         </div>
     </div>
 </form>
@@ -87,87 +94,98 @@
         var form = layui.form,
             ayer = layui.layer,
             $ = layui.jquery;
-            element = layui.element;
-            upload = layui.upload;
+        element = layui.element;
+        upload = layui.upload;
 
 
-        //监听提交
-        form.on('submit(formSubmint)', function(data){
-            var loading = layer.load(0,{shade:false});
-            console.log(data.field);
-            $.ajax({
-                url:"/add/template",
-                data:data.field,
-                success:function (res) {
-                    if(res.status==200){
-                        layer.msg('添加成功', {
-                            icon: 1,//提示的样式
-                            time: 1000, //2秒关闭（如果不配置，默认是3秒）//设置后不需要自己写定时关闭了，单位是毫秒
-                            end: function () {
-                                layer.close(loading);
-                                window.parent.location.reload();
-                            }
-                        });
-
-                    }else {
-                        layer.msg(res.msg, {
-                            icon: 5,//提示的样式
-                            time: 2000, //2秒关闭（如果不配置，默认是3秒）//设置后不需要自己写定时关闭了，单位是毫秒
-                            end: function () {
-                                layer.close(loading);
-                                window.location.reload();
-                            }
-                        });
-
+        $("#formSubmit").on('click',function () {
+            if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
+                layer.msg("请选择图片");
+            }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
+                $.ajax({
+                    method:"post",
+                    url:'/add/addAndUpdateTemplate',
+                    data:{
+                        id: $("#id").val().trim(),
+                        tradeName: $("#templateName").val().trim(),
+                        tradeType: $("input[type='radio']:checked").val().trim(),
+                        price: $("#price").val().trim(),
+                        file: $("#updateload").file,
+                        description:$("#description").val().trim()
+                    },
+                    success:function (res) {
+                        if(res.status==200){
+                            //上传成功重写加载数据表格
+                            parent.layui.table.reload('templateList', {page: {curr: 1}});
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            layer.msg("上传成功");
+                        }else{
+                            layer.msg(res.msg);
+                        }
                     }
-                }
-            });
-            return false;
-        });
-        //图片上传
+                })
+            }
+        })
+
         var uploadInst = upload.render({
-            elem: '#uploadImage'
-            , url: '/list/uploadBanner'
-            , size: 5000
-            ,acceptMime:'image/*'
-            , before: function (obj) {
-                //预读本地文件示例，不支持ie8
-                $("#hide").css("display","block");
+            elem:"#uploadImage",
+            url:"/add/addAndUpdateTemplate",
+            auto:false,
+            bindAction:"#formSubmit",
+            accept: 'images' ,//只允许上传图片
+            acceptMime: 'image/*', //只筛选图片
+            data:{
+                id:function(){
+                    return $("#id").val()
+                },
+                templateName:function(){
+                    return $("#templateName").val();
+                },
+                templateType:function () {
+                    return $("input[type='radio']:checked").val();
+                },
+                price:function () {
+                    return $("#price").val();
+                },
+                description:function(){
+                    return $("#description").val();
+                }
+
+            },
+            choose:function (obj) {
+                // $("#showImage").css("display","block");
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                 obj.preview(function (index, file, result) {
+                    $("#updateImage").css("display","none");
+                    $("#hide").css("display","block");
                     $('#upload').attr('src', result); //图片链接（base64）
                 });
-            }
-            , done: function (res) {
 
-                //如果上传失败
-                if (res.code!= 0) {
-                    return layer.msg('上传失败');
+            },
+            done:function (res) {
+                if (res.status === 200) {
+                    //上传成功重写加载数据表格
+                    parent.layui.table.reload('templateList', {page: {curr: 1}});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    layer.msg("上传成功");
+                } else if (res.status === 500) {
+                    layer.msg(res.msg)
                 }
-
-                //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台
-                $("#urlSubmit").val(res.data.src);
-                //上传成功
-
-                /*   console.log(res.data.src);*/
-                var errupload = $('#errupload');
-                errupload.html('<span style="color: #8f8f8f;">上传成功!!!</span>');
-
-            }
-            , error: function () {
-                var errupload = $('#errupload');
-                errupload.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
-                errupload.find('.demo-reload').on('click', function () {
-                    uploadInst.upload();
-                });
+            },
+            error:function (index,upload) {
+                layer.msg("上传失败！");
             }
         });
-        element.init();
 
 
-        form.render();
+
+
+
     });
-</script>
 
+</script>
 
 
 

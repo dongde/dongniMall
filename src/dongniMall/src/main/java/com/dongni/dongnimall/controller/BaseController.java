@@ -21,4 +21,6 @@ public class BaseController {
     public static final String IMAGE_SAVE_PATH = "C:/Users/15303/Desktop/OTA/";
     //底料商城图片保存地址
     public static final String TRADE_SAVE_PATH = "C:/Users/15303/Desktop/baseTrade/";
+    //配方交易图片
+    public static final String FORMULA_SAVE_PATH = "C:/Users/15303/Desktop/formula/";
 }
