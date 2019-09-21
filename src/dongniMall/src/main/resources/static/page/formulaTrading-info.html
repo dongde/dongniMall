@@ -116,7 +116,7 @@
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
                 $.ajax({
                     method:"post",
-                    url:'/add/addAndUpdateFormula',
+                    url:'/formula/add',
                     data:{
                         id: $("#id").val().trim(),
                         formulaName: $("#formulaName").val().trim(),
@@ -145,7 +145,7 @@
 
         var uploadInst = upload.render({
             elem:"#uploadImage",
-            url:"/add/addAndUpdateFormula",
+            url:"/formula/add",
             auto:false,
             bindAction:"#formSubmit",
             accept: 'images' ,//只允许上传图片

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>宣传模板管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="addModel">
+    <button type="button" class="layui-btn" id="addTrade">添加类型</button>
+</div>
+
+<div>
+    <table id="tradeType" lay-filter="tradeType" style="margin-top:20px;"></table>
+</div>
+
+
+<script type="text/html" id="operation">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+    <script>
+        layui.use(['table','form'],function () {
+            var table = layui.table;
+            var form = layui.form,
+                layer = layui.layer,
+                $ = layui.jquery;
+
+
+
+            table.on('tool(tradeType)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event参数对应的值）
+                if(layEvent === 'del'){ //删除
+                    layer.confirm('真的删除行么', function(index){
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        layer.close(index);
+                        //向服务端发送删除指令
+                        deleteObject(data.id);
+                    });
+                }
+
+            });
+
+            //删除数据
+            function deleteObject(id){
+                if(id==null){
+                    layer.msg("查询不到数据");
+                }
+                $.ajax({
+                    url:"/baseTradeType/delete",
+                    data:{id:id},
+                    success:function (res) {
+                        if(res.status == 200){
+                            layer.msg("删除成功！");
+                            window.location.reload();
+                            table.reload('tradeType', {
+                                page: {
+                                    curr: 1
+                                    //重新从第 1 页开始
+                                }
+                            });
+                        }
+                    }
+                })
+            }
+            $("#addTrade").on('click',function () {
+                layer.open({
+                    area: ['50%','50%'],
+                    title: "添加模板",
+                    type: 2,
+                    id:"",
+                    content: ['/page/tradeTypeManager-info.html'],
+                    success: function(res){
+                        if(res.status == 200){
+                            layer.msg("添加成功！");
+                            table.reload('tradeType', {
+                                page: {
+                                    curr: 1
+                                    //重新从第 1 页开始
+                                }
+                            });
+
+                        }
+
+                    }
+                });
+            });
+
+
+            table.render({
+                elem:'#tradeType'
+                ,url:"/baseTradeType/list"
+                ,cellMinWidth: 100
+                ,page:true
+                ,height:"full-160"
+                ,cols:[[
+                    {field: 'type', title: '底料类型',align:"center"}
+                    ,{field: 'updateTime', title: '更新时间',align:"center"}
+                    ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
+
+                ]]
+                ,id:"tradeType"
+                ,limit:10
+            });
+        });
+    </script>
+
+
+
+</body>
+</html>

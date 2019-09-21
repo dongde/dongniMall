@@ -5,7 +5,7 @@
         id,formulaURL,formulaPrice,formulaDescription,samplePrice,flyPrice,factoryAdress,updateTime,formulaName
     </sql>
 
-    <select id="selectAllFormula" resultType="com.dongni.dongnimall.pojo.Formula">
+    <select id="selectAllFormula" resultType="com.dongni.dongnimall.pojo.FormulaDO">
         select * from formula
         WHERE 1=1
         <if test="formulaName!=null and formulaName!=''">
@@ -14,20 +14,20 @@
 
     </select>
 
-    <insert id="insertFormula" parameterType="com.dongni.dongnimall.pojo.Formula">
+    <insert id="insertFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
         insert into formula (<include refid="formula_col"></include>) values
-         (#{formula.id},#{formula.formulaURL},#{formula.formulaPrice},#{formula.formulaDescription},#{formula.samplePrice},#{formula.flyPrice},#{formula.factoryAdress},#{formula.updateTime},#{formula.formulaName})
+         (#{formulaDO.id},#{formulaDO.formulaURL},#{formulaDO.formulaPrice},#{formulaDO.formulaDescription},#{formulaDO.samplePrice},#{formulaDO.flyPrice},#{formulaDO.factoryAdress},#{formulaDO.updateTime},#{formulaDO.formulaName})
     </insert>
 
-    <delete id="deleteFormula" parameterType="java.lang.Integer">
+    <delete id="deleteFormula" parameterType="java.lang.String">
         delete from formula where id = #{id}
     </delete>
-    <select id="selectByID" parameterType="java.lang.Integer">
+    <select id="selectByID" parameterType="java.lang.String">
         select * from formula where id = #{id}
     </select>
-    <update id="updateFormula" parameterType="com.dongni.dongnimall.pojo.BaseStore">
-        update formula set formulaName=#{formula.formulaName},formulaPrice=#{formula.formulaPrice},formulaDescription=#{formula.formulaDescription},
-        formulaURL=#{formula.formulaURL},samplePrice=#{formula.samplePrice},flyPrice=#{formula.flyPrice},factoryAdress=#{formula.factoryAdress},updateTime=#{formula.updateTime}
-        where id = #{formula.id}
+    <update id="updateFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
+        update formula set formulaName=#{formulaDO.formulaName},formulaPrice=#{formulaDO.formulaPrice},formulaDescription=#{formulaDO.formulaDescription},
+        formulaURL=#{formulaDO.formulaURL},samplePrice=#{formulaDO.samplePrice},flyPrice=#{formulaDO.flyPrice},factoryAdress=#{formulaDO.factoryAdress},updateTime=#{formulaDO.updateTime}
+        where id = #{formulaDO.id}
     </update>
 </mapper>

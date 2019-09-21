@@ -3,9 +3,9 @@ package com.dongni.dongnimall.pojo;
 /**
  * 宣传模板实体类
  */
-public class PublicityTemplate {
+public class TemplateDO {
 
-    private Integer id;
+    private String id;
     private String templateName;
     private String templateType;
     private String textDescription;
@@ -15,7 +15,7 @@ public class PublicityTemplate {
 
     @Override
     public String toString() {
-        return "PublicityTemplate{" +
+        return "TemplateDO{" +
                 "id=" + id +
                 ", templateName='" + templateName + '\'' +
                 ", templateType='" + templateType + '\'' +
@@ -26,11 +26,11 @@ public class PublicityTemplate {
                 '}';
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

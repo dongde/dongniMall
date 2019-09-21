@@ -2,9 +2,9 @@ package com.dongni.dongnimall.pojo;
 
 import java.io.Serializable;
 
-public class Formula implements Serializable {
+public class FormulaDO implements Serializable {
 
-    private Integer id;
+    private String id;
     private String formulaName;
     private String formulaURL;
     private Float formulaPrice;
@@ -32,7 +32,7 @@ public class Formula implements Serializable {
 
     @Override
     public String toString() {
-        return "Formula{" +
+        return "FormulaDO{" +
                 "id=" + id +
                 ", formulaName='" + formulaName + '\'' +
                 ", formulaURL='" + formulaURL + '\'' +
@@ -45,11 +45,11 @@ public class Formula implements Serializable {
                 '}';
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

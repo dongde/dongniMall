@@ -1,9 +1,9 @@
 package com.dongni.dongnimall.manager;
 
-import com.dongni.dongnimall.pojo.NewsInformation;
+import com.dongni.dongnimall.pojo.ActicleDO;
 import com.dongni.dongnimall.vo.PageData;
 
-public interface NewsService {
+public interface ArticleService {
 
     /**
      * 查询所有信息
@@ -14,16 +14,16 @@ public interface NewsService {
 
     /**
      * 插入文章
-     * @param newsInformation
+     * @param acticleDO
      */
-    void insertObject(NewsInformation newsInformation);
+    void insertObject(ActicleDO acticleDO);
 
     /**
      * 通过id查找文章
      * @param id
      * @return
      */
-    NewsInformation findByID(Integer id);
+    ActicleDO findByID(String id);
 
 
     /**
@@ -31,16 +31,16 @@ public interface NewsService {
      * @param title
      * @return
      */
-    NewsInformation findByTitle(String title);
+    ActicleDO findByTitle(String title);
 
     /**
      * 删除文章信息
      * @param id
      */
-    void deleteNews(Integer id);
+    void deleteNews(String id);
     /**
      * 修改文章
      */
-    void updateNews(NewsInformation newsInformation, Integer id);
+    void updateNews(ActicleDO acticleDO, String id);
 
 }

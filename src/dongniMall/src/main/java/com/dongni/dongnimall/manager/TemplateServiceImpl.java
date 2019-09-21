@@ -1,7 +1,7 @@
 package com.dongni.dongnimall.manager;
 
-import com.dongni.dongnimall.dao.PublicityTemplateDAO;
-import com.dongni.dongnimall.pojo.PublicityTemplate;
+import com.dongni.dongnimall.dao.TemplateMapper;
+import com.dongni.dongnimall.pojo.TemplateDO;
 import com.dongni.dongnimall.vo.PageData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PublicityTemplateServiceImpl implements PublicityTemplateService {
+public class TemplateServiceImpl implements TemplateService {
 
     @Autowired
-    private PublicityTemplateDAO publicityTemplateDAO;
+    private TemplateMapper templateMapper;
 
 
     @Override
@@ -23,17 +23,17 @@ public class PublicityTemplateServiceImpl implements PublicityTemplateService {
         PageData pageData = new PageData();
         if("".equals(templateName) && "".equals(templateType)) {
             PageHelper.startPage(page, limit);
-            List<PublicityTemplate> publicityTemplates = publicityTemplateDAO.selectAll();
-            PageInfo<PublicityTemplate> pageInfo = new PageInfo<>(publicityTemplates);
+            List<TemplateDO> templateDOS = templateMapper.selectAll();
+            PageInfo<TemplateDO> pageInfo = new PageInfo<>(templateDOS);
             pageData.setCode(0);
             pageData.setCount(pageInfo.getTotal());
             pageData.setMsg("");
-            pageData.setData(publicityTemplates);
+            pageData.setData(templateDOS);
             return pageData;
         }else if("".equals(templateName) && templateType!=null){
             PageHelper.startPage(page, limit);
-            List<PublicityTemplate> lists = publicityTemplateDAO.queryByType(templateType);
-            PageInfo<PublicityTemplate> pageInfo = new PageInfo<>(lists);
+            List<TemplateDO> lists = templateMapper.queryByType(templateType);
+            PageInfo<TemplateDO> pageInfo = new PageInfo<>(lists);
 
                 pageData.setCode(0);
                 pageData.setCount(pageInfo.getTotal());
@@ -43,19 +43,19 @@ public class PublicityTemplateServiceImpl implements PublicityTemplateService {
 
         }else if(!"".equals(templateName) && templateType==null){
             PageHelper.startPage(page, limit);
-            List<PublicityTemplate> publicityTemplateList = publicityTemplateDAO.queryByName(templateName);
-            PageInfo<PublicityTemplate> pageInfo = new PageInfo<>(publicityTemplateList);
+            List<TemplateDO> templateDOList = templateMapper.queryByName(templateName);
+            PageInfo<TemplateDO> pageInfo = new PageInfo<>(templateDOList);
 
             pageData.setCode(0);
             pageData.setCount(pageInfo.getTotal());
             pageData.setMsg("");
-            pageData.setData(publicityTemplateList);
+            pageData.setData(templateDOList);
             return pageData;
 
         }else if(!"".equals(templateName) && !"".equals(templateType)){
-            List<PublicityTemplate> lists = new ArrayList<>();
-            PublicityTemplate publicityTemplate = publicityTemplateDAO.findByNameAndType(templateName, templateType);
-            lists.add(publicityTemplate);
+            List<TemplateDO> lists = new ArrayList<>();
+            TemplateDO templateDO = templateMapper.findByNameAndType(templateName, templateType);
+            lists.add(templateDO);
             pageData.setCode(0);
             pageData.setCount(1);
             pageData.setMsg("");
@@ -67,23 +67,23 @@ public class PublicityTemplateServiceImpl implements PublicityTemplateService {
     }
 
     @Override
-    public void insertTemplate(PublicityTemplate publicityTemplate) {
-        publicityTemplateDAO.insertTemplate(publicityTemplate);
+    public void insertTemplate(TemplateDO templateDO) {
+        templateMapper.insertTemplate(templateDO);
     }
 
     @Override
-    public void deleteByID(Integer id) {
-        publicityTemplateDAO.deleteByID(id);
+    public void deleteByID(String id) {
+        templateMapper.deleteByID(id);
     }
 
     @Override
-    public PublicityTemplate selectByID(Integer id) {
-        PublicityTemplate publicityTemplate = publicityTemplateDAO.findByID(id);
-        return publicityTemplate;
+    public TemplateDO selectByID(String id) {
+        TemplateDO templateDO = templateMapper.findByID(id);
+        return templateDO;
     }
 
     @Override
-    public void updateObject(PublicityTemplate publicityTemplate) {
-        publicityTemplateDAO.updateObject(publicityTemplate);
+    public void updateObject(TemplateDO templateDO) {
+        templateMapper.updateObject(templateDO);
     }
 }

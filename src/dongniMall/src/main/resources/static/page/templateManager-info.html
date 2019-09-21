@@ -104,7 +104,7 @@
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
                 $.ajax({
                     method:"post",
-                    url:'/add/addAndUpdateTemplate',
+                    url:'/template/add',
                     data:{
                         id: $("#id").val().trim(),
                         tradeName: $("#templateName").val().trim(),
@@ -130,7 +130,7 @@
 
         var uploadInst = upload.render({
             elem:"#uploadImage",
-            url:"/add/addAndUpdateTemplate",
+            url:"/template/add",
             auto:false,
             bindAction:"#formSubmit",
             accept: 'images' ,//只允许上传图片

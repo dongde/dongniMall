@@ -94,7 +94,7 @@
             //富文本编辑器的图片上传
             layedit.set({
                 uploadImage: {
-                    url: '/list/uploadBanner' //接口url
+                    url: '/article/uploadBanner' //接口url
                     ,type: 'post' //默认post
                 }
             });
@@ -113,7 +113,7 @@
                 }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
                     $.ajax({
                         method:"post",
-                        url:'/add/addAndUpdateNews',
+                        url:'/article/add',
                         data:{
                             id: $("#id").val().trim(),
                             title: $("#title").val().trim(),
@@ -140,7 +140,7 @@
 
             var uploadInst = upload.render({
                 elem:"#uploadImage",
-                url:"/add/addAndUpdateNews",
+                url:"/article/add",
                 auto:false,
                 bindAction:"#formSubmit",
                 accept: 'images' ,//只允许上传图片

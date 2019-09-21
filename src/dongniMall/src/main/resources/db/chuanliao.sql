@@ -31,10 +31,10 @@ CREATE TABLE `banner` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
--- Table structure for formula
+-- Table structure for formulaDO
 -- ----------------------------
-DROP TABLE IF EXISTS `formula`;
-CREATE TABLE `formula` (
+DROP TABLE IF EXISTS `formulaDO`;
+CREATE TABLE `formulaDO` (
   `id` varchar(64) NOT NULL,
   `formula_img` varchar(255) NOT NULL,
   `formula_price` decimal(10,2) NOT NULL,

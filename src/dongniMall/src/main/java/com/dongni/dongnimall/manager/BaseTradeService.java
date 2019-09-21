@@ -1,6 +1,6 @@
 package com.dongni.dongnimall.manager;
 
-import com.dongni.dongnimall.pojo.BaseStore;
+import com.dongni.dongnimall.pojo.BaseStoreDO;
 import com.dongni.dongnimall.vo.PageData;
 
 public interface BaseTradeService {
@@ -16,26 +16,26 @@ public interface BaseTradeService {
 
     /**
      * 添加底料信息
-     * @param baseStore
+     * @param baseStoreDO
      */
-    void insertTrade(BaseStore baseStore);
+    void insertTrade(BaseStoreDO baseStoreDO);
 
     /**
      * 通过id删除数据
      * @param id
      */
-    void deleteByID(Integer id);
+    void deleteByID(String id);
 
     /**
      * 通过id查询信息
      * @param id
      * @return
      */
-    BaseStore selectByID(Integer id);
+    BaseStoreDO selectByID(String id);
 
     /**
      * 更新修改
-     * @param baseStore
+     * @param baseStoreDO
      */
-    void updateTrade(BaseStore baseStore);
+    void updateTrade(BaseStoreDO baseStoreDO);
 }

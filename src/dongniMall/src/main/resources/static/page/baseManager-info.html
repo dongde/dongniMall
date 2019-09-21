@@ -47,11 +47,8 @@
 
     <div class="layui-form-item">
         <label class="layui-form-label">底料类型：</label>
-        <div class="layui-input-block">
-            <input type="radio" name="tradeType" value="火锅底料" title="火锅底料" checked="">
-            <input type="radio" name="tradeType" value="美蛙鱼头底料" title="美蛙鱼头底料">
-            <input type="radio" name="tradeType" value="串串底料" title="串串底料">
-            <input type="radio" name="tradeType" value="冷锅鱼" title="冷锅鱼">
+        <div class="layui-input-block" id="tradeType">
+
         </div>
     </div>
 
@@ -103,6 +100,26 @@
         element = layui.element;
         upload = layui.upload;
 
+        $.ajax({
+            url:"/baseTradeType/list",
+            method:'POST',
+            data:{
+                page:1,
+                limit:10
+            },
+            success:function (res) {
+                console.log(res);
+                console.log(res.data);
+                if(res.code==0){
+                    var data = res.data;
+                    $.each(data,function (index,item) {
+                        $("#tradeType").html($("#tradeType").html()+"<input type='radio' name='tradeType' value='"+item.type+"' title='"+item.type+"'>");
+
+                    });
+                    form.render();
+                }
+            }
+        });
 
         $("#formSubmit").on('click',function () {
             if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
@@ -110,7 +127,7 @@
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
                 $.ajax({
                     method:"post",
-                    url:'/add/addAndUpdateTrade',
+                    url:'/baseTrade/add',
                     data:{
                         id: $("#id").val().trim(),
                         tradeName: $("#tradeName").val().trim(),
@@ -133,11 +150,12 @@
                     }
                 })
             }
-        })
+        });
+
 
         var uploadInst = upload.render({
             elem:"#uploadImage",
-            url:"/add/addAndUpdateTrade",
+            url:"/baseTrade/add",
             auto:false,
             bindAction:"#formSubmit",
             accept: 'images' ,//只允许上传图片

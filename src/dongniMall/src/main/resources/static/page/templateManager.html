@@ -72,7 +72,6 @@
             $ = layui.jquery;
 
 
-        var localStorage = window.localStorage;
         table.on('tool(templateList)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event参数对应的值）
@@ -92,7 +91,7 @@
                     shade: 0.8,
                     area: ['80%', '80%'],
                     offset: 'auto',
-                    content: '/page/addTemplate.html', //iframe的url，no代表不显示滚动条
+                    content: '/page/templateManager-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         body.contents().find("#id").val(obj.data.id);
@@ -115,7 +114,7 @@
             var templateType = $("#type option:selected").val();
 
             table.reload('templateList',{
-                url:"showTemplates",
+                url:"/template/list",
                 where:{
                     templateName:templateName,
                     templateType:templateType
@@ -136,7 +135,7 @@
             var options=$("#type option:selected");
             options.val(null);
             table.reload('templateList',{
-                url:"showTemplates",
+                url:"/template/list",
                 where:{
                     templateName:null,
                     templateType:null
@@ -159,7 +158,7 @@
                 layer.msg("查询不到数据");
             }
             $.ajax({
-                url:"/list/deleteTemplate",
+                url:"/template/delete",
                 data:{id:id},
                 success:function (res) {
                     if(res.status == 200){
@@ -184,7 +183,7 @@
                 title: "添加模板",
                 type: 2,
                 id:"",
-                content: ['/page/addTemplate.html'],
+                content: ['/page/templateManager-info.html'],
                 success: function(res){
                     if(res.status == 200){
                         layer.msg("添加成功！");
@@ -208,7 +207,7 @@
 
         table.render({
             elem:'#templateList'
-            ,url:"showTemplates"
+            ,url:"/template/list"
             ,cellMinWidth: 100
             ,page:true
             ,height:"full-160"

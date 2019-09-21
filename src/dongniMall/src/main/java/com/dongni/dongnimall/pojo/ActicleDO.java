@@ -6,9 +6,9 @@ import java.io.Serializable;
 /**
  * 新闻资讯对应实体类
  */
-public class NewsInformation implements Serializable {
+public class ActicleDO implements Serializable {
 
-    private Integer id;
+    private String id;
     private String title;
     private String source;
     private String imageURL;
@@ -24,11 +24,11 @@ public class NewsInformation implements Serializable {
         this.imageURL = imageURL;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -69,7 +69,7 @@ public class NewsInformation implements Serializable {
     }
     @Override
     public String toString() {
-        return "NewsInformation{" +
+        return "ActicleDO{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", source='" + source + '\'' +

@@ -1,9 +1,9 @@
 package com.dongni.dongnimall.manager;
 
-import com.dongni.dongnimall.pojo.PublicityTemplate;
+import com.dongni.dongnimall.pojo.TemplateDO;
 import com.dongni.dongnimall.vo.PageData;
 
-public interface PublicityTemplateService {
+public interface TemplateService {
     /**
      * 查询数据库信息
      * @param page
@@ -17,13 +17,13 @@ public interface PublicityTemplateService {
     /**
      * 添加数据到数据库中
      */
-    void insertTemplate(PublicityTemplate publicityTemplate);
+    void insertTemplate(TemplateDO templateDO);
 
     /**
      * 通过id删除模板信息
      * @param id
      */
-    void deleteByID(Integer id);
+    void deleteByID(String id);
 
 
     /**
@@ -31,11 +31,11 @@ public interface PublicityTemplateService {
      * @param id
      * @return
      */
-    PublicityTemplate selectByID(Integer id);
+    TemplateDO selectByID(String id);
 
     /**
      * 修改模板文件
-     * @param publicityTemplate
+     * @param templateDO
      */
-    void updateObject(PublicityTemplate publicityTemplate);
+    void updateObject(TemplateDO templateDO);
 }

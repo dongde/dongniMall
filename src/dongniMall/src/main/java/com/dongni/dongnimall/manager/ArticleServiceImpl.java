@@ -1,7 +1,7 @@
 package com.dongni.dongnimall.manager;
 
-import com.dongni.dongnimall.dao.NewsInformationDAO;
-import com.dongni.dongnimall.pojo.NewsInformation;
+import com.dongni.dongnimall.dao.ArticleMapper;
+import com.dongni.dongnimall.pojo.ActicleDO;
 import com.dongni.dongnimall.vo.PageData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -15,10 +15,10 @@ import java.util.List;
 
 @Transactional(propagation = Propagation.SUPPORTS)
 @Service
-public class NewsServiceImpl implements NewsService {
+public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
-    private NewsInformationDAO newsInformationDAO;
+    private ArticleMapper articleMapper;
 
 
     @Override
@@ -26,17 +26,17 @@ public class NewsServiceImpl implements NewsService {
         PageData pageData = new PageData();
         if("".equals(title) && "".equals(source)) {
             PageHelper.startPage(page, limit);
-            List<NewsInformation> newsInformations = newsInformationDAO.selectAll();
-            PageInfo<NewsInformation> pageInfo = new PageInfo<>(newsInformations);
+            List<ActicleDO> acticleDOS = articleMapper.selectAll();
+            PageInfo<ActicleDO> pageInfo = new PageInfo<>(acticleDOS);
             pageData.setCode(0);
             pageData.setCount(pageInfo.getTotal());
             pageData.setMsg("");
-            pageData.setData(newsInformations);
+            pageData.setData(acticleDOS);
             return pageData;
         }else if("".equals(title) && source!=null){
             PageHelper.startPage(page, limit);
-            List<NewsInformation> list = newsInformationDAO.queryBySource(source);
-            PageInfo<NewsInformation> pageInfo = new PageInfo<>(list);
+            List<ActicleDO> list = articleMapper.queryBySource(source);
+            PageInfo<ActicleDO> pageInfo = new PageInfo<>(list);
             pageData.setCode(0);
             pageData.setCount(pageInfo.getTotal());
             pageData.setMsg("");
@@ -44,17 +44,17 @@ public class NewsServiceImpl implements NewsService {
             return pageData;
         }else if(!"".equals(title) && "".equals(source)){
             PageHelper.startPage(page, limit);
-            List<NewsInformation> newsInformations1 = newsInformationDAO.queryByTitle(title);
-            PageInfo<NewsInformation> pageInfo = new PageInfo<>(newsInformations1);
+            List<ActicleDO> newsInformations1 = articleMapper.queryByTitle(title);
+            PageInfo<ActicleDO> pageInfo = new PageInfo<>(newsInformations1);
             pageData.setCode(0);
             pageData.setCount(pageInfo.getTotal());
             pageData.setMsg("");
             pageData.setData(newsInformations1);
             return pageData;
         }else if(!"".equals(title) && !"".equals(source)){
-            List<NewsInformation> lists = new ArrayList<>();
-            NewsInformation newsInformation1 = newsInformationDAO.findByTitleAndSource(title, source);
-            lists.add(newsInformation1);
+            List<ActicleDO> lists = new ArrayList<>();
+            ActicleDO acticleDO1 = articleMapper.findByTitleAndSource(title, source);
+            lists.add(acticleDO1);
             pageData.setCode(0);
             pageData.setCount(1);
             pageData.setMsg("");
@@ -67,30 +67,30 @@ public class NewsServiceImpl implements NewsService {
 
 
     @Override
-    public void insertObject(NewsInformation newsInformation) {
-        newsInformationDAO.insertObject(newsInformation);
+    public void insertObject(ActicleDO acticleDO) {
+        articleMapper.insertObject(acticleDO);
     }
 
     @Override
-    public NewsInformation findByID(Integer id) {
-        return newsInformationDAO.findByID(id);
+    public ActicleDO findByID(String id) {
+        return articleMapper.findByID(id);
     }
 
 
     @Override
-    public NewsInformation findByTitle(String title) {
+    public ActicleDO findByTitle(String title) {
 
-        return newsInformationDAO.findByTitle(title);
+        return articleMapper.findByTitle(title);
     }
 
     @Override
-    public void deleteNews(Integer id) {
-        newsInformationDAO.deleteNewsByID(id);
+    public void deleteNews(String id) {
+        articleMapper.deleteNewsByID(id);
     }
 
     @Override
-    public void updateNews(NewsInformation newsInformation, Integer id) {
-        newsInformationDAO.updateNews(newsInformation,id);
+    public void updateNews(ActicleDO acticleDO, String id) {
+        articleMapper.updateNews(acticleDO,id);
     }
 
 }

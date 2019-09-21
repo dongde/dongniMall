@@ -4,10 +4,10 @@ package com.dongni.dongnimall.pojo;
 /**
  * 底料商城对应实体类
  */
-public class BaseStore {
+public class BaseStoreDO {
 
 
-    private Integer id;
+    private String id;
     private String tradeName;
     private String tradeType;
     private Float price;
@@ -24,11 +24,11 @@ public class BaseStore {
         this.updateTime = updateTime;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

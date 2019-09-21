@@ -1,6 +1,6 @@
 package com.dongni.dongnimall.manager;
 
-import com.dongni.dongnimall.pojo.Formula;
+import com.dongni.dongnimall.pojo.FormulaDO;
 import com.dongni.dongnimall.vo.PageData;
 
 public interface FormulaService {
@@ -16,19 +16,19 @@ public interface FormulaService {
 
     /**
      * 插入配方信息
-     * @param formula
+     * @param formulaDO
      */
-    void insertFormula(Formula formula);
+    void insertFormula(FormulaDO formulaDO);
 
     /**
      * 更新配方信息
-     * @param formula
+     * @param formulaDO
      */
-    void updateFormula(Formula formula);
+    void updateFormula(FormulaDO formulaDO);
 
     /**
      * 通过id查询配方信息
      * @param id
      */
-    void deleteByID(Integer id);
+    void deleteByID(String id);
 }

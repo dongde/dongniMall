@@ -90,7 +90,7 @@
                     shade: 0.8,
                     area: ['80%', '80%'],
                     offset: 'auto',
-                    content: '/page/addNews.html', //iframe的url，no代表不显示滚动条
+                    content: '/page/articleManager-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         body.contents().find("#id").val(obj.data.id);
@@ -114,7 +114,7 @@
                 title: "添加文章",
                 type: 2,
                 id:"",
-                content: ['/page/addNews.html'],
+                content: ['/page/articleManager-info.html'],
                 success: function(res){
                     if(res.status == 200){
                         layer.msg("添加成功！");
@@ -138,7 +138,7 @@
             }
             $.ajax({
                 data:{"id":id},
-                url:"list/delete",
+                url:"article/delete",
                 success:function (res) {
                     console.log(res.status);
                     if(res.status == 200){
@@ -160,7 +160,7 @@
         table.render({
             elem: '#userList'
             // ,height: 312
-            ,url: '/showList' //数据接口
+            ,url: '/article/list' //数据接口
             ,cellMinWidth: 100
             ,height:"full-160"
             ,cols: [[ //表头
@@ -180,7 +180,7 @@
                 var title = $("#titles").val();
                 var source = $("#sources").val();
                 table.reload('testReload', {
-                    url:'/showList'
+                    url:'/article/list'
                     ,where: {
                         title: title
                         , source: source
@@ -198,7 +198,7 @@
             $("#titles").val(null);
             $("#sources").val(null);
                 table.reload('testReload', {
-                    url:'/showList'
+                    url:'/article/list'
                     ,where: {
                         title: null
                         , source: null
