@@ -11,7 +11,7 @@
  Target Server Version : 80014
  File Encoding         : 65001
 
- Date: 21/09/2019 09:39:07
+ Date: 21/09/2019 15:15:34
 */
 
 SET NAMES utf8mb4;
@@ -31,20 +31,37 @@ CREATE TABLE `banner` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
+-- Table structure for BaseStore
+-- ----------------------------
+DROP TABLE IF EXISTS `BaseStore`;
+CREATE TABLE `BaseStore` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `tradeName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `tradeType` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `price` float(20,2) DEFAULT NULL,
+  `tradeURL` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `imageURL` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `updateTime` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `viewCount` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
 -- Table structure for formula
 -- ----------------------------
 DROP TABLE IF EXISTS `formula`;
 CREATE TABLE `formula` (
-  `id` varchar(64) NOT NULL,
-  `formula_img` varchar(255) NOT NULL,
-  `formula_price` decimal(10,2) NOT NULL,
-  `description` text NOT NULL,
-  `after_sales_service` varchar(20) DEFAULT NULL,
-  `sample_price` decimal(10,2) NOT NULL,
-  `verify` tinyint(1) NOT NULL COMMENT '0未审核，1审核通过，2审核不通过',
-  `phone` varchar(20) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `formulaURL` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `formulaPrice` float(10,2) DEFAULT NULL,
+  `formulaDescription` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `samplePrice` float(10,2) DEFAULT NULL,
+  `flyPrice` float(10,2) DEFAULT NULL,
+  `factoryAdress` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `updateTime` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `formulaName` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- ----------------------------
 -- Table structure for goods
@@ -99,6 +116,21 @@ CREATE TABLE `manager` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
+-- Table structure for newsinformation
+-- ----------------------------
+DROP TABLE IF EXISTS `newsinformation`;
+CREATE TABLE `newsinformation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `source` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `imageUrl` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `summary` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  `updateTime` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
 -- Table structure for order
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
@@ -114,6 +146,21 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
+-- Table structure for publicityTemplate
+-- ----------------------------
+DROP TABLE IF EXISTS `publicityTemplate`;
+CREATE TABLE `publicityTemplate` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `templateName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `templateType` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `textDescription` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  `image` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `price` float DEFAULT NULL,
+  `updateTime` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
 -- Table structure for smallImage
 -- ----------------------------
 DROP TABLE IF EXISTS `smallImage`;
@@ -124,6 +171,7 @@ CREATE TABLE `smallImage` (
   `url` varchar(255) NOT NULL,
   `description` varchar(10) NOT NULL,
   `create_time` datetime NOT NULL,
+  `position` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

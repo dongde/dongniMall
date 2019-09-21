@@ -38,8 +38,8 @@ public interface SmallImageService {
     void removeSmallImage(List<String> ids);
 
     /**
-     * @Description: 修改推荐小图使用状态
+     * @Description: 修改推荐小图
      * @param smallImageDO
      */
-    void changeUsedStatus(SmallImageDO smallImageDO);
+    void modifySmallImage(SmallImageDO smallImageDO);
 }

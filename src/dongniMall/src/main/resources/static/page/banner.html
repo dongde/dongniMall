@@ -106,16 +106,16 @@
                         break;
                     case 'addBanner':
                         var render = myRender;
-                        render("/home/uploadBanner", table);
-                        // layer.open({
-                        //     type: 2,
-                        //     title: '上传轮播图',
-                        //     shadeClose: true,
-                        //     shade: 0.8,
-                        //     area: ['800px', '500px'],
-                        //     offset: 'auto',
-                        //     content: '/page/banner-info2.html' //iframe的url，no代表不显示滚动条
-                        // });
+                        // render("/home/uploadBanner", table);
+                        layer.open({
+                            type: 2,
+                            title: '上传轮播图',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: ['800px', '500px'],
+                            offset: 'auto',
+                            content: '/page/banner-info.html' //iframe的url，no代表不显示滚动条
+                        });
                         break;
                 }
             });

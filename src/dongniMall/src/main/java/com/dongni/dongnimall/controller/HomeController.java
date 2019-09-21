@@ -78,14 +78,14 @@ public class HomeController extends BaseController {
             return JsonResult.errorMsg("修改出错");
         } else {
             Integer maxCount = bannerService.queryBannerUsedCount();
-            if (maxCount >= MAX_BANNER_COUNT) {
-                return JsonResult.errorMsg("轮播图使用已达上限");
-            }
             BannerDO bannerDO = new BannerDO();
             bannerDO.setId(id);
             if (status == 1) {
                 bannerDO.setIs_used(0);
             } else if (status == 0) {
+                if (maxCount >= MAX_BANNER_COUNT) {
+                    return JsonResult.errorMsg("轮播图使用已达上限");
+                }
                 bannerDO.setIs_used(1);
             }
             bannerService.changeUsedStatus(bannerDO);
@@ -112,6 +112,7 @@ public class HomeController extends BaseController {
             smallImage.setCreate_time(new_date);
             smallImage.setUrl(url);
             smallImage.setDescription(description);
+            smallImage.setPosition(1);
             smallImage.setIs_used(BannerUsedEnum.UNUSED.getValue());
             smallImageService.addSmallImage(smallImage);
 
@@ -140,17 +141,30 @@ public class HomeController extends BaseController {
             return JsonResult.errorMsg("修改出错");
         } else {
             Integer maxCount = smallImageService.querySmallImageUsedCount();
-            if (maxCount >= MAX_SMALL_IMAGES_COUNT) {
-                return JsonResult.errorMsg("小图使用已达上限");
-            }
             SmallImageDO smallImageDO = new SmallImageDO();
             smallImageDO.setId(id);
             if (status == 1) {
                 smallImageDO.setIs_used(0);
             } else if (status == 0) {
+                if (maxCount >= MAX_SMALL_IMAGES_COUNT) {
+                    return JsonResult.errorMsg("小图使用已达上限");
+                }
                 smallImageDO.setIs_used(1);
             }
-            smallImageService.changeUsedStatus(smallImageDO);
+            smallImageService.modifySmallImage(smallImageDO);
+            return JsonResult.ok();
+        }
+    }
+
+    @RequestMapping("/modifySmallImagePosition")
+    public JsonResult modifySmallImagePosition(String id, Integer position) {
+        if (StringUtils.isBlank(id) || position == null) {
+            return JsonResult.errorMsg("修改出错");
+        } else {
+            SmallImageDO smallImageDO = new SmallImageDO();
+            smallImageDO.setId(id);
+            smallImageDO.setPosition(position);
+            smallImageService.modifySmallImage(smallImageDO);
             return JsonResult.ok();
         }
     }
