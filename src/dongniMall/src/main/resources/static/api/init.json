@@ -117,7 +117,7 @@
           "child": [
             {
               "title": "系统状态管理",
-              "href": "page/page14.html",
+              "href": "page/system-info.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
