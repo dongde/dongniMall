@@ -56,7 +56,7 @@ public class SmallImageServiceImpl implements SmallImageService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public void changeUsedStatus(SmallImageDO smallImageDO) {
+    public void modifySmallImage(SmallImageDO smallImageDO) {
         smallImageMapper.updateSmallImage(smallImageDO);
     }
 }

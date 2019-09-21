@@ -35,11 +35,11 @@
 </style>
 <div class="banner-upload-container">
     <div class="layui-form-item">
-        <div class="layui-upload">
+        <label class="layui-form-label">缩略图：</label>
+        <button type="button" class="layui-btn" id="chooseImage">选择图片</button>
+        <i>推荐大小（720*300）</i>
+        <div class="layui-upload img distance" hidden="hidden">
             <img class="layui-upload-img" id="uploadImage">
-            <br>
-            <button type="button" class="layui-btn distance" id="chooseImage">选择图片</button>
-            <i>推荐大小（720*300）</i>
         </div>
     </div>
     <div class="layui-form-item distance">
@@ -54,21 +54,6 @@
             <button class="layui-btn" type="submit" lay-submit="" lay-filter="demo1" id="upload">立即上传</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">头像</label>
-        <div class="layui-input-inline">
-            <input type="text" name="head" lay-verify="required" id="inputimgurl" placeholder="图片地址" value="123.jpg" class="layui-input">
-        </div>
-        <div class="layui-input-inline">
-            <div class="layui-upload-list" style="margin:0">
-                <img src="/code.jpg" id="srcimgurl" class="layui-upload-img">
-            </div>
-        </div>
-        <div class="layui-input-inline layui-btn-container" style="width: auto;">
-            <button class="layui-btn layui-btn-primary" id="editimg">修改图片</button >
-        </div>
-        <div class="layui-form-mid layui-word-aux">头像的尺寸限定150x150px,大小在50kb以内</div>
     </div>
 </div>
 <script src="../lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
@@ -95,6 +80,7 @@
                 //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                 obj.preview(function (index, file, result) {
                     $('#uploadImage').attr('src', result); //图片链接（base64）
+                    $('.img').removeAttr("hidden")
                 });
             }
             , done: function (res) {

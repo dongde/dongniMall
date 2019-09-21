@@ -12,6 +12,11 @@
         .layui-table img {
             max-width: 144px !important;
         }
+
+        .modules {
+            display: inline-block !important;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -34,10 +39,34 @@
     {{#  if(d.is_used == 1){  }}
     <a id="state" class="layui-btn layui-btn-primary layui-btn-xs" lay-event="unuse"
        style='text-decoration:none;'>取消</a>
+
     {{#  } else { }}
     <a id="state" class="layui-btn layui-btn layui-btn-xs" lay-event="use" style='text-decoration:none;'>使用</a>
     {{#  } }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style='text-decoration:none;'>删除</a>
+    <select class="modules" lay-event="modules" id="modules">
+        {{# if(d.position == 1){ }}
+        <option value="1" selected>1</option>
+        {{# }else{ }}
+        <option value="1">1</option>
+        {{# } }}
+        {{# if(d.position == 2){ }}
+        <option value="2" selected>2</option>
+        {{# }else{ }}
+        <option value="2">2</option>
+        {{# } }}
+        {{# if(d.position == 3){ }}
+        <option value="3" selected>3</option>
+        {{# }else{ }}
+        <option value="3">3</option>
+        {{# } }}
+        {{# if(d.position == 4){ }}
+        <option value="4" selected>4</option>
+        {{# }else{ }}
+        <option value="4">4</option>
+        {{# } }}
+    </select>
+
 </script>
 <!-- 缩略图-->
 <script type="text/html" id="templet-thumbnail">
@@ -79,12 +108,22 @@
                 , {field: 'url', title: '链接地址', unresize: true, align: 'center'}
                 , {field: 'description', title: '图片说明', unresize: true, align: 'center'}
                 , {field: 'create_time', title: '上传时间', sort: true, unresize: true, align: 'center', width: 200}
-                , {field: 'is_used', title: '使用状态', templet: '#templet-state', unresize: true, align: 'center',width:150}
-                , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center' ,width:150}
+                , {
+                    field: 'is_used',
+                    title: '使用状态',
+                    templet: '#templet-state',
+                    unresize: true,
+                    align: 'center',
+                    width: 150
+                }
+                , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center', width: 200}
             ]]
             , page: true
             , limit: 10
+            , done: function (res, curr, count) {
+            }
         });
+
         /**
          * 头工具栏事件
          */
@@ -120,6 +159,30 @@
          */
         table.on('tool(smallImage-table)', function (obj) {
             var data = obj.data;
+            //使用one绑定change防止重复绑定change事件
+            obj.tr.find(".modules").one('change', function () {
+                var is_used = obj.tr.find("#is_used").text();
+                if (is_used == "使用中") {
+                    $.ajax({
+                        method: 'POST',
+                        data: {
+                            id: data.id,
+                            position: $(this).val()
+                        },
+                        url: '/home/modifySmallImagePosition',
+                        success: function (res) {
+                            if (res.status == 200) {
+
+                            } else {
+                                layer.msg(res.msg);
+                            }
+                        }
+                    })
+                } else {
+                    layer.msg("此图未使用");
+                }
+            });
+
             switch (obj.event) {
                 case 'del':
                     layer.confirm('确定删除？', function (index) {
@@ -177,6 +240,7 @@
                                     var col2 = obj.tr.find("#is_used");
                                     col2.attr("class", "label label-defaunt radius");
                                     col2.text("使用中");
+                                    obj.tr.find(".modules").find("option[value='1']").attr("selected", true);
                                     layer.close(index);
                                     layer.msg("使用成功");
                                 } else {
