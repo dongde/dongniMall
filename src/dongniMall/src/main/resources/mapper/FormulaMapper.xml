@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.FormulaMapper">
+    <sql id="formula_col">
+        id,formulaURL,formulaPrice,formulaDescription,samplePrice,flyPrice,factoryAdress,updateTime,formulaName
+    </sql>
+
+    <select id="selectAllFormula" resultType="com.dongni.dongnimall.pojo.Formula">
+        select * from formula
+        WHERE 1=1
+        <if test="formulaName!=null and formulaName!=''">
+           and formulaName=#{formulaName}
+        </if>
+
+    </select>
+
+    <insert id="insertFormula" parameterType="com.dongni.dongnimall.pojo.Formula">
+        insert into formula (<include refid="formula_col"></include>) values
+         (#{formula.id},#{formula.formulaURL},#{formula.formulaPrice},#{formula.formulaDescription},#{formula.samplePrice},#{formula.flyPrice},#{formula.factoryAdress},#{formula.updateTime},#{formula.formulaName})
+    </insert>
+
+    <delete id="deleteFormula" parameterType="java.lang.Integer">
+        delete from formula where id = #{id}
+    </delete>
+    <select id="selectByID" parameterType="java.lang.Integer">
+        select * from formula where id = #{id}
+    </select>
+    <update id="updateFormula" parameterType="com.dongni.dongnimall.pojo.BaseStore">
+        update formula set formulaName=#{formula.formulaName},formulaPrice=#{formula.formulaPrice},formulaDescription=#{formula.formulaDescription},
+        formulaURL=#{formula.formulaURL},samplePrice=#{formula.samplePrice},flyPrice=#{formula.flyPrice},factoryAdress=#{formula.factoryAdress},updateTime=#{formula.updateTime}
+        where id = #{formula.id}
+    </update>
+</mapper>
