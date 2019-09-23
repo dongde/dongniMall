@@ -28,7 +28,6 @@ public class BaseTradeTypeController {
     //底料类型总览
     @RequestMapping("list")
     public PageData showFormulaList(Integer page, Integer limit){
-        System.out.println(page+limit);
         return baseTradeTypeService.selectAllType(page,limit);
     }
 

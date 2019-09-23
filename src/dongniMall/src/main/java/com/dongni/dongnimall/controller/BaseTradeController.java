@@ -5,6 +5,7 @@ import com.dongni.dongnimall.manager.BaseTradeService;
 import com.dongni.dongnimall.pojo.BaseStoreDO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
+import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public class BaseTradeController {
     //添加和修改底料
     @RequestMapping("add")
     public JsonResult insertTrade(String id,String tradeName, String tradeType, Float price, String tradeURL, MultipartFile file) {
-        if ("".equals(tradeName) || "".equals(tradeType) || price == null || "".equals(tradeURL)) {
+        if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL)) {
             return JsonResult.errorMsg("数据不能为空");
         }
 
@@ -52,7 +53,7 @@ public class BaseTradeController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         baseStoreDO.setUpdateTime(dateString);
-        if(id==null||"".equals(id)){
+        if(StringUtils.isBlank(id)){
             String ids = sid.nextShort();
             String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
             baseStoreDO.setImageURL(DBpath);

@@ -6,6 +6,7 @@ import com.dongni.dongnimall.pojo.ActicleDO;
 import com.dongni.dongnimall.vo.EditUploadDTO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
+import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,7 @@ public class ArticleController {
     //添加和修改文章
     @RequestMapping("/add")
     public JsonResult insertList(String id,String title, String source, String summary, String content,MultipartFile file) {
-        if ("".equals(title) || "".equals(source) || "".equals(summary) || "".equals(content)) {
+        if (StringUtils.isBlank(title) || StringUtils.isBlank(source) || StringUtils.isBlank(summary) || StringUtils.isBlank(content)) {
             return JsonResult.errorMsg("数据不能为空");
         }
         ActicleDO acticleDO = new ActicleDO();
@@ -59,7 +60,7 @@ public class ArticleController {
         String dateString = formatter.format(new Date());
         acticleDO.setUpdateTime(dateString);
         acticleDO.setTitle(title);
-        if(id==null||"".equals(id)){
+        if(StringUtils.isBlank(id)){
             String ids = sid.nextShort();
             String DBpath = ImageFileUploadUtil.uploadFile(file, IMAGE_SAVE_PATH);
             acticleDO.setId(ids);

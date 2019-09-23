@@ -5,6 +5,7 @@ import com.dongni.dongnimall.manager.FormulaService;
 import com.dongni.dongnimall.pojo.FormulaDO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
+import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public class FormulaController {
     //添加和修改配方
     @RequestMapping("add")
     public JsonResult insertformula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAdress, MultipartFile file) {
-        if ("".equals(formulaName) || "".equals(formulaDescription) || formulaPrice == null || "".equals(factoryAdress)||samplePrice==null||flyPrice==null) {
+        if (StringUtils.isBlank(formulaName) || StringUtils.isBlank(formulaDescription) || formulaPrice == null || StringUtils.isBlank(factoryAdress)||samplePrice==null||flyPrice==null) {
             return JsonResult.errorMsg("数据不能为空");
 
         }
@@ -54,7 +55,7 @@ public class FormulaController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         formulaDO.setUpdateTime(dateString);
-        if(id==null||"".equals(id)){
+        if(StringUtils.isBlank(id)){
             String ids = sid.nextShort();
             String DBpath = ImageFileUploadUtil.uploadFile(file, FORMULA_SAVE_PATH);
             formulaDO.setFormulaURL(DBpath);
