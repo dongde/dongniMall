@@ -56,6 +56,7 @@
 <script type="text/html" id="operation">
     <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="see">查看</a>
 </script>
 
 <script>
@@ -101,6 +102,25 @@
                         body.contents().find("#updateload").attr("src",obj.data.imageURL);
                         body.contents().find("#contents").val(obj.data.content);
 
+                    }
+                });
+            }else if(layEvent === 'see'){
+
+                layer.open({
+                    type: 2,
+                    title: '查看文章',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['80%', '90%'],
+                    offset: 'auto',
+                    content: '/page/articleManagerLookUp.html', //iframe的url，no代表不显示滚动条
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#title").html(obj.data.title);
+                        body.contents().find("#source").html(obj.data.source);
+                        body.contents().find("#summary").html(obj.data.summary);
+                        body.contents().find("#updateload").attr("src",obj.data.imageURL);
+                        body.contents().find("#contents").html(obj.data.content);
                     }
                 });
             }
