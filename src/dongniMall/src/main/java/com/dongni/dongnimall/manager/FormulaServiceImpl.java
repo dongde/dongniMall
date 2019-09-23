@@ -17,6 +17,12 @@ public class FormulaServiceImpl implements FormulaService {
     private FormulaMapper formulaMapper;
     @Override
     public PageData selectAllFormula(Integer page, Integer limit, String formulaName) {
+        if(page==null){
+            page = 1;
+        }
+        if(limit==null){
+            limit = 10;
+        }
         PageHelper.startPage(page, limit);
         List<FormulaDO> formulaDOS = formulaMapper.selectAllFormula(formulaName);
         PageInfo<FormulaDO> pageInfo = new PageInfo<>(formulaDOS);

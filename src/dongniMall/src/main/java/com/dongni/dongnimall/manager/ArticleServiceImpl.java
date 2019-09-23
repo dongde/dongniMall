@@ -5,12 +5,12 @@ import com.dongni.dongnimall.pojo.ActicleDO;
 import com.dongni.dongnimall.vo.PageData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Transactional(propagation = Propagation.SUPPORTS)
@@ -24,7 +24,13 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public PageData selectAll(Integer page, Integer limit, String title, String source){
         PageData pageData = new PageData();
-        if("".equals(title) && "".equals(source)) {
+        if(page==null){
+            page = 1;
+        }
+        if(limit==null){
+            limit = 10;
+        }
+        if(StringUtils.isBlank(title) && StringUtils.isBlank(source)) {
             PageHelper.startPage(page, limit);
             List<ActicleDO> acticleDOS = articleMapper.selectAll();
             PageInfo<ActicleDO> pageInfo = new PageInfo<>(acticleDOS);
@@ -33,7 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
             pageData.setMsg("");
             pageData.setData(acticleDOS);
             return pageData;
-        }else if("".equals(title) && source!=null){
+        }else if(StringUtils.isBlank(title) && !StringUtils.isBlank(source)){
             PageHelper.startPage(page, limit);
             List<ActicleDO> list = articleMapper.queryBySource(source);
             PageInfo<ActicleDO> pageInfo = new PageInfo<>(list);
@@ -42,7 +48,7 @@ public class ArticleServiceImpl implements ArticleService {
             pageData.setMsg("");
             pageData.setData(list);
             return pageData;
-        }else if(!"".equals(title) && "".equals(source)){
+        }else if(!StringUtils.isBlank(title) && StringUtils.isBlank(source)){
             PageHelper.startPage(page, limit);
             List<ActicleDO> newsInformations1 = articleMapper.queryByTitle(title);
             PageInfo<ActicleDO> pageInfo = new PageInfo<>(newsInformations1);
@@ -52,11 +58,11 @@ public class ArticleServiceImpl implements ArticleService {
             pageData.setData(newsInformations1);
             return pageData;
         }else if(!"".equals(title) && !"".equals(source)){
-            List<ActicleDO> lists = new ArrayList<>();
-            ActicleDO acticleDO1 = articleMapper.findByTitleAndSource(title, source);
-            lists.add(acticleDO1);
+            PageHelper.startPage(page, limit);
+            List<ActicleDO> lists =  articleMapper.findByTitleAndSource(title, source);
+            PageInfo<ActicleDO> pageInfo = new PageInfo<>(lists);
             pageData.setCode(0);
-            pageData.setCount(1);
+            pageData.setCount(pageInfo.getTotal());
             pageData.setMsg("");
             pageData.setData(lists);
             return pageData;

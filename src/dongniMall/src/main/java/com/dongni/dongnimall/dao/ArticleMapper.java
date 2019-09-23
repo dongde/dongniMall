@@ -68,7 +68,7 @@ public interface ArticleMapper {
      * @return
      */
     @Select("select * from newsinformation where title=#{title} and source=#{source}")
-    ActicleDO findByTitleAndSource(@Param("title") String title, @Param("source") String source);
+    List<ActicleDO> findByTitleAndSource(@Param("title") String title, @Param("source") String source);
 
     /**
      * 通过来源查找

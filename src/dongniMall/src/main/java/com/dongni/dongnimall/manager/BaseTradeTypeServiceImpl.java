@@ -18,6 +18,12 @@ public class BaseTradeTypeServiceImpl implements BaseTradeTypeService {
 
     @Override
     public PageData selectAllType(Integer page, Integer limit) {
+        if(page==null){
+            page = 1;
+        }
+        if(limit==null){
+            limit = 10;
+        }
         PageHelper.startPage(page, limit);
         List<BaseTradeTypeDO> BaseTradeTypeDOs = baseTradeTypeMapper.selectAllType();
         PageInfo<BaseTradeTypeDO> pageInfo = new PageInfo<>(BaseTradeTypeDOs);

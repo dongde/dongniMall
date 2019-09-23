@@ -9,6 +9,7 @@ import com.dongni.dongnimall.vo.PageData;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +37,9 @@ public class ArticleController {
 
     //文章数据总览
     @RequestMapping("/list")
-    public PageData list(Integer page, Integer limit, String title, String source){
+    public PageData list(Integer page, Integer limit,
+                         @RequestParam(value = "title",required = false) String title,
+                         @RequestParam(value = "source",required = false) String source){
         return articleService.selectAll(page,limit,title,source);
 
     }

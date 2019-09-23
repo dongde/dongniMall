@@ -20,6 +20,12 @@ public class BaseTradeServiceImpl implements BaseTradeService {
 
     @Override
     public PageData selectAllTrade(Integer page, Integer limit, String tradeName, String tradeType) {
+        if(page==null){
+            page = 1;
+        }
+        if(limit==null){
+            limit = 10;
+        }
         PageHelper.startPage(page, limit);
         List<BaseStoreDO> baseStoreDOS = baseTradeMapper.selectAllTrade(tradeName, tradeType);
         PageInfo<BaseStoreDO> pageInfo = new PageInfo<>(baseStoreDOS);

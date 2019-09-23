@@ -5,6 +5,7 @@ import com.dongni.dongnimall.pojo.TemplateDO;
 import com.dongni.dongnimall.vo.PageData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,14 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public PageData selectTemplates(Integer page, Integer limit, String templateName, String templateType) {
+        if(page==null){
+            page = 1;
+        }
+        if(limit==null){
+            limit = 10;
+        }
         PageData pageData = new PageData();
-        if("".equals(templateName) && "".equals(templateType)) {
+        if(StringUtils.isBlank(templateName) && StringUtils.isBlank(templateType)) {
             PageHelper.startPage(page, limit);
             List<TemplateDO> templateDOS = templateMapper.selectAll();
             PageInfo<TemplateDO> pageInfo = new PageInfo<>(templateDOS);
@@ -30,18 +37,17 @@ public class TemplateServiceImpl implements TemplateService {
             pageData.setMsg("");
             pageData.setData(templateDOS);
             return pageData;
-        }else if("".equals(templateName) && templateType!=null){
+        }else if(StringUtils.isBlank(templateName) && !StringUtils.isBlank(templateType)){
             PageHelper.startPage(page, limit);
             List<TemplateDO> lists = templateMapper.queryByType(templateType);
             PageInfo<TemplateDO> pageInfo = new PageInfo<>(lists);
-
                 pageData.setCode(0);
                 pageData.setCount(pageInfo.getTotal());
                 pageData.setMsg("");
                 pageData.setData(lists);
                 return pageData;
 
-        }else if(!"".equals(templateName) && templateType==null){
+        }else if(!StringUtils.isBlank(templateName)&& StringUtils.isBlank(templateType)){
             PageHelper.startPage(page, limit);
             List<TemplateDO> templateDOList = templateMapper.queryByName(templateName);
             PageInfo<TemplateDO> pageInfo = new PageInfo<>(templateDOList);
@@ -52,7 +58,7 @@ public class TemplateServiceImpl implements TemplateService {
             pageData.setData(templateDOList);
             return pageData;
 
-        }else if(!"".equals(templateName) && !"".equals(templateType)){
+        }else if(!StringUtils.isBlank(templateName) && !StringUtils.isBlank(templateType)){
             List<TemplateDO> lists = new ArrayList<>();
             TemplateDO templateDO = templateMapper.findByNameAndType(templateName, templateType);
             lists.add(templateDO);
