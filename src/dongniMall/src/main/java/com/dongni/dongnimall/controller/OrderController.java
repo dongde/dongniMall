@@ -40,11 +40,11 @@ public class OrderController {
     }
 
     @RequestMapping("/addOrder")
-    public JsonResult addOrder(String user_phone, BigDecimal payment_amount, @RequestBody List<GoodsDO> goodsList) {
+    public JsonResult addOrder(String order_number, String user_phone, BigDecimal payment_amount, @RequestBody List<GoodsDO> goodsList) {
         if (StringUtils.isBlank(user_phone) || payment_amount == null || goodsList.size() == 0) {
             return JsonResult.errorMsg("创建订单出错");
         }
-        String order_number = UUID.randomUUID().toString();
+//        String order_number = UUID.randomUUID().toString();
         OrderDO orderDO = new OrderDO();
         orderDO.setOrder_number(order_number);
         orderDO.setUser_phone(user_phone);
@@ -58,7 +58,7 @@ public class OrderController {
     }
 
     @RequestMapping("/modifyOrder")
-    public JsonResult modifyOrder(String order_number, Integer payment_method, Integer order_status, String complete_time) {
+    public JsonResult modifyOrder(String order_number, Integer payment_method, Integer order_status) {
         if (StringUtils.isBlank(order_number)) {
             return JsonResult.errorMsg("修改订单出错");
         }
@@ -66,7 +66,12 @@ public class OrderController {
         orderDO.setOrder_number(order_number);
         orderDO.setPayment_method(payment_method);
         orderDO.setOrder_status(order_status);
-        orderDO.setComplete_time(complete_time);
+        if(order_status == 3) {
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String complete_time = simpleDateFormat.format(date);
+            orderDO.setComplete_time(complete_time);
+        }
         orderService.modifyOrder(orderDO);
         return JsonResult.ok();
     }

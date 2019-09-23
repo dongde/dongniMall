@@ -6,10 +6,15 @@ import com.dongni.dongnimall.manager.ManagerService;
 import com.dongni.dongnimall.pojo.CodeDO;
 import com.dongni.dongnimall.pojo.ManagerDO;
 import com.dongni.dongnimall.vo.JsonResult;
+import com.dongni.dongnimall.vo.ManagerVO;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * @author cengshuai on 2019-09-10.
@@ -23,7 +28,7 @@ public class LoginController extends BaseController{
     private ManagerService managerService;
 
     @RequestMapping("/login")
-    public JsonResult login(String name, String password){
+    public JsonResult login(String name, String password, HttpServletRequest request){
         if(StringUtils.isBlank(name)){
             return JsonResult.errorMsg("用户名不能为空");
         }
@@ -35,6 +40,11 @@ public class LoginController extends BaseController{
         }
         ManagerDO managerDO = managerService.queryManagerByNameAndPassword(name, MD5Util.getMD5(password));
         if(managerDO!=null){
+            ManagerVO managerVO = new ManagerVO();
+            BeanUtils.copyProperties(managerDO,managerVO);
+            String token = UUID.randomUUID().toString();
+            managerVO.setToken(token);
+            request.getSession().setAttribute("token",token);
             return JsonResult.ok(managerDO);
         }else{
             return JsonResult.errorMsg("密码错误");

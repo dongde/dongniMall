@@ -9,18 +9,14 @@
         values(#{leaveMessageDO.id},#{leaveMessageDO.content},#{leaveMessageDO.user_id},#{leaveMessageDO.recipient_id},#{leaveMessageDO.create_time},#{leaveMessageDO.verify})
     </insert>
 
-    <select id="selectLeaveMessageListByRecipientId" parameterType="String" resultType="com.dongni.dongnimall.pojo.LeaveMessageDO">
-        select
-        <include refid="leave_message_col"></include>
-        from leave_message
-        where recipient_id=#{recipient_id} and verify=1
-        order by create_time desc
-    </select>
-
     <select id="selectLeaveMessageList" resultType="com.dongni.dongnimall.pojo.LeaveMessageDO">
         select
         <include refid="leave_message_col"></include>
         from leave_message
+        where 1=1
+        <if test="recipient_id!=null recipient_id!=''">
+            recipient_id=#{recipient_id} and verify=1
+        </if>
         order by create_time desc
     </select>
 

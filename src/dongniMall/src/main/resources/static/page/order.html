@@ -91,31 +91,22 @@
                         var user = null;
                         var goods = null;
                         $.ajax({
-                            method: 'POST',
-                            url: "/user/queryUserByPhone",
-                            data: {
-                                phone: data.user_phone
-                            },
+                            method: 'GET',
+                            url: "/user/queryUserByPhone?phone="+data.user_phone,
                             success: function (userRes) {
                                 if (userRes.status === 200) {
                                     user = userRes.data;
 
                                     $.ajax({
-                                        method: 'POST',
-                                        url: "/order/queryGoods",
-                                        data: {
-                                            order_number: data.order_number
-                                        },
+                                        method: 'GET',
+                                        url: "/order/queryGoods?order_number="+data.order_number,
                                         success: function (goodsRes) {
                                             if (goodsRes.status === 200) {
                                                 goods = goodsRes.data;
 
                                                 $.ajax({
-                                                    method: 'POST',
-                                                    url: "/order/queryLogistics",
-                                                    data: {
-                                                        order_number: data.order_number
-                                                    },
+                                                    method: 'GET',
+                                                    url: "/order/queryLogistics?order_number="+data.order_number,
                                                     success: function (logisticsRes) {
                                                         if (logisticsRes.status === 200) {
                                                             logistics = logisticsRes.data;
@@ -189,7 +180,6 @@
                                                                     var address = user.address;
 
                                                                     var body = layer.getChildFrame('body', index);
-                                                                    console.log(body.contents().find("table > tbody"));
                                                                     body.contents().find(".tb1").html("  <tr>\n" +
                                                                         "                <td>" + order_number + "</td>\n" +
                                                                         "                <td>" + user_phone + "</td>\n" +
