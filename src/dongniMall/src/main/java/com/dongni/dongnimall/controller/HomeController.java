@@ -41,6 +41,11 @@ public class HomeController extends BaseController {
         return bannerService.queryBannerList(page, limit);
     }
 
+    @RequestMapping("/getBannerShowList")
+    public JsonResult getBannerShowList() {
+        return JsonResult.ok(bannerService.queryBannerIsUsedList());
+    }
+
     @RequestMapping("/uploadBanner")
     public JsonResult uploadBanner(@RequestParam("file") MultipartFile file, @RequestParam("url") String url) {
         if (StringUtils.isBlank(url)) {
@@ -96,6 +101,11 @@ public class HomeController extends BaseController {
     @RequestMapping("/getSmallImageList")
     public PageData getSmallImageList(Integer page, Integer limit) {
         return smallImageService.querySmallImageList(page, limit);
+    }
+
+    @RequestMapping("/getSmallImageShowList")
+    public JsonResult getSmallImageShowList() {
+        return JsonResult.ok(smallImageService.querySmallImageShowList());
     }
 
     @RequestMapping("/uploadSmallImage")

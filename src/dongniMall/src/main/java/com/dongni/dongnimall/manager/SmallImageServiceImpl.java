@@ -37,6 +37,12 @@ public class SmallImageServiceImpl implements SmallImageService {
         return pageData;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<SmallImageDO> querySmallImageShowList() {
+        return smallImageMapper.selectSmallImageIsUsedList();
+    }
+
     @Override
     public Integer querySmallImageUsedCount() {
         return smallImageMapper.selectSmallImageUsedCount();

@@ -11,6 +11,13 @@
         order by `position` desc
     </select>
 
+    <select id="selectSmallImageIsUsedList" resultType="com.dongni.dongnimall.pojo.SmallImageDO">
+        select
+        <include refid="small_image_col"></include>
+        from smallImage
+        where is_used = 1
+        order by `position` desc
+    </select>
     <select id="selectSmallImageUsedCount" resultType="Integer">
         select count(*)
         from smallImage
@@ -19,7 +26,8 @@
 
     <insert id="insertSmallImage" parameterType="com.dongni.dongnimall.pojo.SmallImageDO">
         insert into smallImage(<include refid="small_image_col"></include>)
-        values (#{smallImageDO.id},#{smallImageDO.smallImage_img},#{smallImageDO.is_used},#{smallImageDO.url},#{smallImageDO.description},#{smallImageDO.create_time},#{smallImageDO.position})
+        values
+        (#{smallImageDO.id},#{smallImageDO.smallImage_img},#{smallImageDO.is_used},#{smallImageDO.url},#{smallImageDO.description},#{smallImageDO.create_time},#{smallImageDO.position})
     </insert>
 
     <delete id="deleteSmallImage">

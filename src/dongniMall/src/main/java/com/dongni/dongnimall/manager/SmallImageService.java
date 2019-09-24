@@ -20,6 +20,12 @@ public interface SmallImageService {
     PageData querySmallImageList(Integer page, Integer pageSize);
 
     /**
+     * @Description: 查询需要展示的小图
+     * @return
+     */
+    List<SmallImageDO> querySmallImageShowList();
+
+    /**
      * @Description: 查询已使用的小图数量
      * @return
      */

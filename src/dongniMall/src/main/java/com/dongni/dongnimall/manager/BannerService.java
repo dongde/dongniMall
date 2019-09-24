@@ -20,6 +20,12 @@ public interface BannerService {
     PageData queryBannerList(Integer page, Integer pageSize);
 
     /**
+     * @Description: 查询展示的轮播图
+     * @return
+     */
+    List<BannerDO> queryBannerIsUsedList();
+
+    /**
      * @Description: 查询已使用的轮播图数量
      * @return
      */
