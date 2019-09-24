@@ -21,6 +21,8 @@ public class SmallImageDO {
     private String description;
     //图片上传时间
     private String create_time;
+    //图片位置
+    private Integer position;
 
     public String getId() {
         return id;
@@ -68,5 +70,13 @@ public class SmallImageDO {
 
     public void setCreate_time(String create_time) {
         this.create_time = create_time;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 }

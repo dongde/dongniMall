@@ -17,7 +17,7 @@ SET FOREIGN_KEY_CHECKS=0;
 
 ########底料商城#########
 -- ----------------------------
--- Table structure for BaseStore   
+-- Table structure for BaseStoreDO
 -- ----------------------------
 DROP TABLE IF EXISTS `BaseStore`;
 CREATE TABLE `BaseStore` (
@@ -34,10 +34,10 @@ CREATE TABLE `BaseStore` (
 
 ########配方管理######
 -- ----------------------------
--- Table structure for formula
+-- Table structure for formulaDO
 -- ----------------------------
-DROP TABLE IF EXISTS `formula`;
-CREATE TABLE `formula` (
+DROP TABLE IF EXISTS `formulaDO`;
+CREATE TABLE `formulaDO` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `formulaURL` varchar(100) COLLATE utf8mb4_bin DEFAULT NULL,
   `formulaPrice` float(10,2) DEFAULT NULL,
@@ -68,10 +68,10 @@ CREATE TABLE `newsinformation` (
 
 ######宣传模板#####
 -- ----------------------------
--- Table structure for publicityTemplate
+-- Table structure for templateDO
 -- ----------------------------
-DROP TABLE IF EXISTS `publicityTemplate`;
-CREATE TABLE `publicityTemplate` (
+DROP TABLE IF EXISTS `templateDO`;
+CREATE TABLE `templateDO` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `templateName` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL,
   `templateType` varchar(20) COLLATE utf8mb4_bin DEFAULT NULL,

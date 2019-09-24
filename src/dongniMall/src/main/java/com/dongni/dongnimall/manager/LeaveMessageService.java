@@ -16,20 +16,12 @@ public interface LeaveMessageService {
 
     /**
      * @Description: 获取留言列表
-     * @param page
-     * @param pageSize
-     * @return
-     */
-    PageData queryLeaveMessageList(Integer page, Integer pageSize);
-
-    /**
-     * @Description: 根据留言接收对象ID获取留言列表
      * @param recipient_id
      * @param page
      * @param pageSize
      * @return
      */
-    PageData queryLeaveMessageListByRecipientId(String recipient_id, Integer page, Integer pageSize);
+    PageData queryLeaveMessageList(String recipient_id,Integer page, Integer pageSize);
 
     /**
      * @param id

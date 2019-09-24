@@ -41,11 +41,7 @@
             <label class="layui-form-label">类型：</label>
             <div class="layui-input-inline">
                 <select name="tradeType" id="tradeType" lay-verify="required">
-                    <option value="" selected="selected"></option>
-                    <option value="火锅底料">火锅底料</option>
-                    <option value="美蛙鱼头底料">美蛙鱼头底料</option>
-                    <option value="串串底料">串串底料</option>
-                    <option value="冷锅鱼">冷锅鱼</option>
+
                 </select>
             </div>
         </div>
@@ -68,12 +64,32 @@
 
 <script>
 
+
     layui.use(['table','form'],function () {
         var table = layui.table;
         var form = layui.form,
             layer = layui.layer,
             $ = layui.jquery;
 
+
+        $.ajax({
+            url:"/baseTradeType/list",
+            method:'POST',
+            data:{
+                page:1,
+                limit:10
+            },
+            success:function (res) {
+                if(res.code==0){
+                    var data = res.data;
+                    $.each(data,function (index,item) {
+                        $("#tradeType").html($("#tradeType").html()+"<option>"+item.type+"</option>");
+
+                    });
+                    form.render();
+                }
+            }
+        });
 
 
 
@@ -83,7 +99,7 @@
                 area: ['80%','80%'],
                 title: "添加底料",
                 type: 2,
-                content: ['/page/addBaseTrade.html'],
+                content: ['/page/baseManager-info.html'],
                 success: function(res){
                     if(res.status == 200){
                         layer.msg("添加成功！");
@@ -106,7 +122,7 @@
             var tradeName = $("#tradeName").val();
             var tradeType = $("#tradeType").val();
             table.reload('baselist', {
-                url:'/showTradeList'
+                url:'/baseTrade/list'
                 ,where: {
                     tradeName: tradeName
                     , tradeType: tradeType
@@ -124,7 +140,7 @@
             $("#tradeName").val(null);
             $("#tradeType").get(0).selected=true;
             table.reload('baselist', {
-                url:'/showTradeList'
+                url:'/baseTrade/list'
                 ,where: {
                     tradeName: null
                     , tradeType: null
@@ -154,7 +170,7 @@
                     shade: 0.8,
                     area: ['80%', '80%'],
                     offset: 'auto',
-                    content: '/page/addBaseTrade.html', //iframe的url，no代表不显示滚动条
+                    content: '/page/baseManager-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         body.contents().find("#id").val(obj.data.id);
@@ -177,7 +193,7 @@
             }
             $.ajax({
                 data:{"id":id},
-                url:"list/deleteBase",
+                url:"/baseTrade/delete",
                 success:function (res) {
                     console.log(res.status);
                     if(res.status == 200){
@@ -198,7 +214,7 @@
 
         table.render({
             elem:'#baselist'
-            ,url:"/showTradeList"
+            ,url:"/baseTrade/list"
             ,cellMinWidth: 100
             ,page:true
             ,height:"full-160"

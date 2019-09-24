@@ -37,6 +37,12 @@ public class SmallImageServiceImpl implements SmallImageService {
         return pageData;
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<SmallImageDO> querySmallImageShowList() {
+        return smallImageMapper.selectSmallImageIsUsedList();
+    }
+
     @Override
     public Integer querySmallImageUsedCount() {
         return smallImageMapper.selectSmallImageUsedCount();
@@ -56,7 +62,7 @@ public class SmallImageServiceImpl implements SmallImageService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public void changeUsedStatus(SmallImageDO smallImageDO) {
+    public void modifySmallImage(SmallImageDO smallImageDO) {
         smallImageMapper.updateSmallImage(smallImageDO);
     }
 }

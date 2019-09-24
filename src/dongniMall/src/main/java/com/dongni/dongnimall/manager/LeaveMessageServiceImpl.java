@@ -29,25 +29,9 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
-    public PageData queryLeaveMessageList(Integer page, Integer pageSize) {
+    public PageData queryLeaveMessageList(String recipient_id, Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
-        List<LeaveMessageDO> list = leaveMessageMapper.selectLeaveMessageList();
-
-        PageInfo<LeaveMessageDO> pageInfo = new PageInfo<>(list);
-
-        PageData pageData = new PageData();
-        pageData.setCount(pageInfo.getTotal());
-        pageData.setCode(0);
-        pageData.setData(list);
-        pageData.setMsg("");
-        return pageData;
-    }
-
-    @Transactional(propagation = Propagation.SUPPORTS)
-    @Override
-    public PageData queryLeaveMessageListByRecipientId(String recipient_id, Integer page, Integer pageSize) {
-        PageHelper.startPage(page, pageSize);
-        List<LeaveMessageDO> list = leaveMessageMapper.selectLeaveMessageListByRecipientId(recipient_id);
+        List<LeaveMessageDO> list = leaveMessageMapper.selectLeaveMessageList(recipient_id);
 
         PageInfo<LeaveMessageDO> pageInfo = new PageInfo<>(list);
 

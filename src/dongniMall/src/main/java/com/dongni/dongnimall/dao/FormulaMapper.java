@@ -1,6 +1,6 @@
 package com.dongni.dongnimall.dao;
 
-import com.dongni.dongnimall.pojo.Formula;
+import com.dongni.dongnimall.pojo.FormulaDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -14,29 +14,29 @@ public interface FormulaMapper {
      * @param formulaName
      * @return
      */
-    List<Formula> selectAllFormula(@Param("formulaName") String formulaName);
+    List<FormulaDO> selectAllFormula(@Param("formulaName") String formulaName);
 
     /**
      * 添加配方
-     * @param formula
+     * @param formulaDO
      */
-    void insertFormula(@Param("formula") Formula formula);
+    void insertFormula(@Param("formulaDO") FormulaDO formulaDO);
 
     /**
      * 更新配方
-     * @param formula
+     * @param formulaDO
      */
-    void updateFormula(@Param("formula") Formula formula);
+    void updateFormula(@Param("formulaDO") FormulaDO formulaDO);
 
     /**
      * 删除配方
      * @param id
      */
-    void deleteFormula(@Param("id") Integer id);
+    void deleteFormula(@Param("id") String id);
 
     /**
      * 通过id查询
      * @param id
      */
-    void selectByID(@Param("id") Integer id);
+    void selectByID(@Param("id") String id);
 }

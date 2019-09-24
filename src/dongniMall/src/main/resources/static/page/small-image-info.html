@@ -36,10 +36,10 @@
 <form class="layui-form smallImage-upload-container">
 
     <div class="layui-form-item">
-        <div class="layui-upload">
-            <img class="layui-upload-img" id="uploadImage">
-            <br>
-            <button type="button" class="layui-btn distance" id="chooseImage">选择图片</button>
+        <label class="layui-form-label">缩略图：</label>
+        <button type="button" class="layui-btn" id="chooseImage">选择图片</button>
+        <div class="layui-upload img distance" hidden="hidden">
+            <img class="layui-upload-img" id="uploadImage" >
             <i>推荐大小（720*300）</i>
         </div>
     </div>
@@ -92,6 +92,7 @@
                 //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                 obj.preview(function (index, file, result) {
                     $('#uploadImage').attr('src', result); //图片链接（base64）
+                    $('.img').removeAttr("hidden");
                 });
             }
             , done: function (res) {

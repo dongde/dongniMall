@@ -178,6 +178,9 @@
         if (top.location != self.location) {
             top.location = self.location;
         }
+        if (document.referrer != "") {
+            layer.msg('tips:token过期');
+        }
 
 
         // 进行登录操作
@@ -205,8 +208,11 @@
                 url: '/login',
                 success: function (res) {
                     if (res.status === 200) {
+                        console.log(res)
                         //设置当前登录用户
                         window.localStorage.setItem("currentManagerInfo", JSON.stringify(res.data));
+                        //设置请求token
+                        document.cookie = 'token = '+res.data.token;
                         layer.msg('登录成功', {
                             time: 1000
                         }, function () {

@@ -8,6 +8,7 @@ import org.n3r.idworker.Sid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
@@ -50,14 +51,10 @@ public class LeaveMessageController {
     }
 
     @RequestMapping("/queryLeaveMessageList")
-    public PageData queryLeaveMessageList(Integer page, Integer limit) {
-        return leaveMessageService.queryLeaveMessageList(page, limit);
+    public PageData queryLeaveMessageList(@RequestParam(value = "recipient_id", required = false) String recipient_id, Integer page, Integer limit) {
+        return leaveMessageService.queryLeaveMessageList(recipient_id,page, limit);
     }
 
-    @RequestMapping("/queryLeaveMessageListByRecipientId")
-    public PageData queryLeaveMessageListByRecipientId(String recipient_id, Integer page, Integer limit) {
-        return leaveMessageService.queryLeaveMessageListByRecipientId(recipient_id, page, limit);
-    }
 
     @RequestMapping("/removeLeaveMessage")
     public JsonResult removeLeaveMessage(String id) {
@@ -70,7 +67,6 @@ public class LeaveMessageController {
 
     @RequestMapping("/modifyVerify")
     public JsonResult modifyVerify(String id, Integer verify) {
-        System.out.println(id+":"+verify);
         if (StringUtils.isBlank(id) || verify == null) {
             return JsonResult.errorMsg("审核出错");
         }

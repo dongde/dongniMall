@@ -85,6 +85,12 @@
                 ]]
                 , page: true
                 , limit: 10
+                , done: function (res, curr, count) {
+                    console.log(res);
+                    if(res.status==502){
+                        window.location = "/page/login-1.html";
+                    }
+                }
             });
 
             /**
@@ -106,16 +112,16 @@
                         break;
                     case 'addBanner':
                         var render = myRender;
-                        render("/home/uploadBanner", table);
-                        // layer.open({
-                        //     type: 2,
-                        //     title: '上传轮播图',
-                        //     shadeClose: true,
-                        //     shade: 0.8,
-                        //     area: ['800px', '500px'],
-                        //     offset: 'auto',
-                        //     content: '/page/banner-info2.html' //iframe的url，no代表不显示滚动条
-                        // });
+                        // render("/home/uploadBanner", table);
+                        layer.open({
+                            type: 2,
+                            title: '上传轮播图',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: ['800px', '500px'],
+                            offset: 'auto',
+                            content: '/page/banner-info.html' //iframe的url，no代表不显示滚动条
+                        });
                         break;
                 }
             });

@@ -15,6 +15,8 @@ import java.util.List;
 public interface SmallImageMapper {
     List<SmallImageDO> selectSmallImageList();
 
+    List<SmallImageDO> selectSmallImageIsUsedList();
+
     Integer selectSmallImageUsedCount();
 
     void insertSmallImage(@Param("smallImageDO") SmallImageDO smallImageDO);

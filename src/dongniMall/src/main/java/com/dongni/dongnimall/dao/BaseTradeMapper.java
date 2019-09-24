@@ -1,6 +1,6 @@
 package com.dongni.dongnimall.dao;
 
-import com.dongni.dongnimall.pojo.BaseStore;
+import com.dongni.dongnimall.pojo.BaseStoreDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -14,30 +14,30 @@ public interface BaseTradeMapper {
      * @param tradeName
      * @param tradeType
      */
-    List<BaseStore> selectAllTrade(@Param("tradeName") String tradeName, @Param("tradeType") String tradeType);
+    List<BaseStoreDO> selectAllTrade(@Param("tradeName") String tradeName, @Param("tradeType") String tradeType);
 
     /**
      * 增加一个底料
-     * @param baseStore
+     * @param baseStoreDO
      */
-    void insertTrade(@Param("baseStore") BaseStore baseStore);
+    void insertTrade(@Param("baseStoreDO") BaseStoreDO baseStoreDO);
 
     /**
      * 修改货物信息
-     * @param baseStore
+     * @param baseStoreDO
      */
-    void updateTrade(@Param("baseStore") BaseStore baseStore);
+    void updateTrade(@Param("baseStoreDO") BaseStoreDO baseStoreDO);
 
     /**
      * 删除一个底料信息
      * @param id
      */
-    void deleteTrade(@Param("id") Integer id);
+    void deleteTrade(@Param("id") String id);
 
     /**
      * 通过id查询
      * @param id
      * @return
      */
-    BaseStore selectByID(@Param("id") Integer id);
+    BaseStoreDO selectByID(@Param("id") String id);
 }

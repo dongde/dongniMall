@@ -118,36 +118,14 @@ public class UserController extends BaseController {
         return JsonResult.ok();
     }
 
-    @RequestMapping("/addUser")
-    public JsonResult addUser(String phone, String name, String gender, String address, String email, String postal_code, String password) {
-        if (StringUtils.isBlank(phone) || StringUtils.isBlank(name) || StringUtils.isBlank(address) || StringUtils.isBlank(email) || StringUtils.isBlank(postal_code) || StringUtils.isBlank(password) || StringUtils.isBlank(gender)) {
-            return JsonResult.errorMsg("用户信息不能有空值！");
-        }
-        UserDO userDO = new UserDO();
-        userDO.setPhone(phone);
-        userDO.setName(name);
-        if (gender.equals("男")) {
-            userDO.setGender(0);
-        } else if (gender.equals("女")) {
-            userDO.setGender(1);
-        }
-        userDO.setAddress(address);
-        userDO.setEmail(email);
-        userDO.setPostal_code(postal_code);
-        userDO.setPassword(MD5Util.getMD5(password));
-        userService.addUser(userDO);
-        return JsonResult.ok();
-    }
-
     @RequestMapping("/queryUserList")
-    public PageData queryUserList(Integer page, Integer limit, String phone, String name) {
+    public PageData queryUserList(Integer page, Integer limit,@RequestParam(value = "phone",required = false) String phone, @RequestParam(value = "name",required = false) String name) {
         return userService.queryUserList(page, limit, phone, name);
     }
 
     @RequestMapping("/queryUserByPhone")
     public JsonResult queryUserByPhone(String phone) {
         UserDO userDO = userService.queryUserByPhone(phone);
-        System.out.println(userDO);
         if (userDO == null) {
             return JsonResult.errorMsg("查询信息出错");
         }

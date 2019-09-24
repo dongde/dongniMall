@@ -71,7 +71,7 @@
                 area: ['80%','80%'],
                 title: "添加配方",
                 type: 2,
-                content: ['/page/formula-info.html'],
+                content: ['/page/formulaTrading-info.html'],
                 success: function(res){
                     if(res.status == 200){
                         layer.msg("添加成功！");
@@ -93,7 +93,7 @@
         $('#findBySource').on('click',function(){
             var formulaName = $("#formulaName").val();
             table.reload('formulaList', {
-                url:'/showFormula'
+                url:'/formula/list'
                 ,where: {
                     formulaName: formulaName
                 },
@@ -109,7 +109,7 @@
         $('#reloadSource').on('click',function(){
             $("#formulaName").val(null);
             table.reload('formulaList', {
-                url:'/showFormula'
+                url:'/formula/list'
                 ,where: {
                     formulaName: null
                 },
@@ -139,7 +139,7 @@
                     shade: 0.8,
                     area: ['80%', '80%'],
                     offset: 'auto',
-                    content: '/page/formula-info.html', //iframe的url，no代表不显示滚动条
+                    content: '/page/formulaTrading-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
                         body.contents().find("#id").val(obj.data.id);
@@ -164,7 +164,7 @@
             }
             $.ajax({
                 data:{"id":id},
-                url:"list/deleteFormula",
+                url:"/formula/delete",
                 success:function (res) {
                     console.log(res.status);
                     if(res.status == 200){
@@ -185,7 +185,7 @@
 
         table.render({
             elem:'#formulaList'
-            ,url:"/showFormula"
+            ,url:"/formula/list"
             ,cellMinWidth: 100
             ,page:true
             ,height:"full-160"

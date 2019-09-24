@@ -49,13 +49,13 @@
             },
             {
               "title": "新闻资讯管理",
-              "href": "page/newsInformation.html",
+              "href": "page/articleManager.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "宣传模版管理",
-              "href": "page/publicityTemplate.html",
+              "href": "page/templateManager.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -64,16 +64,32 @@
               "href": "page/teach-video.html",
               "icon": "fa fa-video-camera",
               "target": "_self"
-            },{
+            },
+            {
               "title": "配方交易管理",
               "href": "page/formulaTrading.html",
               "icon": "fa fa-gears",
               "target": "_self"
-            },{
+            },
+            {
               "title": "底料商城管理",
-              "href": "page/baseManager.html",
+              "href": "",
               "icon": "fa fa-gears",
-              "target": "_self"
+              "target": "_self",
+              "child": [
+                {
+                  "title": "底料管理",
+                  "href": "page/baseManager.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                },
+                {
+                  "title": "类型管理",
+                  "href": "page/tradeTypeManager.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                }
+              ]
             }
           ]
         },

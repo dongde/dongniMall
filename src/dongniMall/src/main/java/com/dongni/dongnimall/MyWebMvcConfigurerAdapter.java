@@ -1,6 +1,9 @@
 package com.dongni.dongnimall;
 
+import com.dongni.dongnimall.interceptor.TokenInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -10,6 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Configuration
 public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(getTokenInterceptor()).addPathPatterns("/home/**","/menu/**","/order/**","/user/**");
+        super.addInterceptors(registry);
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
@@ -23,5 +32,10 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
                 .addResourceLocations("file:C:/Users/15303/Desktop/OTA/");
 
 
+    }
+
+    @Bean
+    public TokenInterceptor getTokenInterceptor(){
+        return new TokenInterceptor();
     }
 }

@@ -11,6 +11,14 @@
         order by create_time desc
     </select>
 
+    <select id="selectBannerIsUsedList"  resultType="com.dongni.dongnimall.pojo.BannerDO">
+        select
+        <include refid="banner_col"></include>
+        from banner
+        where is_used=1
+        order by create_time desc
+    </select>
+
     <select id="selectBannerUsedCount" resultType="Integer">
         select count(*)
         from banner

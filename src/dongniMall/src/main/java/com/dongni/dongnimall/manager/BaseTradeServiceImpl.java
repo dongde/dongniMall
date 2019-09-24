@@ -1,7 +1,7 @@
 package com.dongni.dongnimall.manager;
 
 import com.dongni.dongnimall.dao.BaseTradeMapper;
-import com.dongni.dongnimall.pojo.BaseStore;
+import com.dongni.dongnimall.pojo.BaseStoreDO;
 import com.dongni.dongnimall.vo.PageData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -20,42 +20,41 @@ public class BaseTradeServiceImpl implements BaseTradeService {
 
     @Override
     public PageData selectAllTrade(Integer page, Integer limit, String tradeName, String tradeType) {
-        PageHelper.startPage(page, limit);
-        List<BaseStore> baseStores = baseTradeMapper.selectAllTrade(tradeName,tradeType);
-        PageInfo<BaseStore> pageInfo = new PageInfo<>(baseStores);
-        PageData pageData = new PageData();
-        if(baseStores!=null) {
-            pageData.setCode(0);
-            pageData.setCount(pageInfo.getTotal());
-            pageData.setMsg("");
-            pageData.setData(baseStores);
-            return pageData;
-        }else {
-            pageData.setCode(1);
-            pageData.setCount(0);
-            pageData.setMsg("获取数据失败");
-            pageData.setData(null);
-            return pageData;
+        if(page==null){
+            page = 1;
         }
+        if(limit==null){
+            limit = 10;
+        }
+        PageHelper.startPage(page, limit);
+        List<BaseStoreDO> baseStoreDOS = baseTradeMapper.selectAllTrade(tradeName, tradeType);
+        PageInfo<BaseStoreDO> pageInfo = new PageInfo<>(baseStoreDOS);
+        PageData pageData = new PageData();
+        pageData.setCode(0);
+        pageData.setCount(pageInfo.getTotal());
+        pageData.setMsg("");
+        pageData.setData(baseStoreDOS);
+        return pageData;
+
     }
 
     @Override
-    public void insertTrade(BaseStore baseStore) {
-        baseTradeMapper.insertTrade(baseStore);
+    public void insertTrade(BaseStoreDO baseStoreDO) {
+        baseTradeMapper.insertTrade(baseStoreDO);
     }
 
     @Override
-    public void deleteByID(Integer id) {
+    public void deleteByID(String id) {
         baseTradeMapper.deleteTrade(id);
     }
 
     @Override
-    public BaseStore selectByID(Integer id) {
+    public BaseStoreDO selectByID(String id) {
         return baseTradeMapper.selectByID(id);
     }
 
     @Override
-    public void updateTrade(BaseStore baseStore) {
-        baseTradeMapper.updateTrade(baseStore);
+    public void updateTrade(BaseStoreDO baseStoreDO) {
+        baseTradeMapper.updateTrade(baseStoreDO);
     }
 }
