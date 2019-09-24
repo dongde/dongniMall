@@ -125,6 +125,7 @@
             $("#formSubmit").attr("disabled","disabled");
             if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
                 layer.msg("请选择图片");
+                $("#formSubmit").removeAttr("disabled");
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
                 $.ajax({
                     method:"post",

@@ -114,6 +114,7 @@
                 $("#formSubmit").attr('disabled','disabled');
                 if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
                     layer.msg("请选择图片");
+                    $("#formSubmit").removeAttr('disabled');
                 }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
                     $.ajax({
                         method:"post",
@@ -141,8 +142,8 @@
                             }
                         },
                         error:function (res) {
-                            layer.msg("遇到未知错误");
                             $("#formSubmit").removeAttr('disabled');
+                            layer.msg("遇到未知错误");
                         }
                     })
                 }
