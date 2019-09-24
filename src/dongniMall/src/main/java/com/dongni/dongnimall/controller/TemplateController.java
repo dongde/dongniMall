@@ -5,6 +5,7 @@ import com.dongni.dongnimall.manager.TemplateService;
 import com.dongni.dongnimall.pojo.TemplateDO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
+import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +49,7 @@ public class TemplateController {
     @RequestMapping("add")
     public JsonResult insertTemplate(String id,String templateName, String templateType, Float price, String description,MultipartFile file) {
 
-        if ("".equals(templateName) || "".equals(templateType) || "".equals(description) || price == null) {
+        if (StringUtils.isBlank(templateName)|| StringUtils.isBlank(templateType) || StringUtils.isBlank(description)|| price == null) {
             return JsonResult.errorMsg("数据不能为空");
         }
 
@@ -60,7 +61,7 @@ public class TemplateController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         templateDO.setUpdateTime(dateString);
-        if(id==null||"".equals(id)){
+        if(StringUtils.isBlank(id)){
             String ids = sid.nextShort();
 
             String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
