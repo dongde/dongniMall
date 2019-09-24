@@ -71,7 +71,7 @@ public class TemplateController {
 
             templateService.insertTemplate(templateDO);
 
-            return JsonResult.ok();
+            return JsonResult.ok(templateDO);
         }else {
             if(file!=null) {
                 String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
@@ -79,7 +79,7 @@ public class TemplateController {
             }
             templateDO.setId(id);
             templateService.updateObject(templateDO);
-            return JsonResult.ok();
+            return JsonResult.ok(templateDO);
         }
 
     }

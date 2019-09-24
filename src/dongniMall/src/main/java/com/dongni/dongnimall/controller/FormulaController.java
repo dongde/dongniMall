@@ -61,7 +61,7 @@ public class FormulaController {
             formulaDO.setFormulaURL(DBpath);
             formulaDO.setId(ids);
             formulaService.insertFormula(formulaDO);
-            return JsonResult.ok();
+            return JsonResult.ok(formulaDO);
         }else {
             if(file!=null) {
                 String DBpath = ImageFileUploadUtil.uploadFile(file, FORMULA_SAVE_PATH);
@@ -69,7 +69,7 @@ public class FormulaController {
             }
             formulaDO.setId(id);
             formulaService.updateFormula(formulaDO);
-            return JsonResult.ok();
+            return JsonResult.ok(formulaDO);
         }
     }
 

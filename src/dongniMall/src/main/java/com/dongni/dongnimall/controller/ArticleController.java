@@ -66,14 +66,14 @@ public class ArticleController {
             acticleDO.setId(ids);
             acticleDO.setImageURL(DBpath);
             articleService.insertObject(acticleDO);
-            return JsonResult.ok();
+            return JsonResult.ok(acticleDO);
         }else {
             if(file!=null) {
                 String DBpath = ImageFileUploadUtil.uploadFile(file, IMAGE_SAVE_PATH);
                 acticleDO.setImageURL(DBpath);
             }
             articleService.updateNews(acticleDO,id);
-            return JsonResult.ok();
+            return JsonResult.ok(acticleDO);
         }
 
 

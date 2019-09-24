@@ -59,7 +59,7 @@ public class BaseTradeController {
             baseStoreDO.setImageURL(DBpath);
             baseStoreDO.setId(ids);
             baseTradeService.insertTrade(baseStoreDO);
-            return JsonResult.ok();
+            return JsonResult.ok(baseStoreDO);
         }else {
             if(file!=null) {
                 String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
@@ -67,7 +67,7 @@ public class BaseTradeController {
             }
             baseStoreDO.setId(id);
             baseTradeService.updateTrade(baseStoreDO);
-            return JsonResult.ok();
+            return JsonResult.ok(baseStoreDO);
         }
     }
 

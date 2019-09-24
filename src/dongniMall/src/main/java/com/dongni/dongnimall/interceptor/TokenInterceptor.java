@@ -2,11 +2,9 @@ package com.dongni.dongnimall.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.dongni.dongnimall.vo.JsonResult;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,7 +13,8 @@ import java.io.OutputStream;
 /**
  * @author cengshuai on 2019-09-21.
  * @version 1.0
- */
+*/
+
 public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
