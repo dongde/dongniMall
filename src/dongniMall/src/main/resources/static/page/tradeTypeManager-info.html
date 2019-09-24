@@ -49,12 +49,14 @@
 
 
         $("#formSubmit").on('click',function () {
+            $("#formSubmit").attr("disabled","disabled");
             $.ajax({
                 url:"/baseTradeType/add",
                 data:{
                     tradeType:$("#tradeType").val()
                 },
                 success:function (res) {
+                    $("#formSubmit").removeAttr('disabled');
                     if(res.status==200){
                         //上传成功重写加载数据表格
                         parent.layui.table.reload('tradeType', {page: {curr: 1}});
@@ -64,6 +66,10 @@
                     }else{
                         layer.msg(res.msg);
                     }
+                },
+                error:function () {
+                    $("#formSubmit").removeAttr('disabled');
+                    layer.msg("上传失败");
                 }
             })
         })

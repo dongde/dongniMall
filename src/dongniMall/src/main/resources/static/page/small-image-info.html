@@ -72,6 +72,9 @@
         var $ = layui.jquery
             , upload = layui.upload;
 
+        $("#upload").on("click",function () {
+           $("#upload").attr("disabled","disabled");
+        });
         //普通图片上传
         var uploadInst = upload.render({
             elem: '#chooseImage'
@@ -96,6 +99,7 @@
                 });
             }
             , done: function (res) {
+                $("#upload").removeAttr("disabled");
                 console.log(res);
                 if (res.status === 200) {
                     //上传成功重写加载数据表格
@@ -103,11 +107,13 @@
                     var index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
                     layer.msg("上传成功");
+
                 } else if (res.status === 500) {
                     layer.msg(res.msg)
                 }
             }
             , error: function () {
+                $("#upload").removeAttr("disabled");
                 layer.msg('上传失败');
             }
         });

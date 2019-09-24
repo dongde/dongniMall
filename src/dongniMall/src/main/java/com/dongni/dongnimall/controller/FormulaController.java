@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.controller;
 
-import com.dongni.dongnimall.common.ImageFileUploadUtil;
+import com.dongni.dongnimall.base.storage.FileUploadManager;
+import com.dongni.dongnimall.base.storage.Response;
 import com.dongni.dongnimall.manager.FormulaService;
 import com.dongni.dongnimall.pojo.FormulaDO;
 import com.dongni.dongnimall.vo.JsonResult;
@@ -12,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static com.dongni.dongnimall.controller.BaseController.FORMULA_SAVE_PATH;
 
 /**
  * 配方交易管理
@@ -24,6 +24,8 @@ import static com.dongni.dongnimall.controller.BaseController.FORMULA_SAVE_PATH;
 @RequestMapping("formula")
 public class FormulaController {
 
+    @Autowired
+    private FileUploadManager fileUploadManager;
     @Autowired
     private FormulaService formulaService;
 
@@ -40,7 +42,7 @@ public class FormulaController {
 
     //添加和修改配方
     @RequestMapping("add")
-    public JsonResult insertformula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAdress, MultipartFile file) {
+    public JsonResult insertformula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAdress, MultipartFile file) throws IOException {
         if (StringUtils.isBlank(formulaName) || StringUtils.isBlank(formulaDescription) || formulaPrice == null || StringUtils.isBlank(factoryAdress)||samplePrice==null||flyPrice==null) {
             return JsonResult.errorMsg("数据不能为空");
 
@@ -57,15 +59,15 @@ public class FormulaController {
         formulaDO.setUpdateTime(dateString);
         if(StringUtils.isBlank(id)){
             String ids = sid.nextShort();
-            String DBpath = ImageFileUploadUtil.uploadFile(file, FORMULA_SAVE_PATH);
-            formulaDO.setFormulaURL(DBpath);
+            Response response = fileUploadManager.upload(file.getInputStream());
+            formulaDO.setFormulaURL(response.getUrl());
             formulaDO.setId(ids);
             formulaService.insertFormula(formulaDO);
             return JsonResult.ok(formulaDO);
         }else {
             if(file!=null) {
-                String DBpath = ImageFileUploadUtil.uploadFile(file, FORMULA_SAVE_PATH);
-                formulaDO.setFormulaURL(DBpath);
+                Response response = fileUploadManager.upload(file.getInputStream());
+                formulaDO.setFormulaURL(response.getUrl());
             }
             formulaDO.setId(id);
             formulaService.updateFormula(formulaDO);

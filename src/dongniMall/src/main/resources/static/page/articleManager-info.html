@@ -108,7 +108,10 @@
                 upload = layui.upload;
 
 
+
+
             $("#formSubmit").on('click',function () {
+                $("#formSubmit").attr('disabled','disabled');
                 if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
                     layer.msg("请选择图片");
                 }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
@@ -124,16 +127,22 @@
                             content:layedit.getContent(index)
                         },
                         success:function (res) {
+                            $("#formSubmit").removeAttr('disabled');
                             console.log(res);
                             if(res.status==200){
                                 //上传成功重写加载数据表格
                                 parent.layui.table.reload('testReload', {page: {curr: 1}});
                                 var index = parent.layer.getFrameIndex(window.name);
                                 parent.layer.close(index);
+
                                 layer.msg("上传成功");
                             }else{
                                 layer.msg(res.msg);
                             }
+                        },
+                        error:function (res) {
+                            layer.msg("遇到未知错误");
+                            $("#formSubmit").removeAttr('disabled');
                         }
                     })
                 }
