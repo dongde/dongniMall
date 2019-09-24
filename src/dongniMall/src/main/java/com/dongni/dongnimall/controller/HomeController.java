@@ -1,5 +1,7 @@
 package com.dongni.dongnimall.controller;
 
+import com.dongni.dongnimall.base.storage.FileUploadManager;
+import com.dongni.dongnimall.base.storage.Response;
 import com.dongni.dongnimall.common.BannerUsedEnum;
 import com.dongni.dongnimall.common.ImageFileUploadUtil;
 import com.dongni.dongnimall.manager.BannerService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,6 +38,8 @@ public class HomeController extends BaseController {
     private SmallImageService smallImageService;
     @Autowired
     private Sid sid;
+    @Autowired
+    private FileUploadManager fileUploadManager;
 
     @RequestMapping("/getBannerImageList")
     public PageData getBannerImageList(Integer page, Integer limit) {
@@ -47,15 +52,16 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping("/uploadBanner")
-    public JsonResult uploadBanner(@RequestParam("file") MultipartFile file, @RequestParam("url") String url) {
+    public JsonResult uploadBanner(@RequestParam("file") MultipartFile file, @RequestParam("url") String url) throws IOException {
         if (StringUtils.isBlank(url)) {
             return JsonResult.errorMsg("url不能为空！");
         }
         if (file != null) {
-            String pathDB = ImageFileUploadUtil.uploadFile(file, BANNER_IMAGES_PATH);
+//            String pathDB = ImageFileUploadUtil.uploadFile(file, BANNER_IMAGES_PATH);
+            Response response = fileUploadManager.upload(file.getInputStream());
             BannerDO bannerDO = new BannerDO();
             bannerDO.setId(sid.nextShort());
-            bannerDO.setBanner_img(pathDB);
+            bannerDO.setBanner_img(response.getUrl());
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String new_date = simpleDateFormat.format(date);
@@ -109,13 +115,13 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping("/uploadSmallImage")
-    public JsonResult uploadSmallImage(@RequestParam("file") MultipartFile file, @RequestParam("url") String url, @RequestParam("description") String description) {
+    public JsonResult uploadSmallImage(@RequestParam("file") MultipartFile file, @RequestParam("url") String url, @RequestParam("description") String description) throws IOException {
 
         if (file != null) {
-            String pathDB = ImageFileUploadUtil.uploadFile(file, SMALL_IMAGES_PATH);
+            Response response = fileUploadManager.upload(file.getInputStream());
             SmallImageDO smallImage = new SmallImageDO();
             smallImage.setId(sid.nextShort());
-            smallImage.setSmallImage_img(pathDB);
+            smallImage.setSmallImage_img(response.getUrl());
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String new_date = simpleDateFormat.format(date);
