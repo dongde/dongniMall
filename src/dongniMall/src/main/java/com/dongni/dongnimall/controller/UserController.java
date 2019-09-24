@@ -119,7 +119,7 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping("/queryUserList")
-    public PageData queryUserList(Integer page, Integer limit, String phone, String name) {
+    public PageData queryUserList(Integer page, Integer limit,@RequestParam(value = "phone",required = false) String phone, @RequestParam(value = "name",required = false) String name) {
         return userService.queryUserList(page, limit, phone, name);
     }
 
