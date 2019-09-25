@@ -11,7 +11,7 @@
  Target Server Version : 80014
  File Encoding         : 65001
 
- Date: 21/09/2019 15:15:34
+ Date: 25/09/2019 15:44:46
 */
 
 SET NAMES utf8mb4;
@@ -35,13 +35,13 @@ CREATE TABLE `banner` (
 -- ----------------------------
 DROP TABLE IF EXISTS `BaseStore`;
 CREATE TABLE `BaseStore` (
-  `id` varchar(255) COLLATE utf8mb4_bin NOT NULL,
-  `tradeName` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL,
-  `tradeType` varchar(25) COLLATE utf8mb4_bin DEFAULT NULL,
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `tradeName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `tradeType` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `price` float(20,2) DEFAULT NULL,
-  `tradeURL` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
-  `imageURL` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
-  `updateTime` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL,
+  `tradeURL` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `imageURL` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `updateTime` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `viewCount` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
@@ -51,15 +51,15 @@ CREATE TABLE `BaseStore` (
 -- ----------------------------
 DROP TABLE IF EXISTS `formula`;
 CREATE TABLE `formula` (
-  `id` varchar(255) COLLATE utf8mb4_bin NOT NULL,
-  `formulaURL` varchar(100) COLLATE utf8mb4_bin DEFAULT NULL,
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `formulaURL` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `formulaPrice` float(10,2) DEFAULT NULL,
-  `formulaDescription` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `formulaDescription` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `samplePrice` float(10,2) DEFAULT NULL,
   `flyPrice` float(10,2) DEFAULT NULL,
-  `factoryAdress` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
-  `updateTime` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL,
-  `formulaName` varchar(20) COLLATE utf8mb4_bin DEFAULT NULL,
+  `factoryAdress` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `updateTime` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `formulaName` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
@@ -116,17 +116,29 @@ CREATE TABLE `manager` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
+-- Table structure for message
+-- ----------------------------
+DROP TABLE IF EXISTS `message`;
+CREATE TABLE `message` (
+  `id` varchar(64) NOT NULL,
+  `user_phone` varchar(20) DEFAULT NULL,
+  `content` text NOT NULL,
+  `create_time` datetime NOT NULL,
+  `type` tinyint(1) NOT NULL COMMENT '0系统消息，1个人消息'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
 -- Table structure for newsinformation
 -- ----------------------------
 DROP TABLE IF EXISTS `newsinformation`;
 CREATE TABLE `newsinformation` (
-  `id` varchar(255) COLLATE utf8mb4_bin NOT NULL,
-  `title` varchar(50) COLLATE utf8mb4_bin NOT NULL,
-  `source` varchar(100) COLLATE utf8mb4_bin DEFAULT NULL,
-  `imageUrl` varchar(300) COLLATE utf8mb4_bin DEFAULT NULL,
-  `summary` varchar(200) COLLATE utf8mb4_bin DEFAULT NULL,
-  `content` longtext COLLATE utf8mb4_bin,
-  `updateTime` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `source` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `imageUrl` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `summary` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  `updateTime` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
@@ -150,25 +162,15 @@ CREATE TABLE `order` (
 -- ----------------------------
 DROP TABLE IF EXISTS `publicityTemplate`;
 CREATE TABLE `publicityTemplate` (
-  `id` varchar(255) COLLATE utf8mb4_bin NOT NULL,
-  `templateName` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL,
-  `templateType` varchar(20) COLLATE utf8mb4_bin DEFAULT NULL,
-  `textDescription` longtext COLLATE utf8mb4_bin,
-  `image` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `templateName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `templateType` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `textDescription` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `price` float DEFAULT NULL,
-  `updateTime` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL,
+  `updateTime` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
--- ----------------------------
--- Table structure for tradeType
--- ----------------------------
-DROP TABLE IF EXISTS `tradeType`;
-CREATE TABLE `tradeType` (
-  `id` varchar(255) NOT NULL,
-  `type` varchar(50) DEFAULT NULL,
-  `updateTime` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for smallImage
@@ -198,6 +200,17 @@ CREATE TABLE `teach_video` (
   `create_time` datetime NOT NULL,
   `counts` int(10) NOT NULL,
   `content` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for tradeType
+-- ----------------------------
+DROP TABLE IF EXISTS `tradeType`;
+CREATE TABLE `tradeType` (
+  `id` varchar(255) NOT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  `updateTime` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
