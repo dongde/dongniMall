@@ -42,12 +42,6 @@
           "target": "_self",
           "child": [
             {
-              "title": "菜单目录管理",
-              "href": "page/page3.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
-            },
-            {
               "title": "新闻资讯管理",
               "href": "page/articleManager.html",
               "icon": "fa fa-tachometer",
