@@ -1,10 +1,12 @@
 package com.dongni.dongnimall.controller;
 
+import com.dongni.dongnimall.base.sms.SMSManager;
 import com.dongni.dongnimall.common.MD5Util;
 import com.dongni.dongnimall.manager.UserService;
 import com.dongni.dongnimall.pojo.UserDO;
 import com.dongni.dongnimall.vo.JsonResult;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +21,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class FrontController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private SMSManager smsManager;
+
+    @PostMapping("/sendSmsRegisterCode")
+    public JsonResult sendSmsRegisterCode(String phone){
+        smsManager.sendSmsRegisterCode(phone);
+        return JsonResult.ok();
+    }
 
     @PostMapping("/register")
-    public JsonResult register(String phone, String name, Integer gender, String address, String email, String postal_code, String password) {
+    public JsonResult register(String phone, String name, Integer gender, String address, String email, String postal_code, String password,String code) {
         if (StringUtils.isBlank(phone) || StringUtils.isBlank(name) || StringUtils.isBlank(address) || StringUtils.isBlank(email) || StringUtils.isBlank(postal_code) || StringUtils.isBlank(password) || gender == null) {
             return JsonResult.errorMsg("用户信息不能为空");
         }
         if(userService.queryUserByPhone(phone)!=null){
             return JsonResult.errorMsg("该手机号已被注册");
+        }
+        if(!smsManager.validateRegisterCode(phone,code)){
+            return JsonResult.errorMsg("验证码错误");
         }
         UserDO userDO = new UserDO();
         userDO.setPhone(phone);
