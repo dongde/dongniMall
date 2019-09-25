@@ -10,10 +10,17 @@ import com.dongni.dongnimall.vo.ManagerVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -28,12 +35,15 @@ public class LoginController extends BaseController{
     private ManagerService managerService;
 
     @RequestMapping("/login")
-    public JsonResult login(String name, String password, HttpServletRequest request){
+    public JsonResult login(String name, String password, String captcha,HttpServletRequest request){
         if(StringUtils.isBlank(name)){
             return JsonResult.errorMsg("用户名不能为空");
         }
         if (StringUtils.isBlank(password)){
             return JsonResult.errorMsg("密码不能为空");
+        }
+        if(!captcha.equals(request.getSession().getAttribute("code"))){
+            return JsonResult.errorMsg("验证码错误");
         }
         if(!managerService.queryManagerByName(name,null)){
             return JsonResult.errorMsg("用户不存在");
@@ -52,10 +62,8 @@ public class LoginController extends BaseController{
     }
 
     @RequestMapping("/getCode")
-    public CodeDO getCode(){
-        CodeDO codeDO = new CodeDO();
-        codeDO.setCode(VerifyCode.getImage(CODE_IMAGE_PATH));
-        codeDO.setCodeUrl("/code.jpg");
-        return codeDO;
+    public void getCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ServletOutputStream outputStream = response.getOutputStream();
+        ImageIO.write(VerifyCode.getImage(request), "png", outputStream);
     }
 }

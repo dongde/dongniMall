@@ -19,21 +19,6 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
         super.addInterceptors(registry);
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        super.addResourceHandlers(registry);
-        registry.addResourceHandler("/**.jpg")
-                .addResourceLocations("file:/Users/cengshuai/intellij_workspace/bannerImages/")
-                .addResourceLocations("file:/Users/cengshuai/intellij_workspace/smallImages/")
-                .addResourceLocations("file:/Users/cengshuai/intellij_workspace/videoCovers/")
-                .addResourceLocations("file:/Users/cengshuai/intellij_workspace/codeImage/")
-                .addResourceLocations("file:C:/Users/15303/Desktop/baseTrade/")
-                .addResourceLocations("file:C:/Users/15303/Desktop/formula/")
-                .addResourceLocations("file:C:/Users/15303/Desktop/OTA/");
-
-
-    }
-
     @Bean
     public TokenInterceptor getTokenInterceptor(){
         return new TokenInterceptor();
