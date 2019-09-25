@@ -10,12 +10,15 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.gson.Gson;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -34,6 +37,9 @@ public class SMSManagerImpl implements SMSManager {
     private String accessKeySecret;
     @Value("${aliyun.message.signName}")
     private String signName;
+
+    @Autowired
+    private Gson gson;
 
     @Override
     public boolean sendSmsRegisterCode(String phoneNumber){
@@ -66,6 +72,9 @@ public class SMSManagerImpl implements SMSManager {
         boolean success = response.getHttpStatus() == 200;
         if (!success) {
             logger.error("短信发送失败：" + response.getData());
+        } else {
+            Map map = gson.fromJson(response.getData(), Map.class);
+            success = Objects.equals("OK", map.get("Code"));
         }
         return success;
     }
