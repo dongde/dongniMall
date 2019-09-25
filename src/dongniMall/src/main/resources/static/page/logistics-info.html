@@ -112,13 +112,13 @@
                             parent.layui.table.reload('order-table', {page: {curr: 1}});
                             var index = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(index);
-                            layer.msg("修改成功");
+                            parent.layer.msg("添加物流成功");
                         } else {
                             layer.msg(res.msg);
                         }
                     },error:function () {
                         $("#submit").removeAttr("disabled");
-                        layer.msg("上传失败");
+                        layer.msg("添加失败");
                     }
                 })
             }

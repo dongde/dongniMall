@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <style>
+        form {
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form ">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">消息类型</label>
+            <div class="layui-input-inline">
+                <select id="modules" name="modules" lay-filter="modules" lay-verify="required" lay-search="">
+                    <option value="0">系统消息</option>
+                    <option value="1">个人消息</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" id="isHidden" hidden>
+        <label class="layui-form-label">用户账号：</label>
+        <div class="layui-input-block">
+            <input type="text" id="user_phone" name="user_phone" autocomplete="off"
+                   placeholder="请输入用户账号"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">消息内容：</label>
+        <div class="layui-input-block">
+            <textarea type="text" id="content" autocomplete="off" placeholder="请输入内容"
+                      class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" id="submit" type="button">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+</body>
+<script src="../lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use('form', function () {
+        var form = layui.form,
+            $ = layui.jquery;
+        form.on('select(modules)', function (data) {
+            if (data.value == 0) {
+                $("#isHidden").attr("hidden", "hidden");
+            }
+            if (data.value == 1) {
+                $("#isHidden").removeAttr("hidden");
+            }
+        });
+
+        //监听提交
+        $("#submit").on('click', function () {
+            var type = $("#modules").val();
+            var user_phone = $("#user_phone").val().trim();
+            var content = $("#content").val().trim();
+            if (type == 1 && user_phone == "") {
+                layer.msg("用户账号不能为空");
+            } else if (content == "") {
+                layer.msg("消息内容不能为空");
+            } else {
+                $.ajax({
+                    method: 'POST',
+                    url: '/message/addMessage',
+                    data: {
+                        type: type,
+                        user_phone: user_phone,
+                        content: content
+                    },
+                    success: function (res) {
+                        if (res.status == 200) {
+                            parent.layui.table.reload('message-table', {page: {curr: 1}});
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            parent.layer.msg("添加成功");
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error: function () {
+                        layer.msg("添加出错");
+                    }
+                })
+            }
+        });
+    });
+</script>
+</html>

@@ -145,7 +145,7 @@
                             parent.layui.table.reload('baselist', {page: {curr: 1}});
                             var index = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(index);
-                            layer.msg("上传成功");
+                            parent.layer.msg("上传成功");
 
                         }else{
                             layer.msg(res.msg);
@@ -201,7 +201,7 @@
                     parent.layui.table.reload('baselist', {page: {curr: 1}});
                     var index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
-                    layer.msg("上传成功");
+                    parent.layer.msg("上传成功");
                 } else if (res.status === 500) {
                     layer.msg(res.msg)
                 }

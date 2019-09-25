@@ -3,7 +3,6 @@ package com.dongni.dongnimall.controller;
 import com.dongni.dongnimall.base.storage.FileUploadManager;
 import com.dongni.dongnimall.base.storage.Response;
 import com.dongni.dongnimall.common.BannerUsedEnum;
-import com.dongni.dongnimall.common.ImageFileUploadUtil;
 import com.dongni.dongnimall.manager.BannerService;
 import com.dongni.dongnimall.manager.SmallImageService;
 import com.dongni.dongnimall.pojo.BannerDO;

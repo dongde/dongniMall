@@ -87,7 +87,7 @@
                             btn: ['通过', '不通过'] //按钮
                         }, function () {
                             $.ajax({
-                                method: 'POST',
+                                method: 'GET',
                                 url: '/leaveMessage/modifyVerify?id=' + obj.data.id + "&verify=" + 1,
                                 success: function (res) {
                                     if (res.status == 200) {
@@ -107,7 +107,7 @@
                             })
                         }, function () {
                             $.ajax({
-                                method: 'POST',
+                                method: 'GET',
                                 url: '/leaveMessage/modifyVerify?id=' + obj.data.id + "&verify=" + 2,
                                 success: function (res) {
                                     if (res.status == 200) {
@@ -135,7 +135,7 @@
              */
             function deleteLeaveMessage(id) {
                 $.ajax({
-                    method: 'POST',
+                    method: 'GET',
                     url: '/leaveMessage/removeLeaveMessage?id=' + id,
                     success: function (res) {
                         if (res.status === 200) {

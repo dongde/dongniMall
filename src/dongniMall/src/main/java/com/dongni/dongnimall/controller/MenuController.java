@@ -2,7 +2,6 @@ package com.dongni.dongnimall.controller;
 
 import com.dongni.dongnimall.base.storage.FileUploadManager;
 import com.dongni.dongnimall.base.storage.Response;
-import com.dongni.dongnimall.common.ImageFileUploadUtil;
 import com.dongni.dongnimall.manager.TeachVideoService;
 import com.dongni.dongnimall.pojo.TeachVideoDO;
 import com.dongni.dongnimall.vo.JsonResult;
@@ -85,8 +84,8 @@ public class MenuController extends BaseController {
             teachVideoDO.setId(id);
             //file不为空则是更新了图片
             if (file != null) {
-                String pathDB = ImageFileUploadUtil.uploadFile(file, VIDEO_COVERS_PATH);
-                teachVideoDO.setCover(pathDB);
+                Response response = fileUploadManager.upload(file.getInputStream());
+                teachVideoDO.setCover(response.getUrl());
             }
             teachVideoService.modifyTeachVideo(teachVideoDO);
         }
