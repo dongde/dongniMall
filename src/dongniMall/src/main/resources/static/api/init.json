@@ -100,6 +100,12 @@
           "target": "_self"
         },
         {
+          "title": "消息管理",
+          "href": "page/message.html",
+          "icon": "fa fa-envelope-o",
+          "target": "_self"
+        },
+        {
           "title": "订单管理",
           "href": "page/order.html",
           "icon": "fa fa-credit-card",

@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -14,7 +15,7 @@ import java.util.Random;
  * @version 1.0
  */
 public class VerifyCode {
-    public static String getImage(String filePath) {
+    public static BufferedImage getImage(HttpServletRequest request) {
         // 创建图片对象
         BufferedImage bufferedImage = new BufferedImage(100, 50, BufferedImage.TYPE_INT_RGB);
 
@@ -42,6 +43,7 @@ public class VerifyCode {
             codes += code;
             graphics.drawString(code, i * 25, 35 + random.nextInt(11) - 5);
         }
+        request.getSession().setAttribute("code", codes);
         // 在画板上画上线条
         for (int i = 0; i < 4; i++) {
             graphics.setColor(colors[random.nextInt(colors.length)]);
@@ -50,23 +52,23 @@ public class VerifyCode {
 //        BufferedImage img = removeBackgroud(file);//去除重影
 
         //bufferedimage 转换成 inputstream
-        ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        ImageOutputStream imOut = null;
-        try {
-            imOut = ImageIO.createImageOutputStream(bs);
-            ImageIO.write(bufferedImage, "jpg", imOut);
-            InputStream inputStream = new ByteArrayInputStream(bs.toByteArray());
-            File file = new File(filePath);
-            if (file.getParentFile().isDirectory() || file.getParentFile() != null) {
-                file.getParentFile().mkdirs();
-            }
-            OutputStream outStream = new FileOutputStream(filePath);
-            IOUtils.copy(inputStream, outStream);
-            inputStream.close();
-            outStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return codes;
+//        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+//        ImageOutputStream imOut = null;
+//        try {
+//            imOut = ImageIO.createImageOutputStream(bs);
+//            ImageIO.write(bufferedImage, "jpg", imOut);
+//            InputStream inputStream = new ByteArrayInputStream(bs.toByteArray());
+//            File file = new File(filePath);
+//            if (file.getParentFile().isDirectory() || file.getParentFile() != null) {
+//                file.getParentFile().mkdirs();
+//            }
+//            OutputStream outStream = new FileOutputStream(filePath);
+//            IOUtils.copy(inputStream, outStream);
+//            inputStream.close();
+//            outStream.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        return bufferedImage;
     }
 }

@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.controller;
 
-import com.dongni.dongnimall.common.ImageFileUploadUtil;
+import com.dongni.dongnimall.base.storage.FileUploadManager;
+import com.dongni.dongnimall.base.storage.Response;
 import com.dongni.dongnimall.manager.TeachVideoService;
 import com.dongni.dongnimall.pojo.TeachVideoDO;
 import com.dongni.dongnimall.vo.JsonResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,6 +29,8 @@ public class MenuController extends BaseController {
     private TeachVideoService teachVideoService;
     @Autowired
     private Sid sid;
+    @Autowired
+    private FileUploadManager fileUploadManager;
 
     @RequestMapping("/queryTeachVideoList")
     public PageData queryTeachVideoList(Integer page, Integer limit, @RequestParam(value = "title", required = false) String title) {
@@ -43,7 +47,7 @@ public class MenuController extends BaseController {
     }
 
     @RequestMapping("/addOrUpdateTeachVideo")
-    public JsonResult addOrUpdateTeachVideo(@RequestParam(value = "file",required = false) MultipartFile file, String title, String videoUrl, String introduction, String content, String id) {
+    public JsonResult addOrUpdateTeachVideo(@RequestParam(value = "file",required = false) MultipartFile file, String title, String videoUrl, String introduction, String content, String id) throws IOException {
 
         if (StringUtils.isBlank(title)) {
             return JsonResult.errorMsg("标题不能为空");
@@ -71,8 +75,8 @@ public class MenuController extends BaseController {
             if (file == null) {
                 return JsonResult.errorMsg("请上传图片");
             }
-            String pathDB = ImageFileUploadUtil.uploadFile(file, VIDEO_COVERS_PATH);
-            teachVideoDO.setCover(pathDB);
+            Response response = fileUploadManager.upload(file.getInputStream());
+            teachVideoDO.setCover(response.getUrl());
             teachVideoDO.setId(sid.nextShort());
             teachVideoDO.setCounts(0);
             teachVideoService.addTeachVideo(teachVideoDO);
@@ -80,8 +84,8 @@ public class MenuController extends BaseController {
             teachVideoDO.setId(id);
             //file不为空则是更新了图片
             if (file != null) {
-                String pathDB = ImageFileUploadUtil.uploadFile(file, VIDEO_COVERS_PATH);
-                teachVideoDO.setCover(pathDB);
+                Response response = fileUploadManager.upload(file.getInputStream());
+                teachVideoDO.setCover(response.getUrl());
             }
             teachVideoService.modifyTeachVideo(teachVideoDO);
         }

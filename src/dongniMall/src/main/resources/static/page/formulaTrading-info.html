@@ -111,8 +111,10 @@
 
 
         $("#formSubmit").on('click',function () {
+            $("#formSubmit").attr("disabled","disabled");
             if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
                 layer.msg("请选择图片");
+                $("#formSubmit").removeAttr("disabled");
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
                 $.ajax({
                     method:"post",
@@ -128,16 +130,21 @@
                         file: $("#updateload").file
                     },
                     success:function (res) {
-                        console.log(res);
+                        $("#formSubmit").removeAttr("disabled");
                         if(res.status==200){
                             //上传成功重写加载数据表格
                             parent.layui.table.reload('formulaList', {page: {curr: 1}});
                             var index = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(index);
-                            layer.msg("上传成功");
+                            parent.layer.msg("上传成功");
+
                         }else{
                             layer.msg(res.msg);
                         }
+                    },
+                    error:function (res) {
+                        $("#formSubmit").removeAttr("disabled");
+                        layer.msg("上传失败！");
                     }
                 })
             }

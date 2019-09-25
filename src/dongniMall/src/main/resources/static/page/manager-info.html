@@ -78,6 +78,7 @@
 <script>
     layui.use('form', function () {
         $("#submit").on('click', function () {
+            $("#submit").attr("disabled","disabled");
             var name = $("input[name='managerName']").val().trim();
             var oldPassword = $("input[name='oldPassword']").val().trim();
             var newPassword = $("input[name='newPassword']").val().trim();
@@ -102,14 +103,20 @@
                             },
                             url: "/user/modifyManager",
                             success: function (res) {
+                                $("#submit").removeAttr("disabled");
                                 if (res.status === 200) {
                                     parent.layui.table.reload('manager-table', {page: {curr: 1}});
                                     var index = parent.layer.getFrameIndex(window.name);
                                     parent.layer.close(index);
-                                    layer.msg("修改成功");
+                                    parent.layer.msg("修改成功");
+
                                 } else {
                                     layer.msg(res.msg);
                                 }
+                            },
+                            error:function () {
+                                $("#submit").removeAttr("disabled");
+                                layer.msg("修改失败");
                             }
                         })
                     }

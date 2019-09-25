@@ -89,6 +89,7 @@
 <script>
     layui.use('form', function () {
         $("#submit").on('click', function () {
+            $("#submit").attr("disabled","disabled");
             var order_number = $("#order_number").val();
             var delivery_method = $("#delivery_method").val();
             var logistics_number = $("#logistics_number").val().trim();
@@ -106,14 +107,18 @@
                     },
                     url: "/order/addLogistics",
                     success: function (res) {
+                        $("#submit").removeAttr("disabled");
                         if(res.status===200){
                             parent.layui.table.reload('order-table', {page: {curr: 1}});
                             var index = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(index);
-                            layer.msg("修改成功");
+                            parent.layer.msg("添加物流成功");
                         } else {
                             layer.msg(res.msg);
                         }
+                    },error:function () {
+                        $("#submit").removeAttr("disabled");
+                        layer.msg("添加失败");
                     }
                 })
             }

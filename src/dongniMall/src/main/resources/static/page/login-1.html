@@ -144,7 +144,7 @@
                     <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码"
                            autocomplete="off" class="layui-input verification captcha" value="">
                     <div class="captcha-img">
-                        <img id="captchaPic" src="">
+                        <img id="captchaPic" src="/getCode">
                         <a onclick="getCode()">看不清，换一张</a>
                     </div>
                 </div>
@@ -198,15 +198,12 @@
                 layer.msg('验证码不能为空');
                 return false;
             }
-            if (data.captcha != window.localStorage.getItem("code")) {
-                layer.msg('验证码错误');
-                return false;
-            }
             $.ajax({
                 method: 'POST',
                 data: data,
                 url: '/login',
                 success: function (res) {
+                    getCode();
                     if (res.status === 200) {
                         console.log(res)
                         //设置当前登录用户
@@ -228,14 +225,7 @@
     });
 
     function getCode() {
-        $.ajax({
-            method: "GET",
-            url: "/getCode",
-            success: function (res) {
-                $("#captchaPic").attr("src", res.codeUrl + "?time=" + new Date().getTime());
-                window.localStorage.setItem("code", res.code);
-            }
-        })
+        $("#captchaPic").attr("src","/getCode?time=" + new Date().getTime());
     }
 </script>
 </body>

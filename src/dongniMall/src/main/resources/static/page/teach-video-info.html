@@ -126,8 +126,10 @@
             }
         });
         $("#upload").on('click',function () {
+            $("#upload").attr("disabled","disabled");
             if($("#image").attr("src")===undefined && $("#imageForUpdate").attr("src")===undefined){
                 layer.msg("请选择图片");
+                $("#upload").removeAttr("disabled");
             }else if($("#image").attr("src")===undefined && $("#imageForUpdate").attr("src")!==undefined){
                 $.ajax({
                     method:'POST',
@@ -141,15 +143,20 @@
                         file: $("#image")[0].file[0]
                     },
                     success:function (res) {
+                        $("#upload").removeAttr("disabled");
                         if(res.status==200){
                             //上传成功重写加载数据表格
                             parent.layui.table.reload('teach-video-table', {page: {curr: 1}});
                             var index = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(index);
-                            layer.msg("上传成功");
+                            parent.layer.msg("上传成功");
                         }else{
                             layer.msg(res.msg);
                         }
+                    },
+                    error:function () {
+                        $("#upload").removeAttr("disabled");
+                        layer.msg("上传失败");
                     }
                 })
             }

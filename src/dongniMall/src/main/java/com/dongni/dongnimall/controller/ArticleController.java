@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.controller;
 
-import com.dongni.dongnimall.common.ImageFileUploadUtil;
+import com.dongni.dongnimall.base.storage.FileUploadManager;
+import com.dongni.dongnimall.base.storage.Response;
 import com.dongni.dongnimall.manager.ArticleService;
 import com.dongni.dongnimall.pojo.ActicleDO;
 import com.dongni.dongnimall.vo.EditUploadDTO;
@@ -14,13 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.dongni.dongnimall.controller.BaseController.IMAGE_SAVE_PATH;
-import static com.dongni.dongnimall.controller.BaseController.TRADE_SAVE_PATH;
 
 /**
  * 新闻资讯管理
@@ -28,6 +27,9 @@ import static com.dongni.dongnimall.controller.BaseController.TRADE_SAVE_PATH;
 @RestController
 @RequestMapping("article")
 public class ArticleController {
+
+    @Autowired
+    private FileUploadManager fileUploadManager;
 
     @Autowired
     private ArticleService articleService;
@@ -47,7 +49,7 @@ public class ArticleController {
 
     //添加和修改文章
     @RequestMapping("/add")
-    public JsonResult insertList(String id,String title, String source, String summary, String content,MultipartFile file) {
+    public JsonResult insertList(String id,String title, String source, String summary, String content,MultipartFile file) throws IOException {
         if (StringUtils.isBlank(title) || StringUtils.isBlank(source) || StringUtils.isBlank(summary) || StringUtils.isBlank(content)) {
             return JsonResult.errorMsg("数据不能为空");
         }
@@ -62,15 +64,15 @@ public class ArticleController {
         acticleDO.setTitle(title);
         if(StringUtils.isBlank(id)){
             String ids = sid.nextShort();
-            String DBpath = ImageFileUploadUtil.uploadFile(file, IMAGE_SAVE_PATH);
+            Response response = fileUploadManager.upload(file.getInputStream());
             acticleDO.setId(ids);
-            acticleDO.setImageURL(DBpath);
+            acticleDO.setImageURL(response.getUrl());
             articleService.insertObject(acticleDO);
             return JsonResult.ok(acticleDO);
         }else {
             if(file!=null) {
-                String DBpath = ImageFileUploadUtil.uploadFile(file, IMAGE_SAVE_PATH);
-                acticleDO.setImageURL(DBpath);
+                Response response2 = fileUploadManager.upload(file.getInputStream());
+                acticleDO.setImageURL(response2.getUrl());
             }
             articleService.updateNews(acticleDO,id);
             return JsonResult.ok(acticleDO);
@@ -85,12 +87,12 @@ public class ArticleController {
 
     //上传图片接口
     @RequestMapping("/uploadBanner")
-    public EditUploadDTO uploadBanner(MultipartFile file) {
+    public EditUploadDTO uploadBanner(MultipartFile file) throws IOException {
 
-        String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
+        Response response = fileUploadManager.upload(file.getInputStream());
 
         Map<String,String> map = new HashMap<>();
-        String imageURL = DBpath;
+        String imageURL = response.getUrl();
         map.put("src",imageURL);
         return EditUploadDTO.ok(map);
 

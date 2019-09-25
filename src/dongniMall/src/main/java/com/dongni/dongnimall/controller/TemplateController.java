@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.controller;
 
-import com.dongni.dongnimall.common.ImageFileUploadUtil;
+import com.dongni.dongnimall.base.storage.FileUploadManager;
+import com.dongni.dongnimall.base.storage.Response;
 import com.dongni.dongnimall.manager.TemplateService;
 import com.dongni.dongnimall.pojo.TemplateDO;
 import com.dongni.dongnimall.vo.JsonResult;
@@ -12,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static com.dongni.dongnimall.controller.BaseController.TRADE_SAVE_PATH;
 
 /**
  * 宣传模板管理
@@ -24,6 +24,8 @@ import static com.dongni.dongnimall.controller.BaseController.TRADE_SAVE_PATH;
 @RequestMapping("template")
 public class TemplateController {
 
+    @Autowired
+    private FileUploadManager fileUploadManager;
     @Autowired
     private TemplateService templateService;
 
@@ -47,7 +49,7 @@ public class TemplateController {
 
     //添加模板文件
     @RequestMapping("add")
-    public JsonResult insertTemplate(String id,String templateName, String templateType, Float price, String description,MultipartFile file) {
+    public JsonResult insertTemplate(String id,String templateName, String templateType, Float price, String description,MultipartFile file) throws IOException {
 
         if (StringUtils.isBlank(templateName)|| StringUtils.isBlank(templateType) || StringUtils.isBlank(description)|| price == null) {
             return JsonResult.errorMsg("数据不能为空");
@@ -64,9 +66,9 @@ public class TemplateController {
         if(StringUtils.isBlank(id)){
             String ids = sid.nextShort();
 
-            String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
+            Response response = fileUploadManager.upload(file.getInputStream());
 
-            templateDO.setImage(DBpath);
+            templateDO.setImage(response.getUrl());
             templateDO.setId(ids);
 
             templateService.insertTemplate(templateDO);
@@ -74,8 +76,8 @@ public class TemplateController {
             return JsonResult.ok(templateDO);
         }else {
             if(file!=null) {
-                String DBpath = ImageFileUploadUtil.uploadFile(file, TRADE_SAVE_PATH);
-                templateDO.setImage(DBpath);
+                Response response = fileUploadManager.upload(file.getInputStream());
+                templateDO.setImage(response.getUrl());
             }
             templateDO.setId(id);
             templateService.updateObject(templateDO);
