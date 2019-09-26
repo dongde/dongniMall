@@ -7,31 +7,31 @@
     <select id="selectSmallImageList" resultType="com.dongni.dongnimall.pojo.SmallImageDO">
         select
         <include refid="small_image_col"></include>
-        from smallImage
+        from smallimage
         order by `position` desc
     </select>
 
     <select id="selectSmallImageIsUsedList" resultType="com.dongni.dongnimall.pojo.SmallImageDO">
         select
         <include refid="small_image_col"></include>
-        from smallImage
+        from smallimage
         where is_used = 1
         order by `position` desc
     </select>
     <select id="selectSmallImageUsedCount" resultType="Integer">
         select count(*)
-        from smallImage
+        from smallimage
         where is_used=1
     </select>
 
     <insert id="insertSmallImage" parameterType="com.dongni.dongnimall.pojo.SmallImageDO">
-        insert into smallImage(<include refid="small_image_col"></include>)
+        insert into smallimage(<include refid="small_image_col"></include>)
         values
         (#{smallImageDO.id},#{smallImageDO.smallImage_img},#{smallImageDO.is_used},#{smallImageDO.url},#{smallImageDO.description},#{smallImageDO.create_time},#{smallImageDO.position})
     </insert>
 
     <delete id="deleteSmallImage">
-        delete from smallImage
+        delete from smallimage
         where id in
         <foreach collection="list" open="(" close=")" separator="," index="index" item="id">
             #{id}
@@ -39,7 +39,7 @@
     </delete>
 
     <update id="updateSmallImage" parameterType="com.dongni.dongnimall.pojo.SmallImageDO">
-        update smallImage
+        update smallimage
         <set>
             <if test="smallImageDO.smallImage_img!=null and smallImageDO.smallImage_img!=''">
                 smallImage_img=#{smallImageDO.smallImage_img},
