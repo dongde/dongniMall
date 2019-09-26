@@ -6,7 +6,7 @@
     </sql>
 
     <select id="selectAllTrade" resultType="com.dongni.dongnimall.pojo.BaseStoreDO">
-        select * from BaseStore
+        select * from basestore
         WHERE 1=1
         <if test="tradeName!=null and tradeName!=''">
            and tradeName=#{tradeName}
@@ -18,18 +18,18 @@
     </select>
 
     <insert id="insertTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
-        insert into BaseStore (<include refid="BaseStore_col"></include>) values
+        insert into basestore (<include refid="BaseStore_col"></include>) values
         (#{baseStoreDO.id},#{baseStoreDO.tradeName},#{baseStoreDO.tradeType},#{baseStoreDO.price},#{baseStoreDO.tradeURL},#{baseStoreDO.imageURL},#{baseStoreDO.viewCount},#{baseStoreDO.updateTime})
     </insert>
 
     <delete id="deleteTrade" parameterType="java.lang.String">
-        delete from BaseStore where id = #{id}
+        delete from basestore where id = #{id}
     </delete>
     <select id="selectByID" parameterType="java.lang.String">
-        select * from BaseStore where id = #{id}
+        select * from basestore where id = #{id}
     </select>
     <update id="updateTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
-        update BaseStore set tradeName=#{baseStoreDO.tradeName},tradeType=#{baseStoreDO.tradeType},
+        update basestore set tradeName=#{baseStoreDO.tradeName},tradeType=#{baseStoreDO.tradeType},
         price=#{baseStoreDO.price},tradeURL=#{baseStoreDO.tradeURL},updateTime=#{baseStoreDO.updateTime}
         where id = #{baseStoreDO.id}
     </update>

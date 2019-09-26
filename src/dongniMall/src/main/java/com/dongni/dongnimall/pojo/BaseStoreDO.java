@@ -15,6 +15,8 @@ public class BaseStoreDO {
     private String imageURL;
     private Integer viewCount;
     private String updateTime;
+    private String content;
+
 
     public String getUpdateTime() {
         return updateTime;

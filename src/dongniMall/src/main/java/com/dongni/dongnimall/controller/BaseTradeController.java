@@ -45,7 +45,7 @@ public class BaseTradeController {
         if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL)) {
             return JsonResult.errorMsg("数据不能为空");
         }
-
+        System.out.println(file);
         BaseStoreDO baseStoreDO = new BaseStoreDO();
         baseStoreDO.setPrice(price);
         baseStoreDO.setTradeName(tradeName);

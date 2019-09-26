@@ -15,19 +15,19 @@ public interface BaseTradeTypeMapper {
     /**
      * 查询所有类型
      */
-    @Select("select * from tradeType")
+    @Select("select * from tradetype")
     List<BaseTradeTypeDO> selectAllType();
 
     /**
      * 插入类型
      */
-    @Insert("insert into tradeType (id,type,updateTime) values(#{baseTradeTypeDO.id},#{baseTradeTypeDO.type},#{baseTradeTypeDO.updateTime})")
+    @Insert("insert into tradetype (id,type,updateTime) values(#{baseTradeTypeDO.id},#{baseTradeTypeDO.type},#{baseTradeTypeDO.updateTime})")
     void insertType(@Param("baseTradeTypeDO") BaseTradeTypeDO baseTradeTypeDO);
 
     /**
      * 删除类型数据
      * @param id
      */
-    @Delete("delete from tradeType where id = #{id}")
+    @Delete("delete from tradetype where id = #{id}")
     void deleteType(@Param("id") String id);
 }

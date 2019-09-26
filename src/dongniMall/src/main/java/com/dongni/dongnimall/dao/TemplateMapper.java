@@ -13,7 +13,7 @@ public interface TemplateMapper {
      * 查询表的全部信息
      * @return
      */
-    @Select("select * from publicityTemplate")
+    @Select("select * from publicitytemplate")
     List<TemplateDO> selectAll();
 
     /**
@@ -21,7 +21,7 @@ public interface TemplateMapper {
      * @param templateType
      * @return
      */
-    @Select("select * from publicityTemplate where templateType = #{templateType}")
+    @Select("select * from publicitytemplate where templateType = #{templateType}")
     List<TemplateDO> queryByType(@Param("templateType") String templateType);
 
     /**
@@ -29,7 +29,7 @@ public interface TemplateMapper {
      * @param templateName
      * @return
      */
-    @Select("select * from publicityTemplate where templateName = #{templateName}")
+    @Select("select * from publicitytemplate where templateName = #{templateName}")
     List<TemplateDO> queryByName(@Param("templateName") String templateName);
 
     /**
@@ -38,14 +38,14 @@ public interface TemplateMapper {
      * @param templateType
      * @return
      */
-    @Select("select * from publicityTemplate where templateName = #{templateName} and templateType = #{templateType}")
+    @Select("select * from publicitytemplate where templateName = #{templateName} and templateType = #{templateType}")
     TemplateDO findByNameAndType(@Param("templateName") String templateName, @Param("templateType") String templateType);
 
     /**
      * 插入数据到数据库
      * @param templateDO
      */
-    @Insert("insert into publicityTemplate (id,templateName,templateType,textDescription,image,price,updateTime) values" +
+    @Insert("insert into publicitytemplate (id,templateName,templateType,textDescription,image,price,updateTime) values" +
             "( #{templateDO.id},#{templateDO.templateName},#{templateDO.templateType}," +
             "#{templateDO.textDescription},#{templateDO.image}," +
             "#{templateDO.price},#{templateDO.updateTime})")
@@ -55,7 +55,7 @@ public interface TemplateMapper {
      * 通过id删除数据
      * @param id
      */
-    @Delete("delete from publicityTemplate where id = #{id}")
+    @Delete("delete from publicitytemplate where id = #{id}")
     void deleteByID(@Param("id") String id);
 
     /**
@@ -63,14 +63,14 @@ public interface TemplateMapper {
      * @param id
      * @return
      */
-    @Select("select * from publicityTemplate where id = #{id}")
+    @Select("select * from publicitytemplate where id = #{id}")
     TemplateDO findByID(@Param("id") String id);
 
     /**
      * 更新语句
      * @param templateDO
      */
-    @Update("update templateDO set templateName= #{templateDO.templateName},templateType=#{templateDO.templateType}" +
+    @Update("update publicitytemplate set templateName= #{templateDO.templateName},templateType=#{templateDO.templateType}" +
             ",textDescription=#{templateDO.textDescription},image=#{templateDO.image}" +
             ",price=#{templateDO.price},updateTime=#{templateDO.updateTime} where id = #{templateDO.id}")
     void updateObject(@Param("templateDO") TemplateDO templateDO);

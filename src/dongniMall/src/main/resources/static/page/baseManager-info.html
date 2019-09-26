@@ -73,12 +73,21 @@
     <div class="layui-form-item">
         <label class="layui-form-label">模板图片</label>
         <div class="layui-input-inline uploadHeadImage">
-            <button type="button" class="layui-btn" id="uploadImage">上传图片</button>
+            <!--<button type="button" class="layui-btn" id="uploadImage">上传图片</button>
             <div class="layui-upload-list" id="showImage" style="display: none">
                 <img class="imageSize" id="upload">
             </div>
             <div class="layui-upload-list" id="updateImage" style="display: none">
                 <img class="imageSize" id="updateload">
+            </div>-->
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="uploadImage">多图片上传</button>
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                    预览图：
+                    <div class="layui-upload-list" id="upload">
+
+                    </div>
+                </blockquote>
             </div>
         </div>
     </div>
@@ -123,10 +132,10 @@
 
         $("#formSubmit").on('click',function () {
             $("#formSubmit").attr("disabled","disabled");
-            if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
+            if($("img.imageUpload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
                 layer.msg("请选择图片");
                 $("#formSubmit").removeAttr("disabled");
-            }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
+            }else if($("img.imageUpload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
                 $.ajax({
                     method:"post",
                     url:'/baseTrade/add',
@@ -167,6 +176,7 @@
             bindAction:"#formSubmit",
             accept: 'images' ,//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
+            multiple: true,
             data:{
                 id:function(){
                     return $("#id").val()
@@ -191,7 +201,10 @@
                 obj.preview(function (index, file, result) {
                     $("#updateImage").css("display","none");
                     $("#showImage").css("display","block");
-                    $('#upload').attr('src', result); //图片链接（base64）
+                    // $('#upload').attr('src', result); //图片链接（base64）
+                    obj.preview(function(index, file, result){
+                        $('#upload').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img imageUpload" style="width: 100px;height: 100px">')
+                    });
                 });
 
             },
