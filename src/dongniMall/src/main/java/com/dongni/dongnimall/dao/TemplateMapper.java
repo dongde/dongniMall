@@ -21,7 +21,7 @@ public interface TemplateMapper {
      * @param templateType
      * @return
      */
-    @Select("select * from publicitytemplate where templateType = #{templateType}")
+    @Select("select * from publicitytemplate where templateType = #{templateType} ")
     List<TemplateDO> queryByType(@Param("templateType") String templateType);
 
     /**
@@ -29,7 +29,7 @@ public interface TemplateMapper {
      * @param templateName
      * @return
      */
-    @Select("select * from publicitytemplate where templateName = #{templateName}")
+    @Select("select * from publicitytemplate where templateName = #{templateName} ")
     List<TemplateDO> queryByName(@Param("templateName") String templateName);
 
     /**

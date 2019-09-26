@@ -21,7 +21,7 @@ public interface BaseTradeTypeMapper {
     /**
      * 插入类型
      */
-    @Insert("insert into tradetype (id,type,updateTime) values(#{baseTradeTypeDO.id},#{baseTradeTypeDO.type},#{baseTradeTypeDO.updateTime})")
+    @Insert("insert into tradetype (id,type,updateTime) values (#{baseTradeTypeDO.id},#{baseTradeTypeDO.type},#{baseTradeTypeDO.updateTime})")
     void insertType(@Param("baseTradeTypeDO") BaseTradeTypeDO baseTradeTypeDO);
 
     /**
