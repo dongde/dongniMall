@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Repository
 public interface UserMapper {
-    void insertUser(UserDO userDO);
+    void insertUser(@Param("userDO")UserDO userDO);
 
     void deleteUser(List<String> phones);
 

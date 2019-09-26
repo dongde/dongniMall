@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @author cengshuai on 2019-09-24.
  * @version 1.0
@@ -36,15 +39,10 @@ public class FrontController {
     @PostMapping(value = "/register", produces = "application/json;charset=UTF-8")
     public JsonResult register(@RequestBody JSONObject jsonObject) {
         String phone = jsonObject.get("phone").toString();
-        String name = jsonObject.get("phone").toString();
-        Integer gender = (Integer) jsonObject.get("phone");
-        String address = jsonObject.get("phone").toString();
-        String email = jsonObject.get("phone").toString();
-        String postal_code = jsonObject.get("phone").toString();
-        String password = jsonObject.get("phone").toString();
-        String code = jsonObject.get("phone").toString();
-        if (StringUtils.isBlank(phone) || StringUtils.isBlank(name) || StringUtils.isBlank(address) || StringUtils.isBlank(email) || StringUtils.isBlank(postal_code) || StringUtils.isBlank(password) || gender == null) {
-            return JsonResult.errorMsg("用户信息不能为空");
+        String password = jsonObject.get("password").toString();
+        String code = jsonObject.get("code").toString();
+        if (StringUtils.isBlank(phone)) {
+            return JsonResult.errorMsg("手机号不能为空");
         }
         if (userService.queryUserByPhone(phone) != null) {
             return JsonResult.errorMsg("该手机号已被注册");
@@ -54,11 +52,9 @@ public class FrontController {
         }
         UserDO userDO = new UserDO();
         userDO.setPhone(phone);
-        userDO.setName(name);
-        userDO.setGender(gender);
-        userDO.setAddress(address);
-        userDO.setEmail(email);
-        userDO.setPostal_code(postal_code);
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        userDO.setCreate_time(simpleDateFormat.format(date));
         userDO.setPassword(MD5Util.getMD5(password));
         userService.addUser(userDO);
         return JsonResult.ok();
