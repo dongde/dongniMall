@@ -19,7 +19,7 @@
 
     <insert id="insertTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
         insert into basestore (<include refid="BaseStore_col"></include>) values
-        (#{baseStoreDO.id},#{baseStoreDO.tradeName},#{baseStoreDO.tradeType},#{baseStoreDO.price},#{baseStoreDO.tradeURL},#{baseStoreDO.imageURL},#{baseStoreDO.viewCount},#{baseStoreDO.updateTime})
+        (#{baseStoreDO.id},#{baseStoreDO.tradeName},#{baseStoreDO.tradeType},#{baseStoreDO.price},#{baseStoreDO.tradeURL},#{baseStoreDO.imageURL},#{baseStoreDO.viewCount},#{baseStoreDO.updateTime},#{baseStoreDO.content})
     </insert>
 
     <delete id="deleteTrade" parameterType="java.lang.String">
@@ -30,7 +30,7 @@
     </select>
     <update id="updateTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
         update basestore set tradeName=#{baseStoreDO.tradeName},tradeType=#{baseStoreDO.tradeType},
-        price=#{baseStoreDO.price},tradeURL=#{baseStoreDO.tradeURL},updateTime=#{baseStoreDO.updateTime}
+        price=#{baseStoreDO.price},tradeURL=#{baseStoreDO.tradeURL},updateTime=#{baseStoreDO.updateTime},content=#{baseStoreDO.content}
         where id = #{baseStoreDO.id}
     </update>
 </mapper>

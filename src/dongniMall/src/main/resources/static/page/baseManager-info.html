@@ -92,6 +92,13 @@
         </div>
     </div>
 
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">底料描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容" class="layui-textarea" name="content" id="contents"></textarea>
+        </div>
+    </div>
+
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" type="button" id="formSubmit">上传底料</button>
@@ -145,6 +152,7 @@
                         tradeType: $("input[type='radio']:checked").val().trim(),
                         price: $("#price").val().trim(),
                         tradeURL: $("#baseURL").val().trim(),
+                        content:$("#contents").val().trim(),
                         file: $("#updateload").file
                     },
                     success:function (res) {
@@ -173,10 +181,14 @@
             elem:"#uploadImage",
             url:"/baseTrade/add",
             auto:false,
+            // multiple:true,
             bindAction:"#formSubmit",
             accept: 'images' ,//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
             multiple: true,
+            allDone:function(obj){
+                layer.msg("上传成功");
+            },
             data:{
                 id:function(){
                     return $("#id").val()
@@ -192,6 +204,9 @@
                 },
                 tradeURL:function(){
                     return $("#baseURL").val();
+                },
+                content:function(){
+                    return $("#contents").val();
                 }
 
             },

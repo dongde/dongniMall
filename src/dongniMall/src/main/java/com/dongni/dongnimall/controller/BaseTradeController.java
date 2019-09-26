@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.dongni.dongnimall.controller.BaseController.REGEX;
+
 /**
  * 底料商城管理
  */
@@ -41,13 +43,18 @@ public class BaseTradeController {
 
     //添加和修改底料
     @RequestMapping("add")
-    public JsonResult insertTrade(String id,String tradeName, String tradeType, Float price, String tradeURL, MultipartFile file) throws IOException {
-        if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL)) {
+    public JsonResult insertTrade(String id,String tradeName, String tradeType, Float price, String tradeURL, MultipartFile file,String content) throws IOException {
+        if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL) || StringUtils.isBlank(content)) {
             return JsonResult.errorMsg("数据不能为空");
+        }else {
+            if (!tradeURL.matches(REGEX)) {
+                return JsonResult.errorMsg("请输入正确的链接地址");
+            }
         }
         System.out.println(file);
         BaseStoreDO baseStoreDO = new BaseStoreDO();
         baseStoreDO.setPrice(price);
+        baseStoreDO.setContent(content);
         baseStoreDO.setTradeName(tradeName);
         baseStoreDO.setTradeType(tradeType);
         baseStoreDO.setTradeURL(tradeURL);
