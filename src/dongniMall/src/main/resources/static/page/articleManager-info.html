@@ -185,6 +185,7 @@
 
                 },
                 done:function (res) {
+                    $("#formSubmit").removeAttr('disabled');
                     if (res.status === 200) {
                         //上传成功重写加载数据表格
                         parent.layui.table.reload('testReload', {page: {curr: 1}});
@@ -196,6 +197,7 @@
                     }
                 },
                 error:function (index,upload) {
+                    $("#formSubmit").removeAttr('disabled');
                     layer.msg("上传失败！");
                 }
             });
