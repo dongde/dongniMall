@@ -92,6 +92,7 @@
                     if (oldPassword == "" || oldPassword == null) {
                         layer.msg("请输入原密码")
                     } else {
+                        layer.load();
                         $.ajax({
                             method: "POST",
                             data: {
@@ -103,6 +104,7 @@
                             },
                             url: "/user/modifyManager",
                             success: function (res) {
+                                layer.closeAll('loading');
                                 $("#submit").removeAttr("disabled");
                                 if (res.status === 200) {
                                     parent.layui.table.reload('manager-table', {page: {curr: 1}});
@@ -115,12 +117,14 @@
                                 }
                             },
                             error:function () {
+                                layer.closeAll('loading');
                                 $("#submit").removeAttr("disabled");
                                 layer.msg("修改失败");
                             }
                         })
                     }
                 } else {
+                    layer.load();
                     $.ajax({
                         method: 'POST',
                         data: {
@@ -130,6 +134,7 @@
                         },
                         url: "/user/addManager",
                         success: function (res) {
+                            layer.closeAll('loading');
                             if (res.status === 200) {
                                 parent.layui.table.reload('manager-table', {page: {curr: 1}});
                                 var index = parent.layer.getFrameIndex(window.name);
@@ -138,6 +143,10 @@
                             } else {
                                 layer.msg(res.msg);
                             }
+                        },
+                        error:function () {
+                            layer.closeAll('loading');
+                            layer.msg("添加出错");
                         }
                     })
                 }

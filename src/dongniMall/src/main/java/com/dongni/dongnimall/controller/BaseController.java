@@ -9,4 +9,6 @@ public class BaseController {
     public static final Integer MAX_BANNER_COUNT = 6;
     //小图数量上限
     public static final Integer MAX_SMALL_IMAGES_COUNT = 4;
+    //url正则
+    public static final String REGEX = "^((https|http|ftp|rtsp|mms)?:\\/\\/)[^\\s]+";
 }

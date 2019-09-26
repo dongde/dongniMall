@@ -86,7 +86,6 @@
                 , page: true
                 , limit: 10
                 , done: function (res, curr, count) {
-                    console.log(res);
                     if(res.status==502){
                         window.location = "/page/login-1.html";
                     }
@@ -111,7 +110,7 @@
                         });
                         break;
                     case 'addBanner':
-                        var render = myRender;
+                        // var render = myRender;
                         // render("/home/uploadBanner", table);
                         layer.open({
                             type: 2,

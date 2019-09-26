@@ -47,13 +47,17 @@ public class MenuController extends BaseController {
     }
 
     @RequestMapping("/addOrUpdateTeachVideo")
-    public JsonResult addOrUpdateTeachVideo(@RequestParam(value = "file",required = false) MultipartFile file, String title, String videoUrl, String introduction, String content, String id) throws IOException {
+    public JsonResult addOrUpdateTeachVideo(@RequestParam(value = "file", required = false) MultipartFile file, String title, String videoUrl, String introduction, String content, String id) throws IOException {
 
         if (StringUtils.isBlank(title)) {
             return JsonResult.errorMsg("标题不能为空");
         }
         if (StringUtils.isBlank(videoUrl)) {
             return JsonResult.errorMsg("视频链接不能为空");
+        } else {
+            if (!videoUrl.matches(REGEX)) {
+                return JsonResult.errorMsg("请输入正确的链接地址");
+            }
         }
         if (StringUtils.isBlank(introduction)) {
             return JsonResult.errorMsg("简介不能为空");

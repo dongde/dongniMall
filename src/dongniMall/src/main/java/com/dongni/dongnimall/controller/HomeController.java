@@ -53,10 +53,13 @@ public class HomeController extends BaseController {
     @RequestMapping("/uploadBanner")
     public JsonResult uploadBanner(@RequestParam("file") MultipartFile file, @RequestParam("url") String url) throws IOException {
         if (StringUtils.isBlank(url)) {
-            return JsonResult.errorMsg("url不能为空！");
+            return JsonResult.errorMsg("链接地址不能为空！");
+        } else {
+            if (!url.matches(REGEX)) {
+                return JsonResult.errorMsg("请输入正确的链接地址");
+            }
         }
         if (file != null) {
-//            String pathDB = ImageFileUploadUtil.uploadFile(file, BANNER_IMAGES_PATH);
             Response response = fileUploadManager.upload(file.getInputStream());
             BannerDO bannerDO = new BannerDO();
             bannerDO.setId(sid.nextShort());
@@ -115,7 +118,16 @@ public class HomeController extends BaseController {
 
     @RequestMapping("/uploadSmallImage")
     public JsonResult uploadSmallImage(@RequestParam("file") MultipartFile file, @RequestParam("url") String url, @RequestParam("description") String description) throws IOException {
-
+        if (StringUtils.isBlank(url)) {
+            return JsonResult.errorMsg("url不能为空！");
+        } else {
+            if (!url.matches(REGEX)) {
+                return JsonResult.errorMsg("请输入正确的链接地址");
+            }
+        }
+        if (StringUtils.isBlank(description)) {
+            return JsonResult.errorMsg("图片描述不能为空！");
+        }
         if (file != null) {
             Response response = fileUploadManager.upload(file.getInputStream());
             SmallImageDO smallImage = new SmallImageDO();
@@ -130,17 +142,9 @@ public class HomeController extends BaseController {
             smallImage.setPosition(1);
             smallImage.setIs_used(BannerUsedEnum.UNUSED.getValue());
             smallImageService.addSmallImage(smallImage);
-
         } else {
             return JsonResult.errorMsg("上传图片不能为空");
         }
-        if (StringUtils.isBlank(url)) {
-            return JsonResult.errorMsg("url不能为空！");
-        }
-        if (StringUtils.isBlank(description)) {
-            return JsonResult.errorMsg("图片描述不能为空！");
-        }
-
         return JsonResult.ok();
     }
 

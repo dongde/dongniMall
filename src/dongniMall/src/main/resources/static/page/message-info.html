@@ -55,9 +55,10 @@
     layui.use('form', function () {
         var form = layui.form,
             $ = layui.jquery;
+        //根据消息类型判断是否显示用户账号输入框
         form.on('select(modules)', function (data) {
             if (data.value == 0) {
-                $("#isHidden").attr("hidden", "hidden");
+                $("#isHidden").attr("hidden","hidden");
             }
             if (data.value == 1) {
                 $("#isHidden").removeAttr("hidden");
@@ -74,6 +75,7 @@
             } else if (content == "") {
                 layer.msg("消息内容不能为空");
             } else {
+                layer.load();
                 $.ajax({
                     method: 'POST',
                     url: '/message/addMessage',
@@ -83,6 +85,7 @@
                         content: content
                     },
                     success: function (res) {
+                        layer.closeAll('loading');
                         if (res.status == 200) {
                             parent.layui.table.reload('message-table', {page: {curr: 1}});
                             var index = parent.layer.getFrameIndex(window.name);
@@ -93,6 +96,7 @@
                         }
                     },
                     error: function () {
+                        layer.closeAll('loading');
                         layer.msg("添加出错");
                     }
                 })

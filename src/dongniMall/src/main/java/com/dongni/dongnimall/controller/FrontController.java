@@ -1,5 +1,6 @@
 package com.dongni.dongnimall.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dongni.dongnimall.base.sms.SMSManager;
 import com.dongni.dongnimall.common.MD5Util;
 import com.dongni.dongnimall.manager.UserService;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,21 +26,30 @@ public class FrontController {
     @Autowired
     private SMSManager smsManager;
 
-    @PostMapping("/sendSmsRegisterCode")
-    public JsonResult sendSmsRegisterCode(String phone){
+    @PostMapping(value = "/sendSmsRegisterCode", produces = "application/json;charset=UTF-8")
+    public JsonResult sendSmsRegisterCode(@RequestBody JSONObject jsonObject) {
+        String phone = jsonObject.get("phone").toString();
         smsManager.sendSmsRegisterCode(phone);
         return JsonResult.ok();
     }
 
-    @PostMapping("/register")
-    public JsonResult register(String phone, String name, Integer gender, String address, String email, String postal_code, String password,String code) {
+    @PostMapping(value = "/register", produces = "application/json;charset=UTF-8")
+    public JsonResult register(@RequestBody JSONObject jsonObject) {
+        String phone = jsonObject.get("phone").toString();
+        String name = jsonObject.get("phone").toString();
+        Integer gender = (Integer) jsonObject.get("phone");
+        String address = jsonObject.get("phone").toString();
+        String email = jsonObject.get("phone").toString();
+        String postal_code = jsonObject.get("phone").toString();
+        String password = jsonObject.get("phone").toString();
+        String code = jsonObject.get("phone").toString();
         if (StringUtils.isBlank(phone) || StringUtils.isBlank(name) || StringUtils.isBlank(address) || StringUtils.isBlank(email) || StringUtils.isBlank(postal_code) || StringUtils.isBlank(password) || gender == null) {
             return JsonResult.errorMsg("用户信息不能为空");
         }
-        if(userService.queryUserByPhone(phone)!=null){
+        if (userService.queryUserByPhone(phone) != null) {
             return JsonResult.errorMsg("该手机号已被注册");
         }
-        if(!smsManager.validateRegisterCode(phone,code)){
+        if (!smsManager.validateRegisterCode(phone, code)) {
             return JsonResult.errorMsg("验证码错误");
         }
         UserDO userDO = new UserDO();
@@ -54,17 +65,17 @@ public class FrontController {
     }
 
     @PostMapping("/login")
-    public JsonResult login(String phone,String password){
-        if(StringUtils.isBlank(phone)){
+    public JsonResult login(String phone, String password) {
+        if (StringUtils.isBlank(phone)) {
             return JsonResult.errorMsg("手机号不能为空");
         }
-        if(StringUtils.isBlank(password)){
+        if (StringUtils.isBlank(password)) {
             return JsonResult.errorMsg("密码不能为空");
         }
-        UserDO userDO = userService.queryUserByPhoneAndPassword(phone,MD5Util.getMD5(password));
-        if(userDO!=null){
+        UserDO userDO = userService.queryUserByPhoneAndPassword(phone, MD5Util.getMD5(password));
+        if (userDO != null) {
             return JsonResult.ok(userDO);
-        }else{
+        } else {
             return JsonResult.errorMsg("用户不存在");
         }
     }
