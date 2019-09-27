@@ -70,6 +70,24 @@
             $ = layui.jquery;
 
 
+        //表格数据展示
+        table.render({
+            elem: '#userList'
+            // ,height: 312
+            ,url: '/article/list' //数据接口
+            ,cellMinWidth: 100
+            ,height:"full-160"
+            ,cols: [[ //表头
+                {field: 'title', title: '标题',align:"center"}
+                ,{field: 'source', title: '来源',align:"center"}
+                ,{field: 'updateTime', title: '更新时间',align:"center"}
+                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
+            ]]
+            ,limit:10
+            ,where:{title:"",source:""}
+            ,page:true
+            ,id:'testReload'
+        });
 
         //监听行工具事件
         table.on('tool(userList)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
@@ -163,7 +181,6 @@
                     console.log(res.status);
                     if(res.status == 200){
                         layer.msg("删除成功！");
-                        window.location.reload();
                         table.reload('userList', {
                             page: {
                                 curr: 1
@@ -176,24 +193,7 @@
         }
 
 
-        //表格数据展示
-        table.render({
-            elem: '#userList'
-            // ,height: 312
-            ,url: '/article/list' //数据接口
-            ,cellMinWidth: 100
-            ,height:"full-160"
-            ,cols: [[ //表头
-                {field: 'title', title: '标题',align:"center"}
-                ,{field: 'source', title: '来源',align:"center"}
-                ,{field: 'updateTime', title: '更新时间',align:"center"}
-                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
-            ]]
-            ,limit:10
-            ,where:{title:"",source:""}
-            ,page:true
-            ,id:'testReload'
-        });
+
 
         //查找
         $('#findBySource').on('click',function(){

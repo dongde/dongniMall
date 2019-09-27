@@ -72,6 +72,29 @@
             $ = layui.jquery;
 
 
+
+        table.render({
+            elem:'#baselist'
+            ,url:"/baseTrade/list"
+            ,cellMinWidth: 100
+            ,page:true
+            ,height:"full-160"
+            ,cols:[[
+                {field: 'tradeName', title: '商品名称',align:"center"}
+                ,{field: 'tradeType', title: '商品类型',align:"center"}
+                ,{field: 'price', title: '价格',align:"center"}
+                ,{field: 'tradeURL', title: '商品连接',align:"center"}
+                ,{field: 'viewCount', title: '查看次数',align:"center"}
+                ,{field: 'updateTime', title: '更新时间',align:"center"}
+                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
+
+            ]]
+            ,id:"baselist"
+            ,limit:10
+            ,where:{tradeName:"",tradeType:""}
+        });
+
+
         $.ajax({
             url:"/baseTradeType/list",
             method:'POST',
@@ -154,6 +177,8 @@
         //监听行工具事件
         table.on('tool(baselist)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
+            console.log(data.id);
+            console.log("********");
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             if(layEvent === 'del'){ //删除
                 layer.confirm('真的删除行么', function(index){
@@ -172,15 +197,20 @@
                     offset: 'auto',
                     content: '/page/baseManager-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
+                        var data = obj.data.imageURL;
+                        var str = data.split(',');
+
                         var body = layer.getChildFrame('body', index);
                         body.contents().find("#id").val(obj.data.id);
                         body.contents().find("#tradeName").val(obj.data.tradeName);
-                        body.contents().find("#tradeType").val(obj.data.tradeType);
+                        body.contents().find("#type").val(obj.data.tradeType);
                         body.contents().find("#price").val(obj.data.price);
-                        body.contents().find("#baseURL").val(obj.data.tradeURL);
-                        body.contents().find("#content").val(obj.data.content);
+                        body.contents().find("#tradeURL").val(obj.data.tradeURL);
+                        body.contents().find("#contents").val(obj.data.content);
                         body.contents().find("#updateImage").css("display","block");
-                        body.contents().find("#updateload").attr("src",obj.data.imageURL);
+                        $.each(str,function (index,item) {
+                            body.contents().find("#updateImage").append('<img src="' + str[index] + '" alt="' + item + '" class="layui-upload-img" style="width: 150px;height: 150px">');
+                        });
                     }
                 });
             }
@@ -199,7 +229,6 @@
                     console.log(res.status);
                     if(res.status == 200){
                         layer.msg("删除成功！");
-                        window.location.reload();
                         table.reload('baselist', {
                             page: {
                                 curr: 1
@@ -213,26 +242,7 @@
 
 
 
-        table.render({
-            elem:'#baselist'
-            ,url:"/baseTrade/list"
-            ,cellMinWidth: 100
-            ,page:true
-            ,height:"full-160"
-            ,cols:[[
-                {field: 'tradeName', title: '商品名称',align:"center"}
-                ,{field: 'tradeType', title: '商品类型',align:"center"}
-                ,{field: 'price', title: '价格',align:"center"}
-                ,{field: 'tradeURL', title: '商品连接',align:"center"}
-                ,{field: 'viewCount', title: '查看次数',align:"center"}
-                ,{field: 'updateTime', title: '更新时间',align:"center"}
-                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
 
-            ]]
-            ,id:"baselist"
-            ,limit:10
-            ,where:{tradeName:"",tradeType:""}
-        });
 
 
     });

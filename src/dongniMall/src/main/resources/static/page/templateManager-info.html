@@ -104,6 +104,7 @@
                 layer.msg("请选择图片");
                 $("#formSubmit").attr("disabled","disabled");
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
+                layer.load();
                 $.ajax({
                     method:"post",
                     url:'/template/add',
@@ -164,6 +165,7 @@
                 // $("#showImage").css("display","block");
                 //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                 obj.preview(function (index, file, result) {
+
                     $("#updateImage").css("display","none");
                     $("#hide").css("display","block");
                     $('#upload').attr('src', result); //图片链接（base64）
@@ -171,6 +173,7 @@
 
             },
             done:function (res) {
+                layer.closeAll('loading');
                 $("#formSubmit").attr("disabled","disabled");
                 if (res.status === 200) {
                     //上传成功重写加载数据表格
@@ -183,6 +186,7 @@
                 }
             },
             error:function (index,upload) {
+                layer.closeAll('loading');
                 $("#formSubmit").attr("disabled","disabled");
                 layer.msg("上传失败！");
             }

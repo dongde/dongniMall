@@ -64,6 +64,28 @@
 
 
 
+        table.render({
+            elem:'#formulaList'
+            ,url:"/formula/list"
+            ,cellMinWidth: 100
+            ,page:true
+            ,height:"full-160"
+            ,cols:[[
+                {field: 'formulaName', title: '配方名称',align:"center"}
+                ,{field: 'formulaPrice', title: '配方价格',align:"center"}
+                ,{field: 'samplePrice', title: '样品价格',align:"center"}
+                ,{field: 'flyPrice', title: '炒制价格',align:"center"}
+                ,{field: 'factoryAdress', title: '料场地址',align:"center"}
+                ,{field: 'updateTime', title: '更新时间',align:"center"}
+                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
+
+            ]]
+            ,id:"formulaList"
+            ,limit:10
+            ,where:{tradeName:"",tradeType:""}
+        });
+
+
 
         $("#addFormula").on('click',function () {
 
@@ -183,26 +205,6 @@
 
 
 
-        table.render({
-            elem:'#formulaList'
-            ,url:"/formula/list"
-            ,cellMinWidth: 100
-            ,page:true
-            ,height:"full-160"
-            ,cols:[[
-                {field: 'formulaName', title: '配方名称',align:"center"}
-                ,{field: 'formulaPrice', title: '配方价格',align:"center"}
-                ,{field: 'samplePrice', title: '样品价格',align:"center"}
-                ,{field: 'flyPrice', title: '炒制价格',align:"center"}
-                ,{field: 'factoryAdress', title: '料场地址',align:"center"}
-                ,{field: 'updateTime', title: '更新时间',align:"center"}
-                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
-
-            ]]
-            ,id:"formulaList"
-            ,limit:10
-            ,where:{tradeName:"",tradeType:""}
-        });
 
 
     });

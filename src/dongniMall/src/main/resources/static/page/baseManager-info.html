@@ -29,12 +29,13 @@
 </head>
 <body>
 
-<form class="layui-form" type="multipart" style="padding-top: 20px">
+<form class="layui-form" id="form1" method="post" multiple="multiple" style="padding-top: 20px">
 
     <div class="layui-form-item" hidden>
         <label class="layui-form-label">ID：</label>
         <div class="layui-input-block">
             <input type="text" id="id" autocomplete="off" class="layui-input">
+            <input id="type">
         </div>
     </div>
     <div class="layui-form-item">
@@ -65,14 +66,14 @@
     <div class="layui-form-item">
         <label class="layui-form-label">底料链接：</label>
         <div class="layui-input-block">
-            <input type="text" id="baseURL" name="baseURL" lay-verify="baseURL" autocomplete="off" placeholder="请输入底料链接"
+            <input type="text" id="tradeURL" name="tradeURL" lay-verify="baseURL" autocomplete="off" placeholder="请输入底料链接"
                    class="layui-input">
         </div>
     </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">模板图片</label>
-        <div class="layui-input-inline uploadHeadImage">
+    <!--<div class="layui-form-item">
+        <label class="layui-form-label">模板图片</label>-->
+        <!--<div class="layui-input-inline uploadHeadImage">-->
             <!--<button type="button" class="layui-btn" id="uploadImage">上传图片</button>
             <div class="layui-upload-list" id="showImage" style="display: none">
                 <img class="imageSize" id="upload">
@@ -80,20 +81,33 @@
             <div class="layui-upload-list" id="updateImage" style="display: none">
                 <img class="imageSize" id="updateload">
             </div>-->
-            <div class="layui-upload">
+
+            <!--<div class="layui-upload">
                 <button type="button" class="layui-btn" id="uploadImage">多图片上传</button>
                 <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
                     预览图：
-                    <div class="layui-upload-list" id="upload">
+                    <div class="layui-upload-list" id="upload" style="display: block"></div>
+                    <div class="layui-upload-list" id="showupload" style="display: none"></div>
+                </blockquote><span id="show"></span>
+            </div>-->
 
-                    </div>
-                </blockquote>
+
+    <!--</div>-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">底料图片：</label>
+        <div class="layui-input-inline uploadHeadImage">
+            <button type="button" class="layui-btn" id="uploadImage">上传图片</button>
+            <div class="layui-upload-list" id="showImage" style="display: none">
+            </div>
+            <div class="layui-upload-list" id="updateImage" style="display: none">
+
             </div>
         </div>
     </div>
 
+
     <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">底料描述</label>
+        <label class="layui-form-label">底料描述：</label>
         <div class="layui-input-block">
             <textarea placeholder="请输入内容" class="layui-textarea" name="content" id="contents"></textarea>
         </div>
@@ -109,66 +123,146 @@
 
 
 <script>
+
+
+
+
+
+
     layui.use(['form','upload',"layer", "element"],function () {
         var form = layui.form,
             ayer = layui.layer,
             $ = layui.jquery;
         element = layui.element;
         upload = layui.upload;
+        var imgURL = null;
+
+        $("#formSubmit").on('click',function () {
+           $.ajax({
+               url:"/baseTrade/add",
+               data:{
+                   id:$("#id").val(),
+                   tradeName:$("#tradeName").val(),
+                   tradeType: $("input[type='radio']:checked").val().trim(),
+                   price:$("#price").val(),
+                   tradeURL:$("#tradeURL").val(),
+                   imgURL:imgURL,
+                   content:$("#contents").val()
+               },
+               success : function(res) {
+                   if (res.status === 200) {
+                       //上传成功重写加载数据表格
+                       parent.layui.table.reload('baselist', {page: {curr: 1}});
+                       var index = parent.layer.getFrameIndex(window.name);
+                       parent.layer.close(index);
+                       parent.layer.msg("上传成功");
+                   } else if (res.status === 500) {
+                       layer.msg(res.msg)
+                   }
+               },
+               error: function (index, upload) {
+                   layer.closeAll('loading');
+                   $("#formSubmit").removeAttr("disabled");
+                   layer.msg("上传失败！");
+               }
+           })
+        });
+
+        var uploadInst = upload.render({
+            elem: "#uploadImage",
+            url: "/baseTrade/uploadImage",
+            accept: 'images',//只允许上传图片
+            multiple: true,
+            number:4,
+            acceptMime: 'image/*', //只筛选图片
+            before: function(obj){
+            //预读本地文件示例，不支持ie8
+            obj.preview(function(index, file, result){
+                $("#showImage").css("display","block");
+                $('#showImage').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img" style="width: 150px;height: 150px">')
+            });
+        }
+        ,done: function(res){
+            //上传完毕
+            console.log(res);
+            if(imgURL!=null){
+                imgURL = imgURL+","+res.data;
+            }else {
+                imgURL = res.data;
+            }
+            console.log(imgURL);
+        },
+            error:function (index,upload) {
+                layer.msg("上传失败！");
+            }
+        });
+
+
+
+
 
         $.ajax({
-            url:"/baseTradeType/list",
-            method:'POST',
-            data:{
-                page:1,
-                limit:10
+            url: "/baseTradeType/list",
+            method: 'POST',
+            data: {
+                page: 1,
+                limit: 10
             },
-            success:function (res) {
+            success: function (res) {
                 console.log(res);
                 console.log(res.data);
-                if(res.code==0){
+                if (res.code == 0) {
                     var data = res.data;
-                    $.each(data,function (index,item) {
-                        $("#tradeType").html($("#tradeType").html()+"<input type='radio' name='tradeType' value='"+item.type+"' title='"+item.type+"'>");
+                    $.each(data, function (index, item) {
+                        if($("#type").val()== item.type){
+                            $("#tradeType").html($("#tradeType").html() + "<input type='radio' name='tradeType' value='" + item.type + "' title='" + item.type + "'checked=\"true\">");
+
+                        }else{
+                            $("#tradeType").html($("#tradeType").html() + "<input type='radio' name='tradeType' value='" + item.type + "' title='" + item.type + "'>");
+
+                        }
 
                     });
                     form.render();
                 }
+
             }
         });
 
-        $("#formSubmit").on('click',function () {
-            $("#formSubmit").attr("disabled","disabled");
-            if($("img.imageUpload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
+        /*$("#formSubmit").on('click', function () {
+
+            $("#formSubmit").attr("disabled", "disabled");
+            if ($("img.imageUpload").attr("src") === undefined && $("#updateload").attr("src") === undefined) {
                 layer.msg("请选择图片");
                 $("#formSubmit").removeAttr("disabled");
-            }else if($("img.imageUpload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
+            } else if ($("img.imageUpload").attr("src") === undefined && $("#updateload").attr("src") !== undefined) {
+                layer.load();
                 $.ajax({
-                    method:"post",
-                    url:'/baseTrade/add',
-                    data:{
+                    method: "post",
+                    url: '/baseTrade/add',
+                    data: {
                         id: $("#id").val().trim(),
                         tradeName: $("#tradeName").val().trim(),
                         tradeType: $("input[type='radio']:checked").val().trim(),
                         price: $("#price").val().trim(),
                         tradeURL: $("#baseURL").val().trim(),
-                        content:$("#contents").val().trim(),
+                        content: $("#contents").val().trim(),
                         file: $("#updateload").file
                     },
-                    success:function (res) {
+                    success: function (res) {
                         $("#formSubmit").removeAttr("disabled");
-                        if(res.status==200){
+                        if (res.status == 200) {
                             //上传成功重写加载数据表格
                             parent.layui.table.reload('baselist', {page: {curr: 1}});
                             var index = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(index);
                             parent.layer.msg("上传成功");
 
-                        }else{
+                        } else {
                             layer.msg(res.msg);
                         }
                     },
-                    error:function (res) {
+                    error: function (res) {
                         $("#formSubmit").removeAttr("disabled");
                         layer.msg("上传失败");
                     }
@@ -178,52 +272,48 @@
 
 
         var uploadInst = upload.render({
-            elem:"#uploadImage",
-            url:"/baseTrade/add",
-            auto:false,
-            // multiple:true,
-            bindAction:"#formSubmit",
-            accept: 'images' ,//只允许上传图片
-            acceptMime: 'image/*', //只筛选图片
+            elem: "#uploadImage",
+            url: "/baseTrade/add",
+            auto: false,
+            bindAction: "#formSubmit",
+            accept: 'images',//只允许上传图片
+            number: 4, //允许上传的最大数量
+            acceptMime: 'image/!*', //只筛选图片
             multiple: true,
-            allDone:function(obj){
-                layer.msg("上传成功");
-            },
-            data:{
-                id:function(){
+            data: {
+                id: function () {
                     return $("#id").val()
                 },
-                tradeName:function(){
+                tradeName: function () {
                     return $("#tradeName").val();
                 },
-                tradeType:function () {
+                tradeType: function () {
                     return $("input[type='radio']:checked").val();
                 },
-                price:function () {
+                price: function () {
                     return $("#price").val();
                 },
-                tradeURL:function(){
+                tradeURL: function () {
                     return $("#baseURL").val();
                 },
-                content:function(){
+                content: function () {
                     return $("#contents").val();
-                }
+                },
 
             },
-            choose:function (obj) {
-                // $("#showImage").css("display","block");
-                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+
+            choose: function (obj) {
                 obj.preview(function (index, file, result) {
-                    $("#updateImage").css("display","none");
-                    $("#showImage").css("display","block");
-                    // $('#upload').attr('src', result); //图片链接（base64）
-                    obj.preview(function(index, file, result){
-                        $('#upload').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img imageUpload" style="width: 100px;height: 100px">')
-                    });
+                    console.log(index);
+
+
+                    $('#upload').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img imageUpload" style="width: 100px;height: 100px">');
                 });
 
+
             },
-            done:function (res) {
+            done: function (res) {
+                console.log(res);
                 $("#formSubmit").removeAttr("disabled");
                 if (res.status === 200) {
                     //上传成功重写加载数据表格
@@ -234,18 +324,21 @@
                 } else if (res.status === 500) {
                     layer.msg(res.msg)
                 }
+                layer.closeAll('loading');
             },
-            error:function (index,upload) {
+            error: function (index, upload) {
+                layer.closeAll('loading');
                 $("#formSubmit").removeAttr("disabled");
                 layer.msg("上传失败！");
             }
-        });
-
-
-
-
-
+        });*/
     });
+
+
+
+
+
+
 
 </script>
 </body>

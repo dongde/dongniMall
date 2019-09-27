@@ -13,7 +13,7 @@ public interface TemplateMapper {
      * 查询表的全部信息
      * @return
      */
-    @Select("select * from publicitytemplate")
+    @Select("select * from publicitytemplate order by updateTime desc")
     List<TemplateDO> selectAll();
 
     /**

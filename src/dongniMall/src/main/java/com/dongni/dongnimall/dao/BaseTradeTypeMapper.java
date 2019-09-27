@@ -15,7 +15,7 @@ public interface BaseTradeTypeMapper {
     /**
      * 查询所有类型
      */
-    @Select("select * from tradetype")
+    @Select("select * from tradetype order by updateTime desc")
     List<BaseTradeTypeDO> selectAllType();
 
     /**

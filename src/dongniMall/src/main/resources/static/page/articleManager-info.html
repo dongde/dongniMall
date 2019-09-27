@@ -111,11 +111,13 @@
 
 
             $("#formSubmit").on('click',function () {
+
                 $("#formSubmit").attr('disabled','disabled');
                 if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
                     layer.msg("请选择图片");
                     $("#formSubmit").removeAttr('disabled');
                 }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
+                    layer.load();
                     $.ajax({
                         method:"post",
                         url:'/article/add',
@@ -135,7 +137,6 @@
                                 parent.layui.table.reload('testReload', {page: {curr: 1}});
                                 var index = parent.layer.getFrameIndex(window.name);
                                 parent.layer.close(index);
-
                                 parent.layer.msg("上传成功");
                             }else{
                                 layer.msg(res.msg);
@@ -178,6 +179,7 @@
                     // $("#showImage").css("display","block");
                     //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                     obj.preview(function (index, file, result) {
+
                         $("#updateImage").css("display","none");
                         $("#showImage").css("display","block");
                         $('#upload').attr('src', result); //图片链接（base64）
@@ -195,8 +197,10 @@
                     } else if (res.status === 500) {
                         layer.msg(res.msg)
                     }
+                    layer.closeAll("loading");
                 },
                 error:function (index,upload) {
+                    layer.closeAll('loading');
                     $("#formSubmit").removeAttr('disabled');
                     layer.msg("上传失败！");
                 }

@@ -111,11 +111,13 @@
 
 
         $("#formSubmit").on('click',function () {
+
             $("#formSubmit").attr("disabled","disabled");
             if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
                 layer.msg("请选择图片");
                 $("#formSubmit").removeAttr("disabled");
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
+                layer.load();
                 $.ajax({
                     method:"post",
                     url:'/formula/add',
@@ -202,8 +204,10 @@
                 } else if (res.status === 500) {
                     layer.msg(res.msg)
                 }
+                layer.closeAll('loading');
             },
             error:function (index,upload) {
+                layer.closeAll('loading');
                 $("#formSubmit").removeAttr("disabled");
                 layer.msg("上传失败！");
             }

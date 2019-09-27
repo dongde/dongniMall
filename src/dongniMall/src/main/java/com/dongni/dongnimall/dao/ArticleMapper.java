@@ -13,7 +13,7 @@ public interface ArticleMapper {
      * 查询全部信息
      * @return
      */
-    @Select("select * from newsinformation")
+    @Select("select * from newsinformation order by updateTime desc")
     List<ActicleDO> selectAll();
 
     /**
@@ -53,7 +53,7 @@ public interface ArticleMapper {
      * @param acticleDO
      * @param id
      */
-    @Update("update acticleDO set title=#{acticleDO.title}" +
+    @Update("update newsinformation set title=#{acticleDO.title}" +
             ",source=#{acticleDO.source}" +
             ",summary=#{acticleDO.summary}" +
             ",content=#{acticleDO.content}" +

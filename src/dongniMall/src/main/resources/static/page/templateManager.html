@@ -71,6 +71,24 @@
             layer = layui.layer,
             $ = layui.jquery;
 
+        table.render({
+            elem:'#templateList'
+            ,url:"/template/list"
+            ,cellMinWidth: 100
+            ,page:true
+            ,height:"full-160"
+            ,cols:[[
+                {field: 'templateName', title: '模板名称',align:"center"}
+                ,{field: 'templateType', title: '模板类型',align:"center"}
+                ,{field: 'price', title: '价格',align:"center"}
+                ,{field: 'updateTime', title: '更新时间',align:"center"}
+                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
+
+            ]]
+            ,id:"templateList"
+            ,limit:10
+            ,where:{templateName:"",templateType:""}
+        });
 
         table.on('tool(templateList)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
@@ -163,7 +181,6 @@
                 success:function (res) {
                     if(res.status == 200){
                         layer.msg("删除成功！");
-                        window.location.reload();
                         table.reload('templateList', {
                             page: {
                                 curr: 1
@@ -205,24 +222,7 @@
 
 
 
-        table.render({
-            elem:'#templateList'
-            ,url:"/template/list"
-            ,cellMinWidth: 100
-            ,page:true
-            ,height:"full-160"
-            ,cols:[[
-                {field: 'templateName', title: '模板名称',align:"center"}
-                ,{field: 'templateType', title: '模板类型',align:"center"}
-                ,{field: 'price', title: '价格',align:"center"}
-                ,{field: 'updateTime', title: '更新时间',align:"center"}
-                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
 
-            ]]
-            ,id:"templateList"
-            ,limit:10
-            ,where:{templateName:"",templateType:""}
-        });
 
 
     });
