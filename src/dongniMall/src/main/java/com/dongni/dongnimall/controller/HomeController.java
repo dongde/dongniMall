@@ -51,10 +51,8 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping("/uploadBanner")
-    public JsonResult uploadBanner(@RequestParam("file") MultipartFile file, @RequestParam("url") String url) throws IOException {
-        if (StringUtils.isBlank(url)) {
-            return JsonResult.errorMsg("链接地址不能为空！");
-        } else {
+    public JsonResult uploadBanner(@RequestParam("file") MultipartFile file, @RequestParam(value = "url",required = false) String url) throws IOException {
+        if (StringUtils.isNotBlank(url)) {
             if (!url.matches(REGEX)) {
                 return JsonResult.errorMsg("请输入正确的链接地址");
             }
@@ -117,10 +115,8 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping("/uploadSmallImage")
-    public JsonResult uploadSmallImage(@RequestParam("file") MultipartFile file, @RequestParam("url") String url, @RequestParam("description") String description) throws IOException {
-        if (StringUtils.isBlank(url)) {
-            return JsonResult.errorMsg("url不能为空！");
-        } else {
+    public JsonResult uploadSmallImage(@RequestParam("file") MultipartFile file, @RequestParam(value = "url",required = false) String url, @RequestParam("description") String description) throws IOException {
+        if (StringUtils.isNotBlank(url)) {
             if (!url.matches(REGEX)) {
                 return JsonResult.errorMsg("请输入正确的链接地址");
             }
