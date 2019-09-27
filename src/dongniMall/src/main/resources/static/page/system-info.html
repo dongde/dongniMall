@@ -4,49 +4,64 @@
     <meta charset="UTF-8">
     <title>system-info</title>
 </head>
+
 <style>
-    .system-table{
+    .layuimini-content-page{
+        width: auto;
+        height: auto;
+    }
+    .cpu-table {
+        padding-left: 80px;
+        padding-right: 80px;
+        padding-top: 20px;
+    }
+
+    .memory-table {
         padding-left: 80px;
         padding-top: 20px;
         display: inline-block;
         width: 40%;
     }
-    .disk-table{
+
+    .server-table {
         padding-left: 80px;
         padding-right: 80px;
+        padding-top: 20px;
+        display: inline-block;
+        width: 40%;
+    }
+
+    .jvm-table {
+        padding-left: 80px;
+        padding-right: 80px;
+        padding-top: 20px;
+    }
+
+    .disk-table {
+        padding: 20px 80px 80px 80px;
     }
 </style>
 <body>
-<div class="cpu-table system-table">
+<div class="cpu-table">
     <label>CPU信息:</label>
     <table class="layui-table">
         <thead>
         <tr>
-            <th>属性</th>
-            <th>值</th>
+            <th>序号</th>
+            <th>用户使用率</th>
+            <th>系统使用率</th>
+            <th>当前等待率</th>
+            <th>当前错误率</th>
+            <th>当前空闲率</th>
+            <th>总使用率</th>
         </tr>
         </thead>
         <tbody class="tb1">
-        <tr>
-            <td>核心数</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>用户使用率</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>系统使用率</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>当前空闲率</td>
-            <td></td>
-        </tr>
+
         </tbody>
     </table>
 </div>
-<div class="memory-table system-table">
+<div class="memory-table">
     <label>内存信息：</label>
     <table class="layui-table">
         <thead>
@@ -55,27 +70,12 @@
             <th>值</th>
         </tr>
         </thead>
-        <tbody class="tb1">
-        <tr>
-            <td>总内存</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>已用内存</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>剩余内存</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>使用率</td>
-            <td></td>
-        </tr>
+        <tbody class="tb2">
+
         </tbody>
     </table>
 </div>
-<div class="server-table system-table">
+<div class="server-table">
     <label>服务器信息：</label>
     <table class="layui-table">
         <thead>
@@ -84,27 +84,11 @@
             <th>值</th>
         </tr>
         </thead>
-        <tbody class="tb1">
-        <tr>
-            <td>服务器名称</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>服务器IP</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>操作系统</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>系统架构</td>
-            <td></td>
-        </tr>
+        <tbody class="tb3">
         </tbody>
     </table>
 </div>
-<div class="jvm-table system-table">
+<div class="jvm-table">
     <label>Java虚拟机信息：</label>
     <table class="layui-table">
         <thead>
@@ -113,31 +97,7 @@
             <th>值</th>
         </tr>
         </thead>
-        <tbody class="tb1">
-        <tr>
-            <td>Java名称</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>启动时间</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>安装路径</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>项目路径</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Java版本</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>运行时常</td>
-            <td></td>
-        </tr>
+        <tbody class="tb4">
         </tbody>
     </table>
 </div>
@@ -146,30 +106,130 @@
     <table class="layui-table">
         <thead>
         <tr>
+            <th>盘符名称</th>
             <th>盘符路径</th>
-            <th>文件系统</th>
+            <th>盘符标志</th>
             <th>盘符类型</th>
-            <th>总大小</th>
-            <th>可用大小</th>
-            <th>已用大小</th>
-            <th>已用百分比</th>
+            <th>盘符类型名</th>
+            <th>盘符文件系统类型</th>
+            <th>盘符总大小</th>
+            <th>盘符剩余大小</th>
+            <th>盘符可用大小</th>
+            <th>盘符已经使用量</th>
+            <th>资源利用率</th>
         </tr>
         </thead>
-        <tbody class="tb1">
-        <tr>
-            <td>数据</td>
-            <td>数据</td>
-            <td>数据</td>
-            <td>数据</td>
-            <td>数据</td>
-            <td>数据</td>
-            <td>数据</td>
-        </tr>
+        <tbody class="tb5">
         </tbody>
     </table>
 </div>
+<script src="../lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script>
-
+    layui.use('layer',function () {
+        var $ = layui.jquery;
+        layer.load();
+        $.ajax({
+            method: 'GET',
+            url: '/system/getSystemInfo',
+            success: function (res) {
+                layer.closeAll('loading');
+                var data = res.data;
+                var cpus = data.cpus;
+                var disks = data.disks;
+                $.each(cpus, function (index, item) {
+                    $(".tb1").append("<tr>\n" +
+                        "            <td>cpu" + item.cpuNumber + "</td>\n" +
+                        "            <td>" + item.cpuUser + "</td>\n" +
+                        "            <td>" + item.cpuSys + "</td>\n" +
+                        "            <td>" + item.cpuWait + "</td>\n" +
+                        "            <td>" + item.cpuNice + "</td>\n" +
+                        "            <td>" + item.cpuIdle + "</td>\n" +
+                        "            <td>" + item.cpuCombined + "</td>\n" +
+                        "        </tr>");
+                });
+                $(".tb2").append(" <tr>\n" +
+                    "            <td>内存总量</td>\n" +
+                    "            <td>" + data.memoryTotal + "K</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>内存使用量</td>\n" +
+                    "            <td>" + data.memoryUsed + "K</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>剩余内存</td>\n" +
+                    "            <td>" + data.memoryFree + "K</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>交换区总量</td>\n" +
+                    "            <td>" + data.swapTotal + "K</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>交换区使用量</td>\n" +
+                    "            <td>" + data.swapUsed + "K</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>交换区剩余量</td>\n" +
+                    "            <td>" + data.swapFree + "K</td>\n" +
+                    "        </tr>");
+                $(".tb3").append("<tr>\n" +
+                    "            <td>系统名</td>\n" +
+                    "            <td>" + data.osName + "</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>服务器IP</td>\n" +
+                    "            <td>data.ip</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>系统版本</td>\n" +
+                    "            <td>" + data.osVersion + "</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>系统架构</td>\n" +
+                    "            <td>" + data.osArch + "</td>\n" +
+                    "        </tr>");
+                $(".tb4").append("<tr>\n" +
+                    "            <td>JVM可使用的内存</td>\n" +
+                    "            <td>" + data.totalMemory + "K</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>JVM可使用的剩余内存</td>\n" +
+                    "            <td>" + data.freeMemory + "K</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>JVM可使用的处理器</td>\n" +
+                    "            <td>" + data.availableProcessors + "</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>Java运行版本</td>\n" +
+                    "            <td>" + data.version + "</td>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>Java安装路径</td>\n" +
+                    "            <td>" + data.home + "</td>\n" +
+                    "        </tr>");
+                $.each(disks, function (index, item) {
+                    $(".tb5").append(" <tr>\n" +
+                        "            <td>" + item.devName + "</td>\n" +
+                        "            <td>" + item.dirName + "</td>\n" +
+                        "            <td>" + item.flags + "</td>\n" +
+                        "            <td>" + item.sysTypeName + "</td>\n" +
+                        "            <td>" + item.typeName + "</td>\n" +
+                        "            <td>" + item.type + "</td>\n" +
+                        "            <td>" + item.usageTotal + "K</td>\n" +
+                        "            <td>" + item.usageFree + "K</td>\n" +
+                        "            <td>" + item.usageAvail + "K</td>\n" +
+                        "            <td>" + item.usageUsed + "K</td>\n" +
+                        "            <td>" + item.usePercent + "%</td>\n" +
+                        "        </tr>");
+                });
+            },
+            error:function () {
+                layer.closeAll('loading');
+                layer.msg("系统信息加载出错");
+            }
+        })
+    });
 </script>
 </body>
 </html>

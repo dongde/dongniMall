@@ -102,6 +102,12 @@
             <artifactId>guava</artifactId>
             <version>28.1-jre</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.fusesource/sigar -->
+        <dependency>
+            <groupId>org.fusesource</groupId>
+            <artifactId>sigar</artifactId>
+            <version>1.6.4</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -110,6 +116,26 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+<!--            <plugin>-->
+<!--                <artifactId>maven-dependency-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>native-dep</id>-->
+<!--                        <phase>compile</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-dependencies</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <stripVersion>true</stripVersion>-->
+<!--                            <outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+<!--                            <includeGroupIds>org.hyperic</includeGroupIds>-->
+<!--                            HERE -> <includeTypes>dll,so</includeTypes>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                    . . .-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 

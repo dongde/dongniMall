@@ -126,30 +126,10 @@
           ]
         },
         {
-          "title": "系统管理",
-          "href": "",
+          "title": "系统状态信息",
+          "href": "page/system-info.html",
           "icon": "fa fa-cogs",
-          "target": "_self",
-          "child": [
-            {
-              "title": "系统状态管理",
-              "href": "page/system-info.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
-            },
-            {
-              "title": "版权信息管理",
-              "href": "page/page15.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
-            },
-            {
-              "title": "logo维护管理",
-              "href": "page/page16.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
-            }
-          ]
+          "target": "_self"
         }
       ]
     }
