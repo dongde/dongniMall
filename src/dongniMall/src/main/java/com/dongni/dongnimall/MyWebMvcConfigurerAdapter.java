@@ -22,6 +22,7 @@ public class MyWebMvcConfigurerAdapter implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("redirect:/dist/index.html#/home");
         registry.addViewController("/admin").setViewName("forward:/index.html");
+        registry.addViewController("/admin/login").setViewName("forward:/page/login-1.html");
     }
 
     @Bean
