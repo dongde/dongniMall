@@ -89,7 +89,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public void updateObject(TemplateDO templateDO) {
+    public void updateTemplate(TemplateDO templateDO) {
         templateMapper.updateObject(templateDO);
     }
 }

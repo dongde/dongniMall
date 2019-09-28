@@ -27,16 +27,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("article")
 public class ArticleController {
-
     @Autowired
     private FileUploadManager fileUploadManager;
-
     @Autowired
     private ArticleService articleService;
-
     @Autowired
     private Sid sid;
-
 
     //文章数据总览
     @RequestMapping("/list")
@@ -53,65 +49,48 @@ public class ArticleController {
         if (StringUtils.isBlank(title) || StringUtils.isBlank(source) || StringUtils.isBlank(summary) || StringUtils.isBlank(content)) {
             return JsonResult.errorMsg("数据不能为空");
         }
-        ActicleDO acticleDO = new ActicleDO();
+
+        ActicleDO acticleDO = articleService.findByID(id);
+        boolean exist = acticleDO != null;
+        if (!exist) {
+            acticleDO = new ActicleDO();
+            acticleDO.setId(sid.nextShort());
+        }
         acticleDO.setContent(content);
         acticleDO.setSource(source);
         acticleDO.setSummary(summary);
+        acticleDO.setTitle(title);
         //时间字符串转化
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         acticleDO.setUpdateTime(dateString);
-        acticleDO.setTitle(title);
-        if(StringUtils.isBlank(id)){
-            String ids = sid.nextShort();
-            Response response = fileUploadManager.upload(file.getInputStream());
-            acticleDO.setId(ids);
-            acticleDO.setImageURL(response.getUrl());
-            articleService.insertObject(acticleDO);
-            return JsonResult.ok(acticleDO);
-        }else {
-            if(file!=null) {
-                Response response2 = fileUploadManager.upload(file.getInputStream());
-                acticleDO.setImageURL(response2.getUrl());
-            }
-            articleService.updateNews(acticleDO,id);
-            return JsonResult.ok(acticleDO);
+
+        if(file!=null) {
+            Response response2 = fileUploadManager.upload(file.getInputStream());
+            acticleDO.setImageURL(response2.getUrl());
         }
-
-
+        if(exist){
+            articleService.updateArticle(acticleDO,id);
+        }else {
+            articleService.insertArticle(acticleDO);
+        }
+        return JsonResult.ok(acticleDO);
     }
-
-
-
-
 
     //上传图片接口
     @RequestMapping("/uploadBanner")
     public EditUploadDTO uploadBanner(MultipartFile file) throws IOException {
-
         Response response = fileUploadManager.upload(file.getInputStream());
-
         Map<String,String> map = new HashMap<>();
         String imageURL = response.getUrl();
         map.put("src",imageURL);
         return EditUploadDTO.ok(map);
-
-
     }
 
     //删除文章对应数据
     @RequestMapping("delete")
     public JsonResult deleteList(String id){
-        articleService.deleteNews(id);
+        articleService.deleteArticle(id);
         return JsonResult.ok();
     }
-
-
-
-
-
-
-
-
-
 }

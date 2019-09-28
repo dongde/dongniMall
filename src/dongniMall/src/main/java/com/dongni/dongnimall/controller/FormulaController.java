@@ -23,22 +23,18 @@ import java.util.Date;
 @RestController
 @RequestMapping("formula")
 public class FormulaController {
-
     @Autowired
     private FileUploadManager fileUploadManager;
     @Autowired
     private FormulaService formulaService;
-
     @Autowired
     private Sid sid;
-
 
     //配方总览
     @RequestMapping("list")
     public PageData showFormulaList(Integer page, Integer limit, String formulaName){
         return formulaService.selectAllFormula(page,limit,formulaName);
     }
-
 
     //添加和修改配方
     @RequestMapping("add")
@@ -47,7 +43,12 @@ public class FormulaController {
             return JsonResult.errorMsg("数据不能为空");
 
         }
-        FormulaDO formulaDO = new FormulaDO();
+        FormulaDO formulaDO = formulaService.selectByID(id);
+        boolean exist = formulaDO != null;
+        if (!exist) {
+            formulaDO = new FormulaDO();
+            formulaDO.setId(sid.nextShort());
+        }
         formulaDO.setFormulaName(formulaName);
         formulaDO.setFormulaPrice(formulaPrice);
         formulaDO.setFormulaDescription(formulaDescription);
@@ -57,24 +58,17 @@ public class FormulaController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         formulaDO.setUpdateTime(dateString);
-        if(StringUtils.isBlank(id)){
-            String ids = sid.nextShort();
+        if(file!=null) {
             Response response = fileUploadManager.upload(file.getInputStream());
             formulaDO.setFormulaURL(response.getUrl());
-            formulaDO.setId(ids);
-            formulaService.insertFormula(formulaDO);
-            return JsonResult.ok(formulaDO);
-        }else {
-            if(file!=null) {
-                Response response = fileUploadManager.upload(file.getInputStream());
-                formulaDO.setFormulaURL(response.getUrl());
-            }
-            formulaDO.setId(id);
-            formulaService.updateFormula(formulaDO);
-            return JsonResult.ok(formulaDO);
         }
+        if (exist) {
+            formulaService.updateFormula(formulaDO);
+        } else {
+            formulaService.insertFormula(formulaDO);
+        }
+        return JsonResult.ok(formulaDO);
     }
-
 
     //删除配方信息
     @RequestMapping("delete")

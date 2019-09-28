@@ -25,7 +25,6 @@ public interface TemplateService {
      */
     void deleteByID(String id);
 
-
     /**
      * 通过id查询模板数据
      * @param id
@@ -37,5 +36,5 @@ public interface TemplateService {
      * 修改模板文件
      * @param templateDO
      */
-    void updateObject(TemplateDO templateDO);
+    void updateTemplate(TemplateDO templateDO);
 }

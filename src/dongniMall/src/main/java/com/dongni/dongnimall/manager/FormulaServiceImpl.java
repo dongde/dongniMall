@@ -49,4 +49,9 @@ public class FormulaServiceImpl implements FormulaService {
     public void deleteByID(String id) {
         formulaMapper.deleteFormula(id);
     }
+
+    @Override
+    public FormulaDO selectByID(String id) {
+        return formulaMapper.selectByID(id);
+    }
 }

@@ -31,4 +31,12 @@ public interface FormulaService {
      * @param id
      */
     void deleteByID(String id);
+
+    /**
+     * 获取配方
+     *
+     * @param id
+     * @return
+     */
+    FormulaDO selectByID(String id);
 }

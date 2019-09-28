@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TemplateMapper {
-
     /**
      * 查询表的全部信息
      * @return
@@ -29,7 +28,7 @@ public interface TemplateMapper {
      * @param templateName
      * @return
      */
-    @Select("select * from publicitytemplate where templateName = #{templateName} ")
+    @Select("select * from publicitytemplate where templateName like concat(concat('%',#{templateName}),'%') ")
     List<TemplateDO> queryByName(@Param("templateName") String templateName);
 
     /**
@@ -38,7 +37,7 @@ public interface TemplateMapper {
      * @param templateType
      * @return
      */
-    @Select("select * from publicitytemplate where templateName = #{templateName} and templateType = #{templateType}")
+    @Select("select * from publicitytemplate where templateName like concat(concat('%',#{templateName}),'%') and templateType = #{templateType}")
     TemplateDO findByNameAndType(@Param("templateName") String templateName, @Param("templateType") String templateType);
 
     /**

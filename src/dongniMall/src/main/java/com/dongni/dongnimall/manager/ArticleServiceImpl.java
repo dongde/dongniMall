@@ -16,10 +16,8 @@ import java.util.List;
 @Transactional(propagation = Propagation.SUPPORTS)
 @Service
 public class ArticleServiceImpl implements ArticleService {
-
     @Autowired
     private ArticleMapper articleMapper;
-
 
     @Override
     public PageData selectAll(Integer page, Integer limit, String title, String source){
@@ -71,9 +69,8 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
-
     @Override
-    public void insertObject(ActicleDO acticleDO) {
+    public void insertArticle(ActicleDO acticleDO) {
         articleMapper.insertObject(acticleDO);
     }
 
@@ -82,21 +79,13 @@ public class ArticleServiceImpl implements ArticleService {
         return articleMapper.findByID(id);
     }
 
-
     @Override
-    public ActicleDO findByTitle(String title) {
-
-        return articleMapper.findByTitle(title);
-    }
-
-    @Override
-    public void deleteNews(String id) {
+    public void deleteArticle(String id) {
         articleMapper.deleteNewsByID(id);
     }
 
     @Override
-    public void updateNews(ActicleDO acticleDO, String id) {
+    public void updateArticle(ActicleDO acticleDO, String id) {
         articleMapper.updateNews(acticleDO,id);
     }
-
 }

@@ -2,6 +2,7 @@ package com.dongni.dongnimall.dao;
 
 import com.dongni.dongnimall.pojo.FormulaDO;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,5 +39,6 @@ public interface FormulaMapper {
      * 通过id查询
      * @param id
      */
-    void selectByID(@Param("id") String id);
+    @Select("select * from formula where id=#{id}")
+    FormulaDO selectByID(@Param("id") String id);
 }

@@ -23,12 +23,10 @@ import java.util.Date;
 @RestController
 @RequestMapping("template")
 public class TemplateController {
-
     @Autowired
     private FileUploadManager fileUploadManager;
     @Autowired
     private TemplateService templateService;
-
     @Autowired
     private Sid sid;
 
@@ -36,7 +34,6 @@ public class TemplateController {
     @RequestMapping("/list")
     public PageData templateLists(Integer page, Integer limit, String templateName, String templateType){
         return templateService.selectTemplates(page,limit,templateName,templateType);
-
     }
 
     //删除模板
@@ -46,16 +43,20 @@ public class TemplateController {
         return JsonResult.ok();
     }
 
-
     //添加模板文件
     @RequestMapping("add")
     public JsonResult insertTemplate(String id,String templateName, String templateType, Float price, String description,MultipartFile file) throws IOException {
-
         if (StringUtils.isBlank(templateName)|| StringUtils.isBlank(templateType) || StringUtils.isBlank(description)|| price == null) {
             return JsonResult.errorMsg("数据不能为空");
         }
 
-        TemplateDO templateDO = new TemplateDO();
+        TemplateDO templateDO = templateService.selectByID(id);
+        boolean exist = templateDO != null;
+        if (!exist) {
+            templateDO = new TemplateDO();
+            templateDO.setId(sid.nextShort());
+        }
+
         templateDO.setPrice(price);
         templateDO.setTemplateName(templateName);
         templateDO.setTemplateType(templateType);
@@ -63,30 +64,17 @@ public class TemplateController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         templateDO.setUpdateTime(dateString);
-        if(StringUtils.isBlank(id)){
-            String ids = sid.nextShort();
 
+        if(file!=null) {
             Response response = fileUploadManager.upload(file.getInputStream());
-
             templateDO.setImage(response.getUrl());
-            templateDO.setId(ids);
-
-            templateService.insertTemplate(templateDO);
-
-            return JsonResult.ok(templateDO);
-        }else {
-            if(file!=null) {
-                Response response = fileUploadManager.upload(file.getInputStream());
-                templateDO.setImage(response.getUrl());
-            }
-            templateDO.setId(id);
-            templateService.updateObject(templateDO);
-            return JsonResult.ok(templateDO);
         }
 
+        if (exist) {
+            templateService.updateTemplate(templateDO);
+        } else {
+            templateService.insertTemplate(templateDO);
+        }
+        return JsonResult.ok(templateDO);
     }
-
-
-
-
 }

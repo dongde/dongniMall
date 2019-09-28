@@ -9,13 +9,12 @@
         select * from basestore
         WHERE 1=1
         <if test="tradeName!=null and tradeName!=''">
-           and tradeName=#{tradeName}
+            and tradeName like concat(concat('%',#{tradeName}),'%')
         </if>
         <if test="tradeType!=null and tradeType!=''">
             and tradeType=#{tradeType}
         </if>
         order by updateTime desc
-
     </select>
 
     <insert id="insertTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">

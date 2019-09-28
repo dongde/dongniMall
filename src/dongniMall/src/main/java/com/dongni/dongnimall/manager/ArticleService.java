@@ -4,7 +4,6 @@ import com.dongni.dongnimall.pojo.ActicleDO;
 import com.dongni.dongnimall.vo.PageData;
 
 public interface ArticleService {
-
     /**
      * 查询所有信息
      * @param page
@@ -16,7 +15,7 @@ public interface ArticleService {
      * 插入文章
      * @param acticleDO
      */
-    void insertObject(ActicleDO acticleDO);
+    void insertArticle(ActicleDO acticleDO);
 
     /**
      * 通过id查找文章
@@ -25,22 +24,14 @@ public interface ArticleService {
      */
     ActicleDO findByID(String id);
 
-
-    /**
-     * 通过标题查找文章
-     * @param title
-     * @return
-     */
-    ActicleDO findByTitle(String title);
-
     /**
      * 删除文章信息
      * @param id
      */
-    void deleteNews(String id);
+    void deleteArticle(String id);
+
     /**
      * 修改文章
      */
-    void updateNews(ActicleDO acticleDO, String id);
-
+    void updateArticle(ActicleDO acticleDO, String id);
 }

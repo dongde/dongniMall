@@ -18,29 +18,21 @@
     <link rel="stylesheet" href="../css/layuimini.css" media="all">
     <link rel="stylesheet" href="../css/public.css" media="all">
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
-
-
     <style>
         .imageSize{
             height: 150px;
             width: 150px;
         }
-
-
     </style>
-
-
 </head>
 <body>
 <form class="layui-form" style="padding-top: 20px">
-
     <div class="layui-form-item" hidden>
         <label class="layui-form-label">ID：</label>
         <div class="layui-input-block">
             <input type="text" id="id" autocomplete="off" class="layui-input">
         </div>
     </div>
-
         <div class="layui-form-item">
             <label class="layui-form-label">标题</label>
             <div class="layui-input-block">
@@ -85,9 +77,7 @@
          </div>
         </div>
 </form>
-
     <script>
-
         //表单提交
         layui.use(['form', 'layedit',"upload","layer", "element"],function(){
             var layedit = layui.layedit;
@@ -107,11 +97,7 @@
                 element = layui.element,
                 upload = layui.upload;
 
-
-
-
-            $("#formSubmit").on('click',function () {
-
+                $("#formSubmit").on('click',function () {
                 $("#formSubmit").attr('disabled','disabled');
                 if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
                     layer.msg("请选择图片");
@@ -207,9 +193,6 @@
             });
 
  });
-
-
-
     </script>
 </body>
 

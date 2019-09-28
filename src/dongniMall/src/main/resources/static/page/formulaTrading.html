@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta charset="utf-8">
     <title>配方交易管理</title>
     <meta name="renderer" content="webkit">
@@ -36,8 +35,6 @@
                 <input type="text" autocomplete="off" id="formulaName" class="layui-input">
             </div>
         </div>
-
-
         <button type="button" class="layui-btn" id="findBySource">查找</button>
         <button type="button" class="layui-btn" id="reloadSource">重置</button>
         <div class="addmodel">
@@ -52,24 +49,19 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
-
-
 <script>
-
     layui.use(['table','form'],function () {
         var table = layui.table;
         var form = layui.form,
             layer = layui.layer,
             $ = layui.jquery;
 
-
-
         table.render({
             elem:'#formulaList'
             ,url:"/formula/list"
             ,cellMinWidth: 100
             ,page:true
-            ,height:"full-160"
+            ,height:"full-200"
             ,cols:[[
                 {field: 'formulaName', title: '配方名称',align:"center"}
                 ,{field: 'formulaPrice', title: '配方价格',align:"center"}
@@ -78,17 +70,13 @@
                 ,{field: 'factoryAdress', title: '料场地址',align:"center"}
                 ,{field: 'updateTime', title: '更新时间',align:"center"}
                 ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
-
             ]]
             ,id:"formulaList"
             ,limit:10
             ,where:{tradeName:"",tradeType:""}
         });
 
-
-
         $("#addFormula").on('click',function () {
-
             layer.open({
                 area: ['80%','80%'],
                 title: "添加配方",
@@ -103,9 +91,7 @@
                                 //重新从第 1 页开始
                             }
                         });
-
                     }
-
                 }
             });
         });
@@ -123,8 +109,6 @@
                     curr: 1
                 }
             });
-
-
         });
 
         //重置
@@ -176,7 +160,6 @@
                     }
                 });
             }
-
         });
 
         //删除所选行数据
@@ -202,11 +185,6 @@
                 }
             })
         }
-
-
-
-
-
     });
 </script>
 

@@ -97,7 +97,6 @@
         element = layui.element;
         upload = layui.upload;
 
-
         $("#formSubmit").on('click',function () {
             $("#formSubmit").attr("disabled","disabled");
             if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
@@ -110,8 +109,8 @@
                     url:'/template/add',
                     data:{
                         id: $("#id").val().trim(),
-                        tradeName: $("#templateName").val().trim(),
-                        tradeType: $("input[type='radio']:checked").val().trim(),
+                        templateName: $("#templateName").val().trim(),
+                        templateType: $("input[type='radio']:checked").val().trim(),
                         price: $("#price").val().trim(),
                         file: $("#updateload").file,
                         description:$("#description").val().trim()
@@ -191,18 +190,8 @@
                 layer.msg("上传失败！");
             }
         });
-
-
-
-
-
     });
-
 </script>
-
-
-
-
 </body>
 </html>
 

@@ -17,8 +17,6 @@
     <link rel="stylesheet" href="../css/layuimini.css" media="all">
     <link rel="stylesheet" href="../css/public.css" media="all">
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
-
-
     <style>
         .addmodel{
             float: right;
@@ -60,7 +58,6 @@
 </script>
 
 <script>
-
     layui.use(['form', 'layedit', 'laydate','table'], function () {
         var table = layui.table;
         var layedit = layui.layedit;
@@ -68,15 +65,13 @@
         var form = layui.form,
             layer = layui.layer,
             $ = layui.jquery;
-
-
         //表格数据展示
         table.render({
             elem: '#userList'
             // ,height: 312
             ,url: '/article/list' //数据接口
             ,cellMinWidth: 100
-            ,height:"full-160"
+            ,height:"full-200"
             ,cols: [[ //表头
                 {field: 'title', title: '标题',align:"center"}
                 ,{field: 'source', title: '来源',align:"center"}
@@ -119,7 +114,6 @@
                         body.contents().find("#updateImage").css("display","block");
                         body.contents().find("#updateload").attr("src",obj.data.imageURL);
                         body.contents().find("#contents").val(obj.data.content);
-
                     }
                 });
             }else if(layEvent === 'see'){
@@ -191,10 +185,6 @@
                 }
             })
         }
-
-
-
-
         //查找
         $('#findBySource').on('click',function(){
                 var title = $("#titles").val();
@@ -209,8 +199,6 @@
                         curr: 1
                     }
                 });
-
-
             });
 
         //重置
@@ -230,7 +218,5 @@
         });
     });
 </script>
-
 </body>
-
 </html>
