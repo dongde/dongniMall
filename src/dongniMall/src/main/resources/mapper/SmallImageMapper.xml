@@ -16,7 +16,7 @@
         <include refid="small_image_col"></include>
         from smallimage
         where is_used = 1
-        order by `position` desc
+        order by `position` asc
     </select>
     <select id="selectSmallImageUsedCount" resultType="Integer">
         select count(*)

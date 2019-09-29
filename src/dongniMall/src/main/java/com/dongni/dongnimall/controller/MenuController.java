@@ -54,10 +54,6 @@ public class MenuController extends BaseController {
         }
         if (StringUtils.isBlank(videoUrl)) {
             return JsonResult.errorMsg("视频链接不能为空");
-        } else {
-            if (!videoUrl.matches(REGEX)) {
-                return JsonResult.errorMsg("请输入正确的链接地址");
-            }
         }
         if (StringUtils.isBlank(introduction)) {
             return JsonResult.errorMsg("简介不能为空");

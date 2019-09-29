@@ -67,6 +67,12 @@ public class HomeController extends BaseController {
             String new_date = simpleDateFormat.format(date);
             bannerDO.setCreate_time(new_date);
             bannerDO.setUrl(url);
+            Integer maxCount = bannerService.queryBannerUsedCount();
+            if (maxCount < MAX_SMALL_IMAGES_COUNT) {
+                bannerDO.setIs_used(BannerUsedEnum.USED.getValue());
+            }else{
+                bannerDO.setIs_used(BannerUsedEnum.UNUSED.getValue());
+            }
             bannerDO.setIs_used(BannerUsedEnum.UNUSED.getValue());
             bannerService.addBanner(bannerDO);
 
@@ -136,7 +142,12 @@ public class HomeController extends BaseController {
             smallImage.setUrl(url);
             smallImage.setDescription(description);
             smallImage.setPosition(1);
-            smallImage.setIs_used(BannerUsedEnum.UNUSED.getValue());
+            Integer maxCount = smallImageService.querySmallImageUsedCount();
+            if (maxCount < MAX_SMALL_IMAGES_COUNT) {
+                smallImage.setIs_used(BannerUsedEnum.USED.getValue());
+            }else{
+                smallImage.setIs_used(BannerUsedEnum.UNUSED.getValue());
+            }
             smallImageService.addSmallImage(smallImage);
         } else {
             return JsonResult.errorMsg("上传图片不能为空");
