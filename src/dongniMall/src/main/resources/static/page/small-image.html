@@ -36,6 +36,7 @@
 
 <!-- 操作栏-->
 <script type="text/html" id="bar">
+    <a id="modify" class="layui-btn layui-btn layui-btn-xs" lay-event="modify" style='text-decoration:none;'>修改</a>
     {{#  if(d.is_used == 1){  }}
     <a id="state" class="layui-btn layui-btn-primary layui-btn-xs" lay-event="unuse"
        style='text-decoration:none;'>取消</a>
@@ -44,28 +45,6 @@
     <a id="state" class="layui-btn layui-btn layui-btn-xs" lay-event="use" style='text-decoration:none;'>使用</a>
     {{#  } }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style='text-decoration:none;'>删除</a>
-    <select class="modules" lay-event="modules" id="modules">
-        {{# if(d.position == 1){ }}
-        <option value="1" selected>1</option>
-        {{# }else{ }}
-        <option value="1">1</option>
-        {{# } }}
-        {{# if(d.position == 2){ }}
-        <option value="2" selected>2</option>
-        {{# }else{ }}
-        <option value="2">2</option>
-        {{# } }}
-        {{# if(d.position == 3){ }}
-        <option value="3" selected>3</option>
-        {{# }else{ }}
-        <option value="3">3</option>
-        {{# } }}
-        {{# if(d.position == 4){ }}
-        <option value="4" selected>4</option>
-        {{# }else{ }}
-        <option value="4">4</option>
-        {{# } }}
-    </select>
 
 </script>
 <!-- 缩略图-->
@@ -159,30 +138,6 @@
          */
         table.on('tool(smallImage-table)', function (obj) {
             var data = obj.data;
-            //使用one绑定change防止重复绑定change事件
-            obj.tr.find(".modules").one('change', function () {
-                var is_used = obj.tr.find("#is_used").text();
-                if (is_used == "使用中") {
-                    $.ajax({
-                        method: 'POST',
-                        data: {
-                            id: data.id,
-                            position: $(this).val()
-                        },
-                        url: '/home/modifySmallImagePosition',
-                        success: function (res) {
-                            if (res.status == 200) {
-
-                            } else {
-                                layer.msg(res.msg);
-                            }
-                        }
-                    })
-                } else {
-                    layer.msg("此图未使用");
-                }
-            });
-
             switch (obj.event) {
                 case 'del':
                     layer.confirm('确定删除？', function (index) {
@@ -253,6 +208,32 @@
                                 layer.msg("使用失败");
                             }
                         })
+                    });
+                    break;
+                case 'modify':
+                    layer.open({
+                        type: 2,
+                        title: '修改推荐小图',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['800px', '510px'],
+                        offset: 'auto',
+                        content: '/page/small-image-info.html', //iframe的url，no代表不显示滚动条
+                        success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.contents().find("#id").val(obj.data.id);
+                            body.contents().find("#url").val(obj.data.url);
+                            body.contents().find("#description").val(obj.data.description);
+                            var Select = 'dd[lay-value='+obj.data.position+']'; //设置要选择的值 --option的value
+                            body.contents().find("#modules").html('  <option value="1">1</option>\n' +
+                                '                <option value="2">2</option>\n' +
+                                '                <option value="3">3</option>\n' +
+                                '                <option value="4">4</option>');
+                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
+                            console.log(body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select));
+                            body.contents().find(".imageBorderForUpdate").removeAttr("hidden");
+                            body.contents().find("#imageForUpdate").attr("src",obj.data.smallImage_img);
+                        }
                     });
                     break;
             }

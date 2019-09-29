@@ -47,5 +47,5 @@ public interface BannerService {
      * @Description: 修改轮播图使用状态
      * @param bannerDO
      */
-    void changeUsedStatus(BannerDO bannerDO);
+    void modifyBanner(BannerDO bannerDO);
 }

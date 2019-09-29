@@ -51,33 +51,44 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping("/uploadBanner")
-    public JsonResult uploadBanner(@RequestParam("file") MultipartFile file, @RequestParam(value = "url",required = false) String url) throws IOException {
+    public JsonResult uploadBanner(@RequestParam(value = "file",required = false) MultipartFile file, @RequestParam(value = "url",required = false) String url,@RequestParam(value = "id",required = false) String id) throws IOException {
         if (StringUtils.isNotBlank(url)) {
             if (!url.matches(REGEX)) {
                 return JsonResult.errorMsg("请输入正确的链接地址");
             }
         }
-        if (file != null) {
-            Response response = fileUploadManager.upload(file.getInputStream());
-            BannerDO bannerDO = new BannerDO();
-            bannerDO.setId(sid.nextShort());
-            bannerDO.setBanner_img(response.getUrl());
-            Date date = new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String new_date = simpleDateFormat.format(date);
-            bannerDO.setCreate_time(new_date);
-            bannerDO.setUrl(url);
-            Integer maxCount = bannerService.queryBannerUsedCount();
-            if (maxCount < MAX_SMALL_IMAGES_COUNT) {
-                bannerDO.setIs_used(BannerUsedEnum.USED.getValue());
-            }else{
+        if(StringUtils.isBlank(id)) {
+            if (file != null) {
+                Response response = fileUploadManager.upload(file.getInputStream());
+                BannerDO bannerDO = new BannerDO();
+                bannerDO.setId(sid.nextShort());
+                bannerDO.setBanner_img(response.getUrl());
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String new_date = simpleDateFormat.format(date);
+                bannerDO.setCreate_time(new_date);
+                bannerDO.setUrl(url);
+                Integer maxCount = bannerService.queryBannerUsedCount();
+                if (maxCount < MAX_SMALL_IMAGES_COUNT) {
+                    bannerDO.setIs_used(BannerUsedEnum.USED.getValue());
+                } else {
+                    bannerDO.setIs_used(BannerUsedEnum.UNUSED.getValue());
+                }
                 bannerDO.setIs_used(BannerUsedEnum.UNUSED.getValue());
-            }
-            bannerDO.setIs_used(BannerUsedEnum.UNUSED.getValue());
-            bannerService.addBanner(bannerDO);
+                bannerService.addBanner(bannerDO);
 
-        } else {
-            return JsonResult.errorMsg("上传文件不能为空");
+            } else {
+                return JsonResult.errorMsg("上传文件不能为空");
+            }
+        }else{
+            BannerDO bannerDO = new BannerDO();
+            bannerDO.setId(id);
+            bannerDO.setUrl(url);
+            if(file!=null){
+                Response response = fileUploadManager.upload(file.getInputStream());
+                bannerDO.setBanner_img(response.getUrl());
+            }
+            bannerService.modifyBanner(bannerDO);
         }
 
         return JsonResult.ok();
@@ -105,7 +116,7 @@ public class HomeController extends BaseController {
                 }
                 bannerDO.setIs_used(1);
             }
-            bannerService.changeUsedStatus(bannerDO);
+            bannerService.modifyBanner(bannerDO);
             return JsonResult.ok();
         }
     }
@@ -121,7 +132,7 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping("/uploadSmallImage")
-    public JsonResult uploadSmallImage(@RequestParam("file") MultipartFile file, @RequestParam(value = "url",required = false) String url, @RequestParam("description") String description) throws IOException {
+    public JsonResult uploadSmallImage(@RequestParam(value = "file",required = false) MultipartFile file, @RequestParam(value = "url",required = false) String url, @RequestParam("description") String description,Integer position,@RequestParam(value = "id",required = false) String id) throws IOException {
         if (StringUtils.isNotBlank(url)) {
             if (!url.matches(REGEX)) {
                 return JsonResult.errorMsg("请输入正确的链接地址");
@@ -130,27 +141,40 @@ public class HomeController extends BaseController {
         if (StringUtils.isBlank(description)) {
             return JsonResult.errorMsg("图片描述不能为空！");
         }
-        if (file != null) {
-            Response response = fileUploadManager.upload(file.getInputStream());
-            SmallImageDO smallImage = new SmallImageDO();
-            smallImage.setId(sid.nextShort());
-            smallImage.setSmallImage_img(response.getUrl());
-            Date date = new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String new_date = simpleDateFormat.format(date);
-            smallImage.setCreate_time(new_date);
-            smallImage.setUrl(url);
-            smallImage.setDescription(description);
-            smallImage.setPosition(1);
-            Integer maxCount = smallImageService.querySmallImageUsedCount();
-            if (maxCount < MAX_SMALL_IMAGES_COUNT) {
-                smallImage.setIs_used(BannerUsedEnum.USED.getValue());
-            }else{
-                smallImage.setIs_used(BannerUsedEnum.UNUSED.getValue());
+        if(StringUtils.isBlank(id)) {
+            if (file != null) {
+                Response response = fileUploadManager.upload(file.getInputStream());
+                SmallImageDO smallImage = new SmallImageDO();
+                smallImage.setId(sid.nextShort());
+                smallImage.setSmallImage_img(response.getUrl());
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String new_date = simpleDateFormat.format(date);
+                smallImage.setCreate_time(new_date);
+                smallImage.setUrl(url);
+                smallImage.setPosition(position);
+                smallImage.setDescription(description);
+                Integer maxCount = smallImageService.querySmallImageUsedCount();
+                if (maxCount < MAX_SMALL_IMAGES_COUNT) {
+                    smallImage.setIs_used(BannerUsedEnum.USED.getValue());
+                } else {
+                    smallImage.setIs_used(BannerUsedEnum.UNUSED.getValue());
+                }
+                smallImageService.addSmallImage(smallImage);
+            } else {
+                return JsonResult.errorMsg("上传图片不能为空");
             }
-            smallImageService.addSmallImage(smallImage);
-        } else {
-            return JsonResult.errorMsg("上传图片不能为空");
+        }else{
+            SmallImageDO smallImageDO = new SmallImageDO();
+            smallImageDO.setId(id);
+            smallImageDO.setUrl(url);
+            smallImageDO.setPosition(position);
+            smallImageDO.setDescription(description);
+            if(file!=null){
+                Response response = fileUploadManager.upload(file.getInputStream());
+                smallImageDO.setSmallImage_img(response.getUrl());
+            }
+            smallImageService.modifySmallImage(smallImageDO);
         }
         return JsonResult.ok();
     }

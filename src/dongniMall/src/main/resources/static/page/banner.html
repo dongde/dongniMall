@@ -31,6 +31,7 @@
 
 <!-- 操作栏-->
 <script type="text/html" id="bar">
+    <a id="modify" class="layui-btn layui-btn layui-btn-xs" lay-event="modify" style='text-decoration:none;'>修改</a>
     {{#  if(d.is_used == 1){  }}
     <a id="state" class="layui-btn layui-btn-primary layui-btn-xs" lay-event="unuse"
        style='text-decoration:none;'>取消</a>
@@ -81,12 +82,12 @@
                         align: 'center',
                         width: 150
                     }
-                    , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center', width: 150}
+                    , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center', width: 200}
                 ]]
                 , page: true
                 , limit: 10
                 , done: function (res, curr, count) {
-                    if(res.status==502){
+                    if (res.status == 502) {
                         window.location = "/page/login-1.html";
                     }
                 }
@@ -198,6 +199,24 @@
                                     layer.msg("使用失败");
                                 }
                             })
+                        });
+                        break;
+                    case 'modify':
+                        layer.open({
+                            type: 2,
+                            title: '修改轮播图',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: ['800px', '500px'],
+                            offset: 'auto',
+                            content: '/page/banner-info.html', //iframe的url，no代表不显示滚动条
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                body.contents().find("#id").val(obj.data.id);
+                                body.contents().find("#url").val(obj.data.url);
+                                body.contents().find(".imageBorderForUpdate").removeAttr("hidden");
+                                body.contents().find("#imageForUpdate").attr("src",obj.data.banner_img);
+                            }
                         });
                         break;
                 }

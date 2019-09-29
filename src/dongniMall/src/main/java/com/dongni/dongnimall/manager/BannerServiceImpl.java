@@ -62,7 +62,7 @@ public class BannerServiceImpl implements BannerService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public void changeUsedStatus(BannerDO bannerDO) {
+    public void modifyBanner(BannerDO bannerDO) {
         bannerMapper.updateBanner(bannerDO);
     }
 }

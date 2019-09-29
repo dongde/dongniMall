@@ -69,7 +69,7 @@
             if (obj.event == 'addManager') {
                 var currentManagerInfo = window.localStorage.getItem("currentManagerInfo");
                 var currentManagerObj = JSON.parse(currentManagerInfo);
-                if (currentManagerObj != null) {
+                // if (currentManagerObj != null) {
                     layer.open({
                         type: 2,
                         title: '添加管理员',
@@ -91,9 +91,9 @@
                             }
                         }
                     });
-                } else {
-                    layer.msg("未登录");
-                }
+                // } else {
+                //     layer.msg("未登录");
+                // }
             }
         });
         /**
