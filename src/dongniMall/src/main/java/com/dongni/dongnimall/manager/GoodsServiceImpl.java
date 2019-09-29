@@ -20,17 +20,32 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private GoodsMapper goodsMapper;
     @Override
-    public void addGoods(List<GoodsDO> goodsList) {
-        goodsMapper.insertGoods(goodsList);
+    public void addGoods(GoodsDO goodsDO) {
+        goodsMapper.insertGoods(goodsDO);
     }
 
     @Override
-    public void removeGoods(String order_number) {
-        goodsMapper.deleteGoods(order_number);
+    public void removeGoodsByOrderNumber(String order_number) {
+        goodsMapper.deleteGoodsByOrderNumber(order_number);
     }
 
     @Override
-    public List<GoodsDO> queryGoods(String order_number) {
-        return goodsMapper.selectGoods(order_number);
+    public List<GoodsDO> queryGoods(String user_phone) {
+        return goodsMapper.selectGoods(user_phone);
+    }
+
+    @Override
+    public List<GoodsDO> queryOrderGoods(String order_number) {
+        return goodsMapper.selectOrderGoods(order_number);
+    }
+
+    @Override
+    public void removeGoodsById(String id) {
+        goodsMapper.deleteGoodsById(id);
+    }
+
+    @Override
+    public void addOrder(String order_number, List<String> goodsIdList) {
+        goodsMapper.updateGoodsOrderNumber(order_number,goodsIdList);
     }
 }

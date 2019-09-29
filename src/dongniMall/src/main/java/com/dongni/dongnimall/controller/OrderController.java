@@ -1,5 +1,6 @@
 package com.dongni.dongnimall.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dongni.dongnimall.manager.GoodsService;
 import com.dongni.dongnimall.manager.LogisticsService;
 import com.dongni.dongnimall.manager.OrderService;
@@ -9,13 +10,13 @@ import com.dongni.dongnimall.pojo.OrderDO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
 import org.apache.commons.lang3.StringUtils;
+import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -28,36 +29,65 @@ import java.util.UUID;
 @RequestMapping("/order")
 public class OrderController {
     @Autowired
+    private Sid sid;
+    @Autowired
     private OrderService orderService;
     @Autowired
     private LogisticsService logisticsService;
     @Autowired
     private GoodsService goodsService;
 
+    @PostMapping("/addGoods")
+    public JsonResult addGoods(String user_phone, BigDecimal goods_price, String goods_name, String goods_img, Integer goods_count, BigDecimal subtotal) {
+        if (StringUtils.isBlank(user_phone) || StringUtils.isBlank(goods_name) || StringUtils.isBlank(goods_img) || goods_price == null || goods_count == null || subtotal == null) {
+            return JsonResult.errorMsg("添加出错");
+        }
+        GoodsDO goodsDO = new GoodsDO();
+        goodsDO.setId(sid.nextShort());
+        goodsDO.setGoods_name(goods_name);
+        goodsDO.setUser_phone(user_phone);
+        goodsDO.setGoods_price(goods_price);
+        goodsDO.setGoods_img(goods_img);
+        goodsDO.setGoods_count(goods_count);
+        goodsDO.setSubtotal(subtotal);
+        goodsService.addGoods(goodsDO);
+        return JsonResult.ok();
+    }
+
+    @GetMapping("/queryGoods")
+    public JsonResult queryGoods(String user_phone){
+        return JsonResult.ok(goodsService.queryGoods(user_phone));
+    }
+
+    @PostMapping("/removeGoodsById")
+    public JsonResult removeGoodsById(String id){
+        if(StringUtils.isBlank(id)){
+            return JsonResult.errorMsg("删除出错");
+        }
+        goodsService.removeGoodsById(id);
+        return JsonResult.ok();
+    }
+
     @RequestMapping("/queryOrderList")
     public PageData queryOrderList(Integer page, Integer limit) {
         return orderService.queryOrderList(page, limit);
     }
 
-    @RequestMapping("/addOrder")
-    public JsonResult addOrder(String order_number, String user_phone, BigDecimal payment_amount, @RequestBody List<GoodsDO> goodsList) {
-        if (StringUtils.isBlank(user_phone) || payment_amount == null || goodsList.size() == 0) {
+    @PostMapping(value = "/addOrder", produces = "application/json;charset=UTF-8")
+    public JsonResult addOrder(@RequestBody JSONObject jsonObject) {
+//        String order_number= jsonObject.getString("order_number");
+        List<String> goodsIdList = Arrays.asList((String[])jsonObject.get("goodsList"));
+
+
+        if (goodsIdList.size() == 0) {
             return JsonResult.errorMsg("创建订单出错");
         }
-//        String order_number = UUID.randomUUID().toString();
-        OrderDO orderDO = new OrderDO();
-        orderDO.setOrder_number(order_number);
-        orderDO.setUser_phone(user_phone);
-        orderDO.setPayment_amount(payment_amount);
-        orderService.addOrder(orderDO);
-        for (GoodsDO goodsDO : goodsList) {
-            goodsDO.setOrder_number(order_number);
-        }
-        goodsService.addGoods(goodsList);
+        String order_number = UUID.randomUUID().toString();
+        goodsService.addOrder(order_number,goodsIdList);
         return JsonResult.ok();
     }
 
-    @RequestMapping("/modifyOrder")
+    @PostMapping("/modifyOrder")
     public JsonResult modifyOrder(String order_number, Integer payment_method, Integer order_status) {
         if (StringUtils.isBlank(order_number)) {
             return JsonResult.errorMsg("修改订单出错");
@@ -66,7 +96,7 @@ public class OrderController {
         orderDO.setOrder_number(order_number);
         orderDO.setPayment_method(payment_method);
         orderDO.setOrder_status(order_status);
-        if(order_status == 3) {
+        if (order_status == 3) {
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String complete_time = simpleDateFormat.format(date);
@@ -83,7 +113,7 @@ public class OrderController {
         }
         orderService.removeOrder(order_number);
         logisticsService.removeLogistics(order_number);
-        goodsService.removeGoods(order_number);
+        goodsService.removeGoodsByOrderNumber(order_number);
         return JsonResult.ok();
     }
 
@@ -116,8 +146,8 @@ public class OrderController {
     }
 
 
-    @RequestMapping("/queryGoods")
-    public JsonResult queryGoods(String order_number) {
+    @GetMapping("/queryGoodsByOrderNumber")
+    public JsonResult queryGoodsByOrderNumber(String order_number) {
         return JsonResult.ok(goodsService.queryGoods(order_number));
     }
 }

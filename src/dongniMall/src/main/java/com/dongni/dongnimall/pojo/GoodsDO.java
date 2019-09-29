@@ -11,6 +11,10 @@ import java.math.BigDecimal;
  */
 @Component
 public class GoodsDO implements Serializable {
+    //交易商品ID
+    private String id;
+    //用户账号
+    private String user_phone;
     //所属订单号
     private String order_number;
     //商品名称
@@ -23,6 +27,22 @@ public class GoodsDO implements Serializable {
     private Integer goods_count;
     //商品小计
     private BigDecimal subtotal;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUser_phone() {
+        return user_phone;
+    }
+
+    public void setUser_phone(String user_phone) {
+        this.user_phone = user_phone;
+    }
 
     public String getOrder_number() {
         return order_number;

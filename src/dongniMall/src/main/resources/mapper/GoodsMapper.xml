@@ -2,17 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dongni.dongnimall.dao.GoodsMapper">
     <sql id="goods_col">
-        order_number,goods_name,goods_img,goods_price,goods_count,subtotal
+        id,user_phone,order_number,goods_name,goods_img,goods_price,goods_count,subtotal
     </sql>
-    <insert id="insertGoods" parameterType="java.util.List">
+    <insert id="insertGoods" parameterType="com.dongni.dongnimall.pojo.GoodsDO">
         insert into goods(<include refid="goods_col"></include>)
-        values
-        <foreach collection="list" index="index" open="(" separator="," close=")" item="goodsDO">
-            (#{goodsDO.order_number},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_count},#{goodsDO.subtotal})
-        </foreach>
+        values(#{goodsDO.id},#{goodsDO.user_phone},#{goodsDO.order_number},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_count},#{goodsDO.subtotal})
     </insert>
 
-    <delete id="deleteGoods" parameterType="String">
+    <delete id="deleteGoodsById" parameterType="String">
+        delete from goods
+        where id=#{id}
+    </delete>
+
+    <delete id="deleteGoodsByOrderNumber" parameterType="String">
         delete from goods
         where order_number=#{order_number}
     </delete>
@@ -21,6 +23,22 @@
         select
         <include refid="goods_col"></include>
         from goods
+        where user_phone=#{user_phone} and order_number=null
+    </select>
+
+    <select id="selectOrderGoods" parameterType="String" resultType="com.dongni.dongnimall.pojo.GoodsDO">
+        select
+        <include refid="goods_col"></include>
+        from goods
         where order_number=#{order_number}
     </select>
+
+    <update id="updateGoodsOrderNumber">
+        <foreach collection="list" index="index" item="id">
+            update goods
+            <include refid="goods_col"></include>
+            set order_number=#{order_number}
+            where id=#{id}
+        </foreach>
+    </update>
 </mapper>

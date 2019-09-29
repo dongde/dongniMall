@@ -11,21 +11,41 @@ import java.util.List;
  */
 public interface GoodsService {
     /**
-     * @param goodsList
-     * @Description: 添加商品信息
+     * @param goodsDO
+     * @Description: 添加交易商品信息
      */
-    void addGoods(List<GoodsDO> goodsList);
+    void addGoods(GoodsDO goodsDO);
 
     /**
      * @param order_number
-     * @Description: 删除购买的商品信息
+     * @Description: 根据订单删除购买的商品信息
      */
-    void removeGoods(String order_number);
+    void removeGoodsByOrderNumber(String order_number);
+
+    /**
+     * @param id
+     * @Description: 根据ID删除商品信息
+     */
+    void removeGoodsById(String id);
+
+    /**
+     * @param user_phone
+     * @return
+     * @Description: 查询用户购物车商品信息
+     */
+    List<GoodsDO> queryGoods(String user_phone);
 
     /**
      * @param order_number
      * @return
-     * @Description: 查询购买的商品信息
+     * @Description: 查询订单商品信息
      */
-    List<GoodsDO> queryGoods(String order_number);
+    List<GoodsDO> queryOrderGoods(String order_number);
+
+    /**
+     * @Description: 给商品添加订单号
+     * @param order_number
+     * @param goodsIdList
+     */
+    void addOrder(String order_number,List<String> goodsIdList);
 }
