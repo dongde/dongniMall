@@ -36,7 +36,7 @@
 
     <select id="selectUserByPhone" parameterType="String" resultType="com.dongni.dongnimall.pojo.UserDO">
         select
-        <include refid="logistics_user_col"></include>
+        <include refid="user_col"></include>
         from `user`
         where phone=#{phone}
     </select>
