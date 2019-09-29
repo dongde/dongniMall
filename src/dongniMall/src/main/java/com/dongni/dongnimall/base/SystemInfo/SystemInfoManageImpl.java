@@ -83,7 +83,7 @@ public class SystemInfoManageImpl implements SystemInfoManager {
         //获取jvm信息
         Runtime r = Runtime.getRuntime();
         Properties props = System.getProperties();
-        systemInfoDO.setMemoryTotal(r.totalMemory());
+        systemInfoDO.setTotalMemory(r.totalMemory());
         systemInfoDO.setFreeMemory(r.freeMemory());
         systemInfoDO.setAvailableProcessors(r.availableProcessors());
         systemInfoDO.setVersion(props.getProperty("java.version"));
