@@ -63,7 +63,7 @@ public class BaseTradeController {
     //添加和修改底料
     @RequestMapping("add")
     public JsonResult insertTrade(String id,String tradeName, String tradeType, Float price, String tradeURL,String content,String[] allID,MultipartFile file,String alipay,String weChat) throws IOException {
-
+        System.out.println(alipay+"****"+weChat);
         if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(alipay) || StringUtils.isBlank(weChat)|| StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL) || StringUtils.isBlank(content) || allID.length==0) {
             return JsonResult.errorMsg("数据不能为空");
         }else {
@@ -123,6 +123,8 @@ public class BaseTradeController {
     public JsonResult uploadImages(MultipartFile file) throws IOException {
         Response response = fileUploadManager.upload(file.getInputStream());
         String url = response.getUrl();
+        System.out.println("###########");
+        System.out.println(url);
         return JsonResult.ok(url);
     }
 

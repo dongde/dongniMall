@@ -223,8 +223,12 @@
                 content: function () {
                     return $("#contents").val();
                 },
-                alipay:alipay,
-                weChat:wechat
+                alipay:function () {
+                    return alipay;
+                },
+                weChat:function () {
+                    return wechat;
+                }
 
 
 
@@ -275,6 +279,7 @@
             }
             ,done: function(res){
                 alipay = res.data;
+
             },
             error:function (index,upload) {
                 layer.msg("上传失败！");
@@ -298,6 +303,7 @@
                 });
             }
             ,done: function(res){
+
                 wechat = res.data;
             },
             error:function (index,upload) {
@@ -324,10 +330,10 @@
             });
         }
         ,done: function(res){
+
             //上传完毕
             imgURL.push(res.data);
 
-                uploadInst.render();
 
         },
             error:function (index,upload) {
@@ -346,7 +352,9 @@
             success:function (res) {
                 console.log(res);
                 if(res.status === 200){
+                    $.each(res.data, function (index, item) {
 
+                    });
                 }
             }
         });

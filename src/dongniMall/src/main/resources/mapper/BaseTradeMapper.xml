@@ -19,7 +19,7 @@
 
     <insert id="insertTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
         insert into basestore (<include refid="BaseStore_col"></include>) values
-        (#{baseStoreDO.id},#{baseStoreDO.tradeName},#{baseStoreDO.tradeType},#{baseStoreDO.price},#{baseStoreDO.tradeURL},#{baseStoreDO.viewCount},#{baseStoreDO.updateTime},#{baseStoreDO.content},#{baseStoreDO.bigImage})
+        (#{baseStoreDO.id},#{baseStoreDO.tradeName},#{baseStoreDO.tradeType},#{baseStoreDO.price},#{baseStoreDO.tradeURL},#{baseStoreDO.viewCount},#{baseStoreDO.updateTime},#{baseStoreDO.content},#{baseStoreDO.bigImage},#{baseStoreDO.Alipay},#{baseStoreDO.wechat})
     </insert>
 
     <delete id="deleteTrade" parameterType="java.lang.String">
