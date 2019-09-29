@@ -1,22 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>底料管理</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta http-equiv="Access-Control-Allow-Origin" content="*">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <link rel="icon" href="../images/favicon.ico">
-    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
-    <link rel="stylesheet" href="../css/layuimini.css" media="all">
-    <link rel="stylesheet" href="../css/public.css" media="all">
-    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
-    <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
-    <script src="../js/lay-config.js" charset="utf-8"></script>
     <style>
         .addmodel{
             float: right;
@@ -37,7 +21,7 @@
             <label class="layui-form-label">类型：</label>
             <div class="layui-input-inline">
                 <select name="tradeType" id="tradeType" lay-verify="required">
-
+                    <option value="">全部</option>
                 </select>
             </div>
         </div>
@@ -148,7 +132,8 @@
         //重置
         $('#reloadSource').on('click',function(){
             $("#tradeName").val(null);
-            $("#tradeType").get(0).selected=true;
+            var options=$("#type option:selected");
+            options.val(null);
             table.reload('baselist', {
                 url:'/baseTrade/list'
                 ,where: {
@@ -164,8 +149,6 @@
         //监听行工具事件
         table.on('tool(baselist)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
-            console.log(data.id);
-            console.log("********");
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             if(layEvent === 'del'){ //删除
                 layer.confirm('真的删除行么', function(index){
@@ -184,20 +167,25 @@
                     offset: 'auto',
                     content: '/page/baseManager-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
-                        var data = obj.data.imageURL;
-                        var str = data.split(',');
-
                         var body = layer.getChildFrame('body', index);
+                        console.log("8*********");
+                        console.log(obj.data.alipay);
+
                         body.contents().find("#id").val(obj.data.id);
                         body.contents().find("#tradeName").val(obj.data.tradeName);
                         body.contents().find("#type").val(obj.data.tradeType);
                         body.contents().find("#price").val(obj.data.price);
                         body.contents().find("#tradeURL").val(obj.data.tradeURL);
                         body.contents().find("#contents").val(obj.data.content);
-                        body.contents().find("#updateImage").css("display","block");
-                        $.each(str,function (index,item) {
-                            body.contents().find("#updateImage").append('<img src="' + str[index] + '" alt="' + item + '" class="layui-upload-img" style="width: 150px;height: 150px">');
-                        });
+                        body.contents().find("#updateAlipayImage").css("display","block");
+                        body.contents().find("#updateloadAlipay").attr("src",obj.data.alipay);
+
+                        body.contents().find("#updateWechatImage").css("display","block");
+                        body.contents().find("#updateloadWechat").attr("src",obj.data.weChat);
+
+                        body.contents().find("#updateBigImage").css("display","block");
+                        body.contents().find("#updateload").attr("src",obj.data.bigImage);
+
                     }
                 });
             }

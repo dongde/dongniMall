@@ -2,8 +2,11 @@ package com.dongni.dongnimall.controller;
 
 import com.dongni.dongnimall.base.storage.FileUploadManager;
 import com.dongni.dongnimall.base.storage.Response;
+import com.dongni.dongnimall.manager.BaseImageService;
 import com.dongni.dongnimall.manager.BaseTradeService;
+import com.dongni.dongnimall.pojo.BaseImageDO;
 import com.dongni.dongnimall.pojo.BaseStoreDO;
+import com.dongni.dongnimall.vo.BaseStoreVO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +36,9 @@ public class BaseTradeController {
     private BaseTradeService baseTradeService;
 
     @Autowired
+    private BaseImageService baseImageService;
+
+    @Autowired
     private Sid sid;
 
     //底料商品总览
@@ -41,36 +47,60 @@ public class BaseTradeController {
         return baseTradeService.selectAllTrade(page,limit,tradeName,tradeType);
     }
 
+    //底料商品总览
+    @RequestMapping("smallimage")
+    public JsonResult smallimage(String id){
+        return baseImageService.findAllbyID(id);
+    }
+
+
+    //底料商品总览
+    @RequestMapping("listAll")
+    public BaseStoreVO trademessage(String id){
+        return baseTradeService.selectDetails(id);
+    }
+
     //添加和修改底料
     @RequestMapping("add")
-    public JsonResult insertTrade(String id,String tradeName, String tradeType, Float price, String tradeURL, String imgURL,String content) {
+    public JsonResult insertTrade(String id,String tradeName, String tradeType, Float price, String tradeURL,String content,String[] allID,MultipartFile file,String alipay,String weChat) throws IOException {
 
-        if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL) || StringUtils.isBlank(content)) {
+        if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(alipay) || StringUtils.isBlank(weChat)|| StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL) || StringUtils.isBlank(content) || allID.length==0) {
             return JsonResult.errorMsg("数据不能为空");
         }else {
             if (!tradeURL.matches(REGEX)) {
                 return JsonResult.errorMsg("请输入正确的链接地址");
             }
         }
-
         BaseStoreDO baseStoreDO = new BaseStoreDO();
         baseStoreDO.setPrice(price);
+        baseStoreDO.setAlipay(alipay);
+        baseStoreDO.setWechat(weChat);
         baseStoreDO.setContent(content);
         baseStoreDO.setTradeName(tradeName);
         baseStoreDO.setTradeType(tradeType);
         baseStoreDO.setTradeURL(tradeURL);
         baseStoreDO.setViewCount(1);
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         baseStoreDO.setUpdateTime(dateString);
         if(StringUtils.isBlank(id)){
+            if(file==null){
+                return JsonResult.errorMsg("图片不能为空");
+            }
+            Response response = fileUploadManager.upload(file.getInputStream());
+            baseStoreDO.setBigImage(response.getUrl());
             String ids = sid.nextShort();
-            baseStoreDO.setImageURL(imgURL);
+            for (String imageId : allID) {
+                BaseImageDO baseImageDO = baseImageService.findID(imageId);
+                baseImageDO.setBaseStoreId(ids);
+                baseImageService.updateMessage(baseImageDO);
+            }
             baseStoreDO.setId(ids);
             baseTradeService.insertTrade(baseStoreDO);
             return JsonResult.ok(baseStoreDO);
         }else {
-            baseStoreDO.setImageURL(imgURL);
+
             baseStoreDO.setId(id);
             baseTradeService.updateTrade(baseStoreDO);
             return JsonResult.ok(baseStoreDO);
@@ -80,6 +110,17 @@ public class BaseTradeController {
 
     @RequestMapping("uploadImage")
     public JsonResult uploadImage(MultipartFile file) throws IOException {
+        Response response = fileUploadManager.upload(file.getInputStream());
+        String url = response.getUrl();
+        String ids = sid.nextShort();
+        BaseImageDO baseImageDO = new BaseImageDO();
+        baseImageDO.setId(ids);
+        baseImageDO.setImageURL(url);
+        baseImageService.insertImageURL(baseImageDO);
+        return JsonResult.ok(ids);
+    }
+    @RequestMapping("uploadImages")
+    public JsonResult uploadImages(MultipartFile file) throws IOException {
         Response response = fileUploadManager.upload(file.getInputStream());
         String url = response.getUrl();
         return JsonResult.ok(url);

@@ -71,32 +71,26 @@
         </div>
     </div>
 
-    <!--<div class="layui-form-item">
-        <label class="layui-form-label">模板图片</label>-->
-        <!--<div class="layui-input-inline uploadHeadImage">-->
-            <!--<button type="button" class="layui-btn" id="uploadImage">上传图片</button>
-            <div class="layui-upload-list" id="showImage" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label">封面大图：</label>
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="bigImage">上传图片</button>
+            <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
+            <div class="layui-upload-list" id="showBigImage" style="display: none">
                 <img class="imageSize" id="upload">
             </div>
-            <div class="layui-upload-list" id="updateImage" style="display: none">
+            <div class="layui-upload-list" id="updateBigImage" style="display: none">
                 <img class="imageSize" id="updateload">
-            </div>-->
-
-            <!--<div class="layui-upload">
-                <button type="button" class="layui-btn" id="uploadImage">多图片上传</button>
-                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
-                    预览图：
-                    <div class="layui-upload-list" id="upload" style="display: block"></div>
-                    <div class="layui-upload-list" id="showupload" style="display: none"></div>
-                </blockquote><span id="show"></span>
-            </div>-->
+            </div>
+        </div>
+    </div>
 
 
-    <!--</div>-->
     <div class="layui-form-item">
         <label class="layui-form-label">底料图片：</label>
-        <div class="layui-input-inline uploadHeadImage">
-            <button type="button" class="layui-btn" id="uploadImage">上传图片</button>
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="uploadImage">上传图片</button>
+            <i style="font-size: 10px;color: gray;">建议尺寸214*143</i>
             <div class="layui-upload-list" id="showImage" style="display: none">
             </div>
             <div class="layui-upload-list" id="updateImage" style="display: none">
@@ -110,6 +104,34 @@
         <label class="layui-form-label">底料描述：</label>
         <div class="layui-input-block">
             <textarea placeholder="请输入内容" class="layui-textarea" name="content" id="contents"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付宝：</label>
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="alipay">上传图片</button>
+            <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
+            <div class="layui-upload-list" id="showAlipayImage" style="display: none">
+                <img class="imageSize" id="uploadAlipay">
+            </div>
+            <div class="layui-upload-list" id="updateAlipayImage" style="display: none">
+                <img class="imageSize" id="updateloadAlipay">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">微信：</label>
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="wechatImage">上传图片</button>
+            <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
+            <div class="layui-upload-list" id="showWechatImage" style="display: none">
+                <img class="imageSize" id="uploadWechat">
+            </div>
+            <div class="layui-upload-list" id="updateWechatImage" style="display: none">
+                <img class="imageSize" id="updateloadWechat">
+            </div>
         </div>
     </div>
 
@@ -135,9 +157,12 @@
             $ = layui.jquery;
         element = layui.element;
         upload = layui.upload;
-        var imgURL = null;
+        var imgURL = [];
 
-        $("#formSubmit").on('click',function () {
+        var alipay = null;
+        var wechat = null;
+
+        /*$("#formSubmit").on('click',function () {
            $.ajax({
                url:"/baseTrade/add",
                data:{
@@ -146,7 +171,7 @@
                    tradeType: $("input[type='radio']:checked").val().trim(),
                    price:$("#price").val(),
                    tradeURL:$("#tradeURL").val(),
-                   imgURL:imgURL,
+                   urls:imgURL,
                    content:$("#contents").val()
                },
                success : function(res) {
@@ -166,14 +191,130 @@
                    layer.msg("上传失败！");
                }
            })
+        });*/
+
+        //封面图上传
+        var uploadInsts = upload.render({
+            elem: "#bigImage",
+            url: "/baseTrade/add",
+            auto: false,
+            bindAction: "#formSubmit",
+            accept: 'images',//只允许上传图片
+            acceptMime: 'image/*', //只筛选图片
+            data:{
+                id:function () {
+                    return $("#id").val();
+                },
+                tradeName:function () {
+                    return $("#tradeName").val();
+                },
+                tradeType:function () {
+                    return $("input[type='radio']:checked").val();
+                },
+                price:function () {
+                    return $("#price").val();
+                },
+                tradeURL:function () {
+                    return $("#tradeURL").val();
+                },
+                allID:function () {
+                    return imgURL;
+                },
+                content: function () {
+                    return $("#contents").val();
+                },
+                alipay:alipay,
+                weChat:wechat
+
+
+
+            },
+            choose: function (obj) {
+                // $("#showImage").css("display","block");
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                obj.preview(function (index, file, result) {
+
+                    $("#updateBigImage").css("display", "none");
+                    $("#showBigImage").css("display", "block");
+                    $('#upload').attr('src', result); //图片链接（base64）
+                });
+
+            },
+            done: function (res) {
+                if (res.status === 200) {
+                    //上传成功重写加载数据表格
+                    parent.layui.table.reload('baselist', {page: {curr: 1}});
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    parent.layer.msg("上传成功");
+                } else if (res.status === 500) {
+                    layer.msg(res.msg)
+                }
+            },
+            error: function (index, upload) {
+                layer.closeAll('loading');
+                $("#formSubmit").removeAttr('disabled');
+                layer.msg("上传失败！");
+            }
         });
 
+        //支付宝图片上传
+        var uploadInstapliy = upload.render({
+            elem: "#alipay",
+            url: "/baseTrade/uploadImages",
+            accept: 'images',//只允许上传图片
+            acceptMime: 'image/*', //只筛选图片
+            before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+
+                    $("#updateAlipayImage").css("display", "none");
+                    $("#showAlipayImage").css("display", "block");
+                    $('#uploadAlipay').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                alipay = res.data;
+            },
+            error:function (index,upload) {
+                layer.msg("上传失败！");
+            }
+        });
+
+
+        //微信图片上传
+        var uploadInsWechat = upload.render({
+            elem: "#wechatImage",
+            url: "/baseTrade/uploadImages",
+            accept: 'images',//只允许上传图片
+            acceptMime: 'image/*', //只筛选图片
+            before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+
+                    $("#updateWechatImage").css("display", "none");
+                    $("#showWechatImage").css("display", "block");
+                    $('#uploadWechat').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                wechat = res.data;
+            },
+            error:function (index,upload) {
+                layer.msg("上传失败！");
+            }
+        });
+
+
+
+
+        //小图显示
         var uploadInst = upload.render({
             elem: "#uploadImage",
             url: "/baseTrade/uploadImage",
             accept: 'images',//只允许上传图片
             multiple: true,
-            number:4,
+            number:3-imgURL.length,
             acceptMime: 'image/*', //只筛选图片
             before: function(obj){
             //预读本地文件示例，不支持ie8
@@ -184,13 +325,10 @@
         }
         ,done: function(res){
             //上传完毕
-            console.log(res);
-            if(imgURL!=null){
-                imgURL = imgURL+","+res.data;
-            }else {
-                imgURL = res.data;
-            }
-            console.log(imgURL);
+            imgURL.push(res.data);
+
+                uploadInst.render();
+
         },
             error:function (index,upload) {
                 layer.msg("上传失败！");
@@ -199,6 +337,19 @@
 
 
 
+        $.ajax({
+            url:"/baseTrade/smallimage",
+            type:"post",
+            data: {
+                id:$("#id").val()
+            },
+            success:function (res) {
+                console.log(res);
+                if(res.status === 200){
+
+                }
+            }
+        });
 
 
         $.ajax({

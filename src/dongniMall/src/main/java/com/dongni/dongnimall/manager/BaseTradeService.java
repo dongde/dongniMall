@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.manager;
 
 import com.dongni.dongnimall.pojo.BaseStoreDO;
+import com.dongni.dongnimall.vo.BaseStoreVO;
 import com.dongni.dongnimall.vo.PageData;
 
 public interface BaseTradeService {
@@ -38,4 +39,11 @@ public interface BaseTradeService {
      * @param baseStoreDO
      */
     void updateTrade(BaseStoreDO baseStoreDO);
+
+    /**
+     * 查询详情
+     * @param id
+     * @return
+     */
+    BaseStoreVO selectDetails(String id);
 }
