@@ -1,9 +1,11 @@
 package com.dongni.dongnimall.pojo;
 
+import lombok.Data;
 
 /**
  * 底料商城对应实体类
  */
+@Data
 public class BaseStoreDO {
 
 

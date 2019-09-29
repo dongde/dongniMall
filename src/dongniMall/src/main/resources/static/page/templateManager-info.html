@@ -101,7 +101,7 @@
             $("#formSubmit").attr("disabled","disabled");
             if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
                 layer.msg("请选择图片");
-                $("#formSubmit").attr("disabled","disabled");
+                $("#formSubmit").removeAttr("disabled");
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
                 layer.load();
                 $.ajax({
@@ -127,7 +127,7 @@
                             layer.msg(res.msg);
                         }
                     },
-                    error:function (res) {
+                    error:function () {
                         $("#formSubmit").removeAttr("disabled");
                         layer.msg("遇到未知错误！");
                     }
@@ -173,7 +173,7 @@
             },
             done:function (res) {
                 layer.closeAll('loading');
-                $("#formSubmit").attr("disabled","disabled");
+                $("#formSubmit").removeAttr("disabled");
                 if (res.status === 200) {
                     //上传成功重写加载数据表格
                     parent.layui.table.reload('templateList', {page: {curr: 1}});
@@ -181,12 +181,13 @@
                     parent.layer.close(index);
                     layer.msg("上传成功");
                 } else if (res.status === 500) {
+                    $("#formSubmit").removeAttr("disabled");
                     layer.msg(res.msg)
                 }
             },
             error:function (index,upload) {
                 layer.closeAll('loading');
-                $("#formSubmit").attr("disabled","disabled");
+                $("#formSubmit").removeAttr("disabled");
                 layer.msg("上传失败！");
             }
         });

@@ -109,7 +109,7 @@
                         var body = layer.getChildFrame('body', index);
                         body.contents().find("#id").val(obj.data.id);
                         body.contents().find("#templateName").val(obj.data.templateName);
-                        body.contents().find("#templateType").val(obj.data.templateType);
+                        body.contents().find("input[name='templateType'][value='"+obj.data.templateType+"']").attr("checked",true);
                         body.contents().find("#price").val(obj.data.price);
                         body.contents().find("#updateImage").css("display","block");
                         body.contents().find("#updateload").attr("src",obj.data.image);

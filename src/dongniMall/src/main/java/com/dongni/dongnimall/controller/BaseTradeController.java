@@ -44,9 +44,7 @@ public class BaseTradeController {
     //添加和修改底料
     @RequestMapping("add")
     public JsonResult insertTrade(String id,String tradeName, String tradeType, Float price, String tradeURL, String imgURL,String content) {
-        System.out.println("********");
-        System.out.println(id);
-        System.out.println("********");
+
         if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL) || StringUtils.isBlank(content)) {
             return JsonResult.errorMsg("数据不能为空");
         }else {
@@ -54,6 +52,7 @@ public class BaseTradeController {
                 return JsonResult.errorMsg("请输入正确的链接地址");
             }
         }
+
         BaseStoreDO baseStoreDO = new BaseStoreDO();
         baseStoreDO.setPrice(price);
         baseStoreDO.setContent(content);
