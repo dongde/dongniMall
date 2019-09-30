@@ -46,10 +46,14 @@ public class ArticleController {
         List<ActicleDO> list = new ArrayList<>();
         ActicleDO article = articleService.findByID(id);
         List<ActicleDO> lists = articleService.selectAll();
-        int i = lists.indexOf(article);
-        ActicleDO acticleDO = lists.get(i + 1);
+        int index = 0;
+        for(ActicleDO acticleDO:lists){
+            if(acticleDO.getId().equals(article.getId())){
+                index = lists.indexOf(acticleDO);
+            }
+        }
         list.add(article);
-        list.add(acticleDO);
+        list.add(lists.get(index + 1));
         return list;
     }
 
