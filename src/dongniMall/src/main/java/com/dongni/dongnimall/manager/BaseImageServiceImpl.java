@@ -1,10 +1,8 @@
 package com.dongni.dongnimall.manager;
 
-import com.alibaba.fastjson.JSON;
 import com.dongni.dongnimall.dao.BaseImageMapper;
 import com.dongni.dongnimall.pojo.BaseImageDO;
 import com.dongni.dongnimall.vo.JsonResult;
-import com.dongni.dongnimall.vo.PageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -70,6 +70,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<ActicleDO> selectAll() {
+        return articleMapper.selectAll();
+    }
+
+    @Override
     public void insertArticle(ActicleDO acticleDO) {
         articleMapper.insertObject(acticleDO);
     }

@@ -3,6 +3,8 @@ package com.dongni.dongnimall.manager;
 import com.dongni.dongnimall.pojo.ActicleDO;
 import com.dongni.dongnimall.vo.PageData;
 
+import java.util.List;
+
 public interface ArticleService {
     /**
      * 查询所有信息
@@ -10,6 +12,7 @@ public interface ArticleService {
      * @return
      */
     PageData selectAll(Integer page, Integer limit, String title, String source);
+    List<ActicleDO> selectAll();
 
     /**
      * 插入文章

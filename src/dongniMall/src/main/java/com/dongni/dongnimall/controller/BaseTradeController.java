@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,9 +63,10 @@ public class BaseTradeController {
 
     //添加和修改底料
     @RequestMapping("add")
-    public JsonResult insertTrade(String id,String tradeName, String tradeType, Float price, String tradeURL,String content,String[] allID,MultipartFile file,String alipay,String weChat) throws IOException {
-        System.out.println(alipay+"****"+weChat);
-        if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(alipay) || StringUtils.isBlank(weChat)|| StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL) || StringUtils.isBlank(content) || allID.length==0) {
+    public JsonResult insertTrade(String id, String tradeName, @RequestParam(value = "tradeType", required = false)String tradeType, Float price, String tradeURL, String content,
+                                  @RequestParam(value = "allID[]", required = false) String[] allID, String bigImage, String alipay, String weChat) throws IOException {
+
+        if (StringUtils.isBlank(tradeName) || StringUtils.isBlank(alipay) ||StringUtils.isBlank(bigImage)|| StringUtils.isBlank(weChat)|| StringUtils.isBlank(tradeType) || price == null || StringUtils.isBlank(tradeURL) || StringUtils.isBlank(content) || allID==null) {
             return JsonResult.errorMsg("数据不能为空");
         }else {
             if (!tradeURL.matches(REGEX)) {
@@ -80,16 +82,12 @@ public class BaseTradeController {
         baseStoreDO.setTradeType(tradeType);
         baseStoreDO.setTradeURL(tradeURL);
         baseStoreDO.setViewCount(1);
-
+        baseStoreDO.setBigImage(bigImage);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         baseStoreDO.setUpdateTime(dateString);
         if(StringUtils.isBlank(id)){
-            if(file==null){
-                return JsonResult.errorMsg("图片不能为空");
-            }
-            Response response = fileUploadManager.upload(file.getInputStream());
-            baseStoreDO.setBigImage(response.getUrl());
+
             String ids = sid.nextShort();
             for (String imageId : allID) {
                 BaseImageDO baseImageDO = baseImageService.findID(imageId);
@@ -110,6 +108,9 @@ public class BaseTradeController {
 
     @RequestMapping("uploadImage")
     public JsonResult uploadImage(MultipartFile file) throws IOException {
+        if(file==null){
+            return JsonResult.errorMsg("数据不能为空");
+        }
         Response response = fileUploadManager.upload(file.getInputStream());
         String url = response.getUrl();
         String ids = sid.nextShort();
@@ -121,10 +122,11 @@ public class BaseTradeController {
     }
     @RequestMapping("uploadImages")
     public JsonResult uploadImages(MultipartFile file) throws IOException {
+        if(file==null){
+            return JsonResult.errorMsg("数据不能为空");
+        }
         Response response = fileUploadManager.upload(file.getInputStream());
         String url = response.getUrl();
-        System.out.println("###########");
-        System.out.println(url);
         return JsonResult.ok(url);
     }
 

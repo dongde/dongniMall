@@ -17,9 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 新闻资讯管理
@@ -41,6 +39,18 @@ public class ArticleController {
                          @RequestParam(value = "source",required = false) String source){
         return articleService.selectAll(page,limit,title,source);
 
+    }
+
+    @RequestMapping("/details")
+    public List findByID(String id){
+        List<ActicleDO> list = new ArrayList<>();
+        ActicleDO article = articleService.findByID(id);
+        List<ActicleDO> lists = articleService.selectAll();
+        int i = lists.indexOf(article);
+        ActicleDO acticleDO = lists.get(i + 1);
+        list.add(article);
+        list.add(acticleDO);
+        return list;
     }
 
     //添加和修改文章
