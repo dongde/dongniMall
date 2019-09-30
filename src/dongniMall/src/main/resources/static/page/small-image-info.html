@@ -128,13 +128,12 @@
             , done: function (res) {
                 layer.closeAll('loading');
                 $("#upload").removeAttr("disabled");
-                console.log(res);
                 if (res.status === 200) {
                     //上传成功重写加载数据表格
                     parent.layui.table.reload('smallImage-table', {page: {curr: 1}});
                     var index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
-                    if ($("#id").val().trim() != null) {
+                    if ($("#id").val().trim() !== '') {
                         parent.layer.msg("修改成功");
                     } else {
                         parent.layer.msg("上传成功");

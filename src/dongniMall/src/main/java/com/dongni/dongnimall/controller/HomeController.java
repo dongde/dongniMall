@@ -69,12 +69,13 @@ public class HomeController extends BaseController {
                 bannerDO.setCreate_time(new_date);
                 bannerDO.setUrl(url);
                 Integer maxCount = bannerService.queryBannerUsedCount();
-                if (maxCount < MAX_SMALL_IMAGES_COUNT) {
+                System.out.println(maxCount);
+                System.out.println(MAX_BANNER_COUNT);
+                if (maxCount < MAX_BANNER_COUNT) {
                     bannerDO.setIs_used(BannerUsedEnum.USED.getValue());
                 } else {
                     bannerDO.setIs_used(BannerUsedEnum.UNUSED.getValue());
                 }
-                bannerDO.setIs_used(BannerUsedEnum.UNUSED.getValue());
                 bannerService.addBanner(bannerDO);
 
             } else {

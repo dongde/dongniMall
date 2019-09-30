@@ -13,10 +13,6 @@
             max-width: 144px !important;
         }
 
-        .modules {
-            display: inline-block !important;
-            margin-left: 10px;
-        }
     </style>
 </head>
 <body>
@@ -87,6 +83,7 @@
                 , {field: 'url', title: '链接地址', unresize: true, align: 'center'}
                 , {field: 'description', title: '图片说明', unresize: true, align: 'center'}
                 , {field: 'create_time', title: '上传时间', sort: true, unresize: true, align: 'center', width: 200}
+                , {field: 'position', title: '位置序号', sort: true, unresize: true, align: 'center', width: 150}
                 , {
                     field: 'is_used',
                     title: '使用状态',
@@ -224,13 +221,7 @@
                             body.contents().find("#id").val(obj.data.id);
                             body.contents().find("#url").val(obj.data.url);
                             body.contents().find("#description").val(obj.data.description);
-                            var Select = 'dd[lay-value='+obj.data.position+']'; //设置要选择的值 --option的value
-                            body.contents().find("#modules").html('  <option value="1">1</option>\n' +
-                                '                <option value="2">2</option>\n' +
-                                '                <option value="3">3</option>\n' +
-                                '                <option value="4">4</option>');
-                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
-                            console.log(body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select));
+                            body.contents().find("#modules").val(obj.data.position);
                             body.contents().find(".imageBorderForUpdate").removeAttr("hidden");
                             body.contents().find("#imageForUpdate").attr("src",obj.data.smallImage_img);
                         }
