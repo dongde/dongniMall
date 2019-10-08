@@ -30,7 +30,7 @@
     </select>
     <update id="updateTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
         update basestore set tradeName=#{baseStoreDO.tradeName},tradeType=#{baseStoreDO.tradeType},
-        price=#{baseStoreDO.price},tradeURL=#{baseStoreDO.tradeURL},bigimage = #{baseStoreDO.bigImage},updateTime=#{baseStoreDO.updateTime},content=#{baseStoreDO.content}
+        price=#{baseStoreDO.price},tradeURL=#{baseStoreDO.tradeURL},bigimage = #{baseStoreDO.bigImage},updateTime=#{baseStoreDO.updateTime},content=#{baseStoreDO.content},alipay=#{baseStoreDO.Alipay},wechat=#{baseStoreDO.wechat}
         where id = #{baseStoreDO.id}
     </update>
 </mapper>

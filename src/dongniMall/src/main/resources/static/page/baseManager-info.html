@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="../css/public.css" media="all">
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <style>
-        .imageSize{
+        .imageSize {
             height: 150px;
             width: 150px;
         }
@@ -41,7 +41,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">底料名称：</label>
         <div class="layui-input-block">
-            <input type="text" id="tradeName" name="tradeName" lay-verify="tradeName" autocomplete="off" placeholder="请输入底料名称"
+            <input type="text" id="tradeName" name="tradeName" lay-verify="tradeName" autocomplete="off"
+                   placeholder="请输入底料名称"
                    class="layui-input">
         </div>
     </div>
@@ -54,11 +55,11 @@
     </div>
 
 
-
     <div class="layui-form-item">
         <label class="layui-form-label">底料价格:</label>
         <div class="layui-input-inline">
-            <input type="number" name="price" id="price" lay-verify="price" placeholder="单价" autocomplete="off" class="layui-input">
+            <input type="number" name="price" id="price" lay-verify="price" placeholder="单价" autocomplete="off"
+                   class="layui-input">
         </div>
         <div class="layui-form-mid layui-word-aux">单位：元</div>
     </div>
@@ -66,7 +67,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">底料链接：</label>
         <div class="layui-input-block">
-            <input type="text" id="tradeURL" name="tradeURL" lay-verify="baseURL" autocomplete="off" placeholder="请输入底料链接"
+            <input type="text" id="tradeURL" name="tradeURL" lay-verify="baseURL" autocomplete="off"
+                   placeholder="请输入底料链接"
                    class="layui-input">
         </div>
     </div>
@@ -143,15 +145,10 @@
 </form>
 
 
-
 <script>
 
 
-
-
-
-
-    layui.use(['form','upload',"layer", "element"],function () {
+    layui.use(['form', 'upload', "layer", "element"], function () {
         var form = layui.form,
             layer = layui.layer,
             $ = layui.jquery;
@@ -163,43 +160,67 @@
         var wechat = null;
         var bigImage = null;
 
+        var imageID = null;
         $("#formSubmit").on('click', function () {
             $("#formSubmit").attr('disabled', 'disabled');
-            console.log($("input[type='radio']:checked").val());
-            console.log(imgURL);
-                $.ajax({
-                    method: "post",
-                    url: '/baseTrade/add',
-                    data: {
-                        id: $("#id").val().trim(),
-                        tradeName:$("#tradeName").val(),
-                        tradeType: $("input[type='radio']:checked").val(),
-                        price:$("#price").val(),
-                        tradeURL:$("#tradeURL").val(),
-                        content:$("#contents").val(),
-                        alipay:alipay,
-                        weChat:wechat,
-                        bigImage:bigImage,
-                        allID:imgURL
-                    },
-                    success: function (res) {
-                        $("#formSubmit").removeAttr('disabled');
-                        console.log(res);
-                        if (res.status == 200) {
-                            //上传成功重写加载数据表格
-                            parent.layui.table.reload('baselist', {page: {curr: 1}});
-                            var index = parent.layer.getFrameIndex(window.name);
-                            parent.layer.close(index);
-                            parent.layer.msg("上传成功");
-                        } else {
-                            layer.msg(res.msg);
-                        }
-                    },
-                    error: function (res) {
-                        $("#formSubmit").removeAttr('disabled');
-                        layer.msg("遇到未知错误");
+            if(bigImage == null){
+                bigImage = $("#updateload").attr("src");
+            }
+            if(alipay == null){
+                alipay = $("#updateloadAlipay").attr("src");
+            }
+            if(wechat == null){
+                wechat = $("#updateloadWechat").attr("src");
+            }
+            $.ajax({
+                method:"post",
+                url:'/baseTrade/deleteImage',
+                data:{
+                    imageID:imageID
+                },
+                success:function (res) {
+                    if(res.status===200){
+                        $.ajax({
+                            method: "post",
+                            url: '/baseTrade/add',
+                            data: {
+                                id: $("#id").val().trim(),
+                                tradeName: $("#tradeName").val(),
+                                tradeType: $("input[type='radio']:checked").val(),
+                                price: $("#price").val(),
+                                tradeURL: $("#tradeURL").val(),
+                                content: $("#contents").val(),
+                                alipay: alipay,
+                                weChat: wechat,
+                                bigImage: bigImage,
+                                allURL: imgURL
+                            },
+                            success: function (res) {
+                                $("#formSubmit").removeAttr('disabled');
+                                console.log(res);
+                                if (res.status == 200) {
+                                    //上传成功重写加载数据表格
+                                    parent.layui.table.reload('baselist', {page: {curr: 1}});
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    parent.layer.close(index);
+                                    parent.layer.msg("上传成功");
+                                } else {
+                                    layer.msg(res.msg);
+                                }
+                            },
+                            error: function (res) {
+                                $("#formSubmit").removeAttr('disabled');
+                                layer.msg("遇到未知错误");
+                            }
+                        });
                     }
-                })
+                },
+                error: function () {
+                    $("#formSubmit").removeAttr('disabled');
+                    layer.msg("遇到未知错误");
+                }
+            });
+
         });
 
 
@@ -209,7 +230,7 @@
             url: "/baseTrade/uploadImages",
             accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
-            before: function(obj){
+            before: function (obj) {
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
 
@@ -219,11 +240,11 @@
                     $('#upload').attr('src', result); //图片链接（base64）
                 });
             }
-            ,done: function(res){
+            , done: function (res) {
 
                 bigImage = res.data;
             },
-            error:function () {
+            error: function () {
                 layer.msg("上传失败！");
             }
         });
@@ -235,7 +256,7 @@
             url: "/baseTrade/uploadImages",
             accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
-            before: function(obj){
+            before: function (obj) {
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
 
@@ -244,11 +265,11 @@
                     $('#uploadAlipay').attr('src', result); //图片链接（base64）
                 });
             }
-            ,done: function(res){
+            , done: function (res) {
                 alipay = res.data;
 
             },
-            error:function (index,upload) {
+            error: function (index, upload) {
                 layer.msg("上传失败！");
             }
         });
@@ -260,7 +281,7 @@
             url: "/baseTrade/uploadImages",
             accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
-            before: function(obj){
+            before: function (obj) {
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
 
@@ -269,67 +290,81 @@
                     $('#uploadWechat').attr('src', result); //图片链接（base64）
                 });
             }
-            ,done: function(res){
-
+            , done: function (res) {
+                console.log(res.data);
+                console.log("微信图片上传");
                 wechat = res.data;
             },
-            error:function (index,upload) {
+            error: function (index, upload) {
                 layer.msg("上传失败！");
             }
         });
 
-
-
-
-
+        var fileSize = 0;
         //小图显示
         var uploadInst = upload.render({
             elem: "#uploadImage",
             url: "/baseTrade/uploadImage",
             accept: 'images',//只允许上传图片
             multiple: true,
-            number:3-imgURL.length,
+            number: 3 - imgURL.length,
             acceptMime: 'image/*', //只筛选图片
-            before: function(obj){
-            //预读本地文件示例，不支持ie8
-            obj.preview(function(index, file, result){
-                $("#showImage").css("display","block");
-                $('#showImage').append('<img class="layui-upload-images" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img" style="height: 150px;width: 150px;padding-left: 20px">')
-            });
-        }
-        ,done: function(res){
+            before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $("#showImage").css("display", "block");
+                });
+            },
+            choose:function (obj) {
 
-            //上传完毕
-            imgURL.push(res.data);
+            }, done: function (res) {
+                console.log("ceshi")
+                $('#showImage').append(' <div style="display: inline-block">\n' +
+                    '                    <img class="layui-upload-images" src="' + res.data + '"  class="layui-upload-img" style="height: 150px;width: 150px">\n' +
+                    '                    <button type="button" value="' + res.data + '" class="delete">删除</button>\n' +
+                    '                </div>');
+                //上传完毕
+                imgURL.push(res.data);
 
-
-        },
-            error:function (index,upload) {
+            },
+            error: function (index, upload) {
                 layer.msg("上传失败！");
             }
         });
 
+        $("#showImage").on('click','.delete', function () {
 
+            var va = $(this).attr('value');
+            $(this).parent().remove();
+            imgURL.splice($.inArray(va,imgURL),1);
+        });
 
         $.ajax({
-            url:"/baseTrade/smallimage",
-            type:"post",
+            url: "/baseTrade/smallimage",
+            type: "post",
             data: {
-                id:$("#id").val()
+                id: $("#id").val()
             },
-            success:function (res) {
-                console.log(res);
-                if(res.status === 200){
-                    $("#updateImage").css("display","block");
+            success: function (res) {
+                if (res.status === 200) {
+                    $("#updateImage").css("display", "block");
                     $.each(res.data, function (index, item) {
-                        console.log(item);
-                        $("#updateImage").append(' <div style="display: inline-block">\n' +
-                            '                    <img src="'+item+'" style="width: 150px;height: 150px">\n' +
-                            '                    <button>删除</button>\n' +
+                        $("#updateImage").append(' <div id="'+item.id+'" style="display: inline-block">\n' +
+                            '                    <img src="' + item.imageURL + '" style="width: 150px;height: 150px">\n' +
+                            '                    <button type="button" value='+item.id+' class="deleteImage">删除</button>\n' +
                             '                </div>');
+
                     });
                 }
+
+
             }
+        });
+
+        $("#updateImage").on('click','.deleteImage', function () {
+            $(this).parent().remove();
+            imageID = $(this).attr('value');
+
         });
 
 
@@ -344,10 +379,10 @@
                 if (res.code == 0) {
                     var data = res.data;
                     $.each(data, function (index, item) {
-                        if($("#type").val()== item.type){
+                        if ($("#type").val() == item.type) {
                             $("#tradeType").html($("#tradeType").html() + "<input type='radio' name='tradeType' value='" + item.type + "' title='" + item.type + "'checked=\"true\">");
 
-                        }else{
+                        } else {
                             $("#tradeType").html($("#tradeType").html() + "<input type='radio' name='tradeType' value='" + item.type + "' title='" + item.type + "'>");
 
                         }
@@ -360,11 +395,6 @@
         });
 
     });
-
-
-
-
-
 
 
 </script>

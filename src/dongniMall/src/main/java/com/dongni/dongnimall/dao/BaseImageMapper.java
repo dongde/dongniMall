@@ -1,10 +1,7 @@
 package com.dongni.dongnimall.dao;
 
 import com.dongni.dongnimall.pojo.BaseImageDO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +15,7 @@ public interface BaseImageMapper {
     @Select("select id,image_url as imageURL,basestoreID from imageurl_save where basestoreID = #{id}")
     List<BaseImageDO> findByID(@Param("id") String id);
 
-    @Insert("insert into imageurl_save (id,image_url) values (#{baseImageDO.id},#{baseImageDO.imageURL})")
+    @Insert("insert into imageurl_save (id,image_url,basestoreID) values (#{baseImageDO.id},#{baseImageDO.imageURL},#{baseImageDO.baseStoreId})")
     void insert(@Param("baseImageDO") BaseImageDO baseImageDO);
 
     @Select("select id,image_url as imageURL,basestoreID from imageurl_save where image_url=#{url}")
@@ -29,4 +26,7 @@ public interface BaseImageMapper {
 
     @Update("update imageurl_save set basestoreID = #{baseImageDO.baseStoreId} where id = #{baseImageDO.id}")
     void updateMessage(@Param("baseImageDO") BaseImageDO baseImageDO);
+
+    @Delete("delete from imageurl_save where id = #{id}")
+    void deleteByID(@Param("id") String id);
 }

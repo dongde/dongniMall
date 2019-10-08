@@ -168,8 +168,7 @@
                     content: '/page/baseManager-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
-                        console.log("8*********");
-                        console.log(obj.data.alipay);
+
 
                         body.contents().find("#id").val(obj.data.id);
                         body.contents().find("#tradeName").val(obj.data.tradeName);

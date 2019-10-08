@@ -17,4 +17,6 @@ public interface BaseImageService {
     BaseImageDO findID(String imageId);
 
     void updateMessage(BaseImageDO baseImageDO);
+
+    JsonResult deleteByID(String[] ids);
 }

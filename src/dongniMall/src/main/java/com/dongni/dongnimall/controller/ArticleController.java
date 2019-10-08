@@ -41,6 +41,7 @@ public class ArticleController {
 
     }
 
+    //详情
     @RequestMapping("/details")
     public List findByID(String id){
         List<ActicleDO> list = new ArrayList<>();
@@ -53,7 +54,9 @@ public class ArticleController {
             }
         }
         list.add(article);
-        list.add(lists.get(index + 1));
+        if(index < lists.size()-1){
+            list.add(lists.get(index + 1));
+        }
         return list;
     }
 

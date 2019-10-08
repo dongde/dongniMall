@@ -6,7 +6,6 @@ import com.dongni.dongnimall.vo.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,11 +17,11 @@ public class BaseImageServiceImpl implements BaseImageService {
     @Override
     public JsonResult findAllbyID(String id) {
         List<BaseImageDO> baseImageDOS = baseImageMapper.findByID(id);
-        List<String> lists = new ArrayList<>();
-        for (BaseImageDO baseImageDO : baseImageDOS) {
-            lists.add(baseImageDO.getImageURL());
-        }
-       return JsonResult.ok(lists);
+//        List<String> lists = new ArrayList<>();
+//        for (BaseImageDO baseImageDO : baseImageDOS) {
+//            lists.add(baseImageDO.getImageURL());
+//        }
+       return JsonResult.ok(baseImageDOS);
     }
 
     @Override
@@ -43,5 +42,13 @@ public class BaseImageServiceImpl implements BaseImageService {
     @Override
     public void updateMessage(BaseImageDO baseImageDO) {
         baseImageMapper.updateMessage(baseImageDO);
+    }
+
+    @Override
+    public JsonResult deleteByID(String[] ids) {
+        for (String id : ids) {
+            baseImageMapper.deleteByID(id);
+        }
+        return JsonResult.ok();
     }
 }
