@@ -80,7 +80,7 @@
                         oldPassword: oldPassword,
                         newPassword: newPassword
                     },
-                    url: "/user/modifyUser",
+                    url: "/user/modifyUserPassword",
                     success: function (res) {
                         $("#submit").removeAttr("disabled");
                         if (res.status === 200) {

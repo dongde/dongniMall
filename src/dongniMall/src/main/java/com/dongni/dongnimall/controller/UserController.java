@@ -8,18 +8,14 @@ import com.dongni.dongnimall.pojo.ManagerDO;
 import com.dongni.dongnimall.pojo.UserDO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
-import org.apache.catalina.User;
 import org.n3r.idworker.Sid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author cengshuai on 2019-09-09.
@@ -119,7 +115,7 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping("/queryUserList")
-    public PageData queryUserList(Integer page, Integer limit,@RequestParam(value = "phone",required = false) String phone, @RequestParam(value = "name",required = false) String name) {
+    public PageData queryUserList(Integer page, Integer limit, @RequestParam(value = "phone", required = false) String phone, @RequestParam(value = "name", required = false) String name) {
         return userService.queryUserList(page, limit, phone, name);
     }
 
@@ -141,24 +137,21 @@ public class UserController extends BaseController {
         return JsonResult.ok();
     }
 
-    @RequestMapping("/modifyUser")
-    public JsonResult modifyUser(String phone, String oldPassword, String newPassword, String name, String gender, String email, String address, String postal_code) {
+    @PostMapping(value = "/modifyUserInfo", produces = "application/json;charset=UTF-8")
+    public JsonResult modifyUserInfo(@RequestBody UserDO userDO) {
+        if (StringUtils.isBlank(userDO.getPhone())) {
+            return JsonResult.errorMsg("修改错误");
+        }
+        userService.modifyUser(userDO);
+        return JsonResult.ok();
+    }
+
+    @PostMapping(value = "/modifyUserPassword", produces = "application/json;charset=UTF-8")
+    public JsonResult modifyUserPassword(String phone, String oldPassword, String newPassword) {
         if (StringUtils.isBlank(phone)) {
             return JsonResult.errorMsg("修改错误");
         } else {
             UserDO userDO = new UserDO();
-            userDO.setPhone(phone);
-            userDO.setName(name);
-            if (StringUtils.isNotBlank(gender)) {
-                if (gender.equals("男")) {
-                    userDO.setGender(0);
-                } else if (gender.equals("女")) {
-                    userDO.setGender(1);
-                }
-            }
-            userDO.setAddress(address);
-            userDO.setEmail(email);
-            userDO.setPostal_code(postal_code);
             if (StringUtils.isNotBlank(oldPassword) && StringUtils.isNotBlank(newPassword)) {
                 if (userService.queryUserByPhoneAndPassword(phone, MD5Util.getMD5(oldPassword)) != null) {
                     userDO.setPassword(MD5Util.getMD5(newPassword));
