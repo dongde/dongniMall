@@ -300,14 +300,14 @@
             }
         });
 
-        var fileSize = 0;
+        var fileSize = 0;//
+        var maxFileSize = 3;//最大选择文件数量
         //小图显示
         var uploadInst = upload.render({
             elem: "#uploadImage",
             url: "/baseTrade/uploadImage",
             accept: 'images',//只允许上传图片
             multiple: true,
-            number: 3 - imgURL.length,
             acceptMime: 'image/*', //只筛选图片
             before: function (obj) {
                 //预读本地文件示例，不支持ie8
@@ -316,9 +316,18 @@
                 });
             },
             choose:function (obj) {
-
-            }, done: function (res) {
+                var files = this.files = obj.pushFile();
+                obj.preview(function(index, file, result) {
+                    fileSize+=1;
+                    if(fileSize>maxFileSize){
+                        layer.msg("不能超过3张");
+                        delete files[index];
+                        return;
+                    }
+                });
+            }, done: function (res, index, upload) {
                 console.log("ceshi")
+                delete this.files[index];
                 $('#showImage').append(' <div style="display: inline-block">\n' +
                     '                    <img class="layui-upload-images" src="' + res.data + '"  class="layui-upload-img" style="height: 150px;width: 150px">\n' +
                     '                    <button type="button" value="' + res.data + '" class="delete">删除</button>\n' +
