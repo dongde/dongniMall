@@ -125,7 +125,7 @@
                         content: '/page/user-info.html',//iframe的url，no代表不显示滚动条
                         success: function (layero, index) {
                             var body = layer.getChildFrame('body', index);
-                            body.contents().find("#phone").val(obj.data.phone);
+                            body.contents().find("#phone").text(obj.data.phone);
                         }
                     });
                     break;

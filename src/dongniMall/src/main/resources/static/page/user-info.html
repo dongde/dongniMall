@@ -18,8 +18,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">账号：</label>
         <div class="layui-input-block">
-            <input type="text" id="phone" name="phone" lay-verify="phone" readonly="readonly"
-                   class="layui-input">
+            <span id="phone" name="phone" style="display: block;padding-top: 10px"></span>
         </div>
     </div>
     <div class="layui-form-item" id="isHidden">
@@ -60,7 +59,7 @@
     layui.use('form', function () {
         $("#submit").on('click', function () {
             $("#submit").attr("disabled","disabled");
-            var phone = $("input[name='phone']").val().trim();
+            var phone = $("#phone").text();
             var oldPassword = $("input[name='oldPassword']").val().trim();
             var newPassword = $("input[name='newPassword']").val().trim();
             var againPassword = $("input[name='againPassword']").val().trim();
