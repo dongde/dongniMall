@@ -14,7 +14,7 @@
         <include refid="leave_message_col"></include>
         from leave_message
         where 1=1
-        <if test="recipient_id!=null or recipient_id!=''">
+        <if test="recipient_id!=null and recipient_id!=''">
             and recipient_id=#{recipient_id} and verify=1
         </if>
         order by create_time desc

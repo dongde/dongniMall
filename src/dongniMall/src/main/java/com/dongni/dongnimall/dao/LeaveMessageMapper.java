@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Repository
 public interface LeaveMessageMapper {
-    void insertLeaveMessage(LeaveMessageDO leaveMessageDO);
+    void insertLeaveMessage(@Param("leaveMessageDO") LeaveMessageDO leaveMessageDO);
 
     List<LeaveMessageDO> selectLeaveMessageList(String recipient_id);
 

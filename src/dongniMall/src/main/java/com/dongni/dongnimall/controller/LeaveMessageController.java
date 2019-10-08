@@ -1,5 +1,6 @@
 package com.dongni.dongnimall.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dongni.dongnimall.manager.LeaveMessageService;
 import com.dongni.dongnimall.pojo.LeaveMessageDO;
 import com.dongni.dongnimall.vo.JsonResult;
@@ -7,9 +8,7 @@ import com.dongni.dongnimall.vo.PageData;
 import org.n3r.idworker.Sid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,9 +26,11 @@ public class LeaveMessageController {
     @Autowired
     private LeaveMessageService leaveMessageService;
 
-    @RequestMapping("/addLeaveMessage")
-    public JsonResult addLeaveMessage(String content, String user_id, String recipient_id) {
-        System.out.println("222222");
+    @PostMapping("/addLeaveMessage")
+    public JsonResult addLeaveMessage(@RequestBody JSONObject jsonObject) {
+        String content = jsonObject.getString("content");
+        String user_id = jsonObject.getString("user_id");
+        String recipient_id = jsonObject.getString("recipient_id");
         if (StringUtils.isBlank(user_id) || StringUtils.isBlank(recipient_id)) {
             return JsonResult.errorMsg("留言出错");
         }
@@ -54,7 +55,6 @@ public class LeaveMessageController {
     public PageData queryLeaveMessageList(@RequestParam(value = "recipient_id", required = false) String recipient_id, Integer page, Integer limit) {
         return leaveMessageService.queryLeaveMessageList(recipient_id,page, limit);
     }
-
 
     @RequestMapping("/removeLeaveMessage")
     public JsonResult removeLeaveMessage(String id) {
