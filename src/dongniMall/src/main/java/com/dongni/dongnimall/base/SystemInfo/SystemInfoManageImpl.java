@@ -31,7 +31,7 @@ public class SystemInfoManageImpl implements SystemInfoManager {
         for (int i = 0; i < infos.length; i++) {
             CpuInfo info = infos[i];
             CpuDO cpuDO = new CpuDO();
-            cpuDO.setCpuNumber(i+1);
+            cpuDO.setCpuNumber(i + 1);
             cpuDO.setCpuMhz(info.getMhz());
             cpuDO.setCpuVendor(info.getVendor());
             cpuDO.setCpuModel(info.getModel());
@@ -48,18 +48,18 @@ public class SystemInfoManageImpl implements SystemInfoManager {
 
         //获取内存信息
         Mem mem = sigar.getMem();
-        systemInfoDO.setMemoryTotal(mem.getTotal() / 1024L);
-        systemInfoDO.setMemoryUsed(mem.getUsed() / 1024L);
-        systemInfoDO.setMemoryFree(mem.getFree() / 1024L);
+        systemInfoDO.setMemoryTotal(mem.getTotal() / 1024L / 1024L);
+        systemInfoDO.setMemoryUsed(mem.getUsed() / 1024L / 1024L);
+        systemInfoDO.setMemoryFree(mem.getFree() / 1024L / 1024L);
         Swap swap = sigar.getSwap();
-        systemInfoDO.setSwapTotal(swap.getTotal() / 1024L);
-        systemInfoDO.setSwapUsed(swap.getUsed() / 1024L);
-        systemInfoDO.setSwapFree(swap.getFree() / 1024L);
+        systemInfoDO.setSwapTotal(swap.getTotal() / 1024L / 1024L);
+        systemInfoDO.setSwapUsed(swap.getUsed() / 1024L / 1024L);
+        systemInfoDO.setSwapFree(swap.getFree() / 1024L / 1024L);
 
         //获取磁盘信息
         FileSystem[] fslist = sigar.getFileSystemList();
         List<DiskDO> list1 = new ArrayList<>();
-        for ( FileSystem fs:fslist) {
+        for (FileSystem fs : fslist) {
             DiskDO diskDO = new DiskDO();
 
             diskDO.setDevName(fs.getDevName());
@@ -70,10 +70,10 @@ public class SystemInfoManageImpl implements SystemInfoManager {
             diskDO.setType(fs.getType());
 
             FileSystemUsage usage = sigar.getFileSystemUsage(fs.getDirName());
-            diskDO.setUsageTotal(usage.getTotal());
-            diskDO.setUsageFree(usage.getFree());
-            diskDO.setUsageAvail(usage.getAvail());
-            diskDO.setUsageUsed(usage.getUsed());
+            diskDO.setUsageTotal(usage.getTotal() / 1024L);
+            diskDO.setUsageFree(usage.getFree() / 1024L);
+            diskDO.setUsageAvail(usage.getAvail() / 1024L);
+            diskDO.setUsageUsed(usage.getUsed() / 1024L);
             diskDO.setUsePercent(usage.getUsePercent() * 100D);
 
             list1.add(diskDO);
@@ -83,8 +83,8 @@ public class SystemInfoManageImpl implements SystemInfoManager {
         //获取jvm信息
         Runtime r = Runtime.getRuntime();
         Properties props = System.getProperties();
-        systemInfoDO.setTotalMemory(r.totalMemory());
-        systemInfoDO.setFreeMemory(r.freeMemory());
+        systemInfoDO.setTotalMemory(r.totalMemory() / 1024L);
+        systemInfoDO.setFreeMemory(r.freeMemory() / 1024L);
         systemInfoDO.setAvailableProcessors(r.availableProcessors());
         systemInfoDO.setVersion(props.getProperty("java.version"));
         systemInfoDO.setHome(props.getProperty("java.home"));
