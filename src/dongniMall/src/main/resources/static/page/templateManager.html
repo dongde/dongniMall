@@ -147,7 +147,8 @@
             }
             $.ajax({
                 url:"/template/delete",
-                data:{id:id},
+                data:{
+                    id:id},
                 success:function (res) {
                     if(res.status == 200){
                         layer.msg("删除成功！");
@@ -168,6 +169,8 @@
                 area: ['80%','80%'],
                 title: "添加模板",
                 type: 2,
+                shadeClose: true,
+                shade: 0.8,
                 id:"",
                 content: ['/page/templateManager-info.html'],
                 success: function(res){

@@ -98,12 +98,13 @@
         upload = layui.upload;
 
         $("#formSubmit").on('click',function () {
+            layer.load();
             $("#formSubmit").attr("disabled","disabled");
             if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
+                layer.closeAll('loading');
                 layer.msg("请选择图片");
                 $("#formSubmit").removeAttr("disabled");
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
-                layer.load();
                 $.ajax({
                     method:"post",
                     url:'/template/add',
@@ -116,6 +117,7 @@
                         description:$("#description").val().trim()
                     },
                     success:function (res) {
+                        layer.closeAll('loading');
                         $("#formSubmit").removeAttr("disabled");
                         if(res.status==200){
                             //上传成功重写加载数据表格
@@ -128,6 +130,7 @@
                         }
                     },
                     error:function () {
+                        layer.closeAll('loading');
                         $("#formSubmit").removeAttr("disabled");
                         layer.msg("遇到未知错误！");
                     }

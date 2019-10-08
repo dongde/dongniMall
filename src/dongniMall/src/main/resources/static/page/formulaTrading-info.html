@@ -111,13 +111,13 @@
 
 
         $("#formSubmit").on('click',function () {
-
+            layer.load();
             $("#formSubmit").attr("disabled","disabled");
             if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
+                layer.closeAll('loading');
                 layer.msg("请选择图片");
                 $("#formSubmit").removeAttr("disabled");
             }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
-                layer.load();
                 $.ajax({
                     method:"post",
                     url:'/formula/add',
@@ -132,6 +132,7 @@
                         file: $("#updateload").file
                     },
                     success:function (res) {
+                        layer.closeAll('loading');
                         $("#formSubmit").removeAttr("disabled");
                         if(res.status==200){
                             //上传成功重写加载数据表格
@@ -145,6 +146,7 @@
                         }
                     },
                     error:function (res) {
+                        layer.closeAll('loading');
                         $("#formSubmit").removeAttr("disabled");
                         layer.msg("上传失败！");
                     }
@@ -194,6 +196,7 @@
 
             },
             done:function (res) {
+                layer.closeAll('loading');
                 $("#formSubmit").removeAttr("disabled");
                 if (res.status === 200) {
                     //上传成功重写加载数据表格
@@ -204,9 +207,8 @@
                 } else if (res.status === 500) {
                     layer.msg(res.msg)
                 }
-                layer.closeAll('loading');
             },
-            error:function (index,upload) {
+            error:function () {
                 layer.closeAll('loading');
                 $("#formSubmit").removeAttr("disabled");
                 layer.msg("上传失败！");

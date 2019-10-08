@@ -127,6 +127,8 @@
         //添加新闻事件
         add = function(){
             layer.open({
+                shadeClose: true,
+                shade: 0.8,
                 area: ['80%','80%'],
                 title: "添加文章",
                 type: 2,
@@ -135,7 +137,7 @@
                 success: function(res){
                     if(res.status == 200){
                         layer.msg("添加成功！");
-                        table.reload('userList', {
+                        table.reload('testReload', {
                             page: {
                                 curr: 1
                                 //重新从第 1 页开始
@@ -160,7 +162,7 @@
                     console.log(res.status);
                     if(res.status == 200){
                         layer.msg("删除成功！");
-                        table.reload('userList', {
+                        table.reload('testReload', {
                             page: {
                                 curr: 1
                                 //重新从第 1 页开始

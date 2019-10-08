@@ -61,6 +61,13 @@ public class TemplateServiceImpl implements TemplateService {
         }else if(!StringUtils.isBlank(templateName) && !StringUtils.isBlank(templateType)){
             List<TemplateDO> lists = new ArrayList<>();
             TemplateDO templateDO = templateMapper.findByNameAndType(templateName, templateType);
+            if(templateDO == null){
+                pageData.setCode(0);
+                pageData.setCount(1);
+                pageData.setMsg("");
+                pageData.setData(null);
+                return pageData;
+            }
             lists.add(templateDO);
             pageData.setCode(0);
             pageData.setCount(1);
