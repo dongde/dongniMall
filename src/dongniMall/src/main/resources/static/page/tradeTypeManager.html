@@ -17,24 +17,20 @@
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
     <script src="../js/lay-config.js" charset="utf-8"></script>
-    <style>
-        .addType{
-            padding-top: 20px;
-            padding-left: 5px;
-        }
-    </style>
+
 </head>
+<script type="text/html" id="toolbar">
+
+    <button lay-event="addTradeType" class="layui-btn layui-btn-sm top-btn" id="addTradeType">添加底料</button>
+
+</script>
 <body>
 
-<div class="addType">
-    <button type="button" class="layui-btn" id="addTrade">添加类型</button>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <table class="layui-hide" id="tradeType" lay-filter="tradeType"></table>
+    </div>
 </div>
-<div>
-    <table id="tradeType" lay-filter="tradeType" style="margin-top:1px;"></table>
-
-</div>
-
-
 
 
 <script type="text/html" id="operation">
@@ -49,6 +45,34 @@
                 $ = layui.jquery;
 
 
+
+            //头工具栏事件
+            table.on('toolbar(tradeType)', function (obj) {
+                switch (obj.event) {
+                    case 'addTradeType':
+                        layer.open({
+                            area: ['50%','50%'],
+                            title: "添加模板",
+                            type: 2,
+                            id:"",
+                            content: ['/page/tradeTypeManager-info.html'],
+                            success: function(res){
+                                if(res.status == 200){
+                                    layer.msg("添加成功！");
+                                    table.reload('tradeType', {
+                                        page: {
+                                            curr: 1
+                                            //重新从第 1 页开始
+                                        }
+                                    });
+
+                                }
+
+                            }
+                        });
+                        break;
+                }
+            });
 
             table.on('tool(tradeType)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data; //获得当前行数据
@@ -86,36 +110,15 @@
                     }
                 })
             }
-            $("#addTrade").on('click',function () {
-                layer.open({
-                    area: ['50%','50%'],
-                    title: "添加模板",
-                    type: 2,
-                    id:"",
-                    content: ['/page/tradeTypeManager-info.html'],
-                    success: function(res){
-                        if(res.status == 200){
-                            layer.msg("添加成功！");
-                            table.reload('tradeType', {
-                                page: {
-                                    curr: 1
-                                    //重新从第 1 页开始
-                                }
-                            });
-
-                        }
-
-                    }
-                });
-            });
 
 
             table.render({
                 elem:'#tradeType'
                 ,url:"/baseTradeType/list"
                 ,cellMinWidth: 100
+                ,toolbar:"#toolbar"
                 ,page:true
-                ,height:"full-160"
+                ,height:"full-200"
                 ,cols:[[
                     {field: 'type', title: '底料类型',align:"center"}
                     ,{field: 'updateTime', title: '更新时间',align:"center"}

@@ -22,13 +22,15 @@
             height: 150px;
             width: 150px;
         }
-        .deleteImage{
+
+        .deleteImage {
             margin-top: 2px;
             line-height: 20px;
             padding: 0 61px;
             height: 20px;
         }
-        .delete{
+
+        .delete {
             margin-top: 2px;
             line-height: 20px;
             padding: 0 61px;
@@ -103,10 +105,12 @@
         <div class="layui-input-block">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="uploadImage">上传图片</button>
             <i style="font-size: 10px;color: gray;">建议尺寸214*143</i>
-            <div class="layui-upload-list" id="showImage" style="display: none">
-            </div>
-            <div class="layui-upload-list" id="updateImage" style="display: none">
+            <div>
+                <div class="layui-upload-list" id="showImage" style="display: none;">
+                </div>
+                <div class="layui-upload-list" id="updateImage" style="display: none">
 
+                </div>
             </div>
         </div>
     </div>
@@ -339,25 +343,19 @@
             multiple: true,
             number: 3,
             acceptMime: 'image/*', //只筛选图片
-            choose:function(){
-                //清空原来的图片
-                // $("#showImage").html("");
-                // imgURL = [];
-            },
-            before: function(obj){
-                console.log(fileCount);
-                if(obj.getLength()+fileCount > 3){
-                    layer.msg("图片数量不能超过3");
+            before: function (obj) {
+                if (obj.getLength() + fileCount > 3) {
+                    layer.msg("图片数量不能超过3张");
                     return false;
                 }
-                fileCount+=obj.getLength();
+                fileCount += obj.getLength();
                 //显示加载
                 layer.load();
             },
             done: function (res, index, upload) {
                 var div = $("#showImage");
                 if (res.status === 200) {
-                    div.css("display", "block");
+                    div.css("display", "inline-block");
                     div.append(' <div style="display: inline-block">\n' +
                         '                    <img class="layui-upload-images" src="' + res.data + '"  class="layui-upload-img layui-btn layui-btn-danger" style="height: 150px;width: 150px;display: block">\n' +
                         '                    <button type="button" value="' + res.data + '" class="delete layui-btn layui-btn-danger">删除</button>\n' +
@@ -376,13 +374,14 @@
         });
 
         $("#showImage").on('click', '.delete', function () {
-            fileCount-=1;
+            fileCount -= 1;
             var va = $(this).attr('value');
             $(this).parent().remove();
             imgURL.splice($.inArray(va, imgURL), 1);
         });
 
-        if($("#id").val()){
+        //小图片回显
+        if ($("#id").val()) {
             $.ajax({
                 url: "/baseTrade/smallimage",
                 type: "post",
@@ -391,8 +390,8 @@
                 },
                 success: function (res) {
                     if (res.status === 200) {
-                        fileCount=3;
-                        $("#updateImage").css("display", "block");
+                        fileCount = 3;
+                        $("#updateImage").css("display", "inline-block");
                         $.each(res.data, function (index, item) {
                             $("#updateImage").append(' <div id="' + item.id + '" style="display: inline-block">\n' +
                                 '                    <img src="' + item.imageURL + '" style="width: 150px;height: 150px;display: block">\n' +
@@ -406,7 +405,7 @@
         }
 
         $("#updateImage").on('click', '.deleteImage', function () {
-            fileCount-=1;
+            fileCount -= 1;
             $(this).parent().remove();
             imageID.push($(this).attr('value'));
         });

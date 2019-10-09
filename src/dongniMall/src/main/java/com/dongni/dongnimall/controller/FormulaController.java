@@ -51,7 +51,6 @@ public class FormulaController {
     @RequestMapping("add")
     public JsonResult insertformula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAdress,String alipay,String wechat,String bigPicture,
                                     @RequestParam(value = "allURL[]", required = false) String[] allURL) throws IOException {
-        System.out.println(id+"**"+formulaName+"**"+formulaDescription+"**"+formulaPrice+"**"+alipay+"**"+allURL+"**"+bigPicture);
         if(StringUtils.isBlank(formulaName)){
             return JsonResult.errorMsg("配方名称不能为空");
         }
