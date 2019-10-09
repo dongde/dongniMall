@@ -22,8 +22,18 @@
             height: 150px;
             width: 150px;
         }
-
-
+        .deleteImage{
+            margin-top: 2px;
+            line-height: 20px;
+            padding: 0 61px;
+            height: 20px;
+        }
+        .delete{
+            margin-top: 2px;
+            line-height: 20px;
+            padding: 0 61px;
+            height: 20px;
+        }
     </style>
 
 </head>
@@ -146,8 +156,6 @@
 
 
 <script>
-
-
     layui.use(['form', 'upload', "layer", "element"], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -159,27 +167,51 @@
         var alipay = null;
         var wechat = null;
         var bigImage = null;
-
         var imageID = null;
+
+        $.ajax({
+            url: "/baseTradeType/list",
+            method: 'POST',
+            data: {
+                page: 1,
+                limit: 10
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    var data = res.data;
+                    $.each(data, function (index, item) {
+                        if ($("#type").val() == item.type) {
+                            $("#tradeType").html($("#tradeType").html() + "<input type='radio' name='tradeType' value='" + item.type + "' title='" + item.type + "'checked=\"true\">");
+
+                        } else {
+                            $("#tradeType").html($("#tradeType").html() + "<input type='radio' name='tradeType' value='" + item.type + "' title='" + item.type + "'>");
+                        }
+
+                    });
+                    form.render();
+                }
+            }
+        });
+
         $("#formSubmit").on('click', function () {
             $("#formSubmit").attr('disabled', 'disabled');
-            if(bigImage == null){
+            if (bigImage == null) {
                 bigImage = $("#updateload").attr("src");
             }
-            if(alipay == null){
+            if (alipay == null) {
                 alipay = $("#updateloadAlipay").attr("src");
             }
-            if(wechat == null){
+            if (wechat == null) {
                 wechat = $("#updateloadWechat").attr("src");
             }
             $.ajax({
-                method:"post",
-                url:'/baseTrade/deleteImage',
-                data:{
-                    imageID:imageID
+                method: "post",
+                url: '/baseTrade/deleteImage',
+                data: {
+                    imageID: imageID
                 },
-                success:function (res) {
-                    if(res.status===200){
+                success: function (res) {
+                    if (res.status === 200) {
                         $.ajax({
                             method: "post",
                             url: '/baseTrade/add',
@@ -231,20 +263,21 @@
             accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
             before: function (obj) {
+                //显示加载
+                layer.load();
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
-
-                    console.log(result);
                     $("#updateBigImage").css("display", "none");
                     $("#showBigImage").css("display", "block");
                     $('#upload').attr('src', result); //图片链接（base64）
                 });
             }
             , done: function (res) {
-
+                layer.closeAll("loading");
                 bigImage = res.data;
             },
             error: function () {
+                layer.closeAll("loading");
                 layer.msg("上传失败！");
             }
         });
@@ -257,9 +290,10 @@
             accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
             before: function (obj) {
+                //显示加载
+                layer.load();
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
-
                     $("#updateAlipayImage").css("display", "none");
                     $("#showAlipayImage").css("display", "block");
                     $('#uploadAlipay').attr('src', result); //图片链接（base64）
@@ -267,9 +301,10 @@
             }
             , done: function (res) {
                 alipay = res.data;
-
+                layer.closeAll("loading");
             },
             error: function (index, upload) {
+                layer.closeAll("loading");
                 layer.msg("上传失败！");
             }
         });
@@ -282,70 +317,68 @@
             accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
             before: function (obj) {
+                //显示加载
+                layer.load();
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
-
                     $("#updateWechatImage").css("display", "none");
                     $("#showWechatImage").css("display", "block");
                     $('#uploadWechat').attr('src', result); //图片链接（base64）
                 });
             }
             , done: function (res) {
-                console.log(res.data);
-                console.log("微信图片上传");
+                layer.closeAll("loading");
                 wechat = res.data;
             },
             error: function (index, upload) {
+                layer.closeAll("loading");
                 layer.msg("上传失败！");
             }
         });
 
-        var fileSize = 0;//
-        var maxFileSize = 3;//最大选择文件数量
         //小图显示
         var uploadInst = upload.render({
             elem: "#uploadImage",
             url: "/baseTrade/uploadImage",
             accept: 'images',//只允许上传图片
             multiple: true,
+            number: 3,
             acceptMime: 'image/*', //只筛选图片
-            before: function (obj) {
-                //预读本地文件示例，不支持ie8
-                obj.preview(function (index, file, result) {
-                    $("#showImage").css("display", "block");
-                });
+            choose:function(){
+                //清空原来的图片
+                $("#showImage").html("");
+                imgURL = [];
             },
-            choose:function (obj) {
-                var files = this.files = obj.pushFile();
-                obj.preview(function(index, file, result) {
-                    fileSize+=1;
-                    if(fileSize>maxFileSize){
-                        layer.msg("不能超过3张");
-                        delete files[index];
-                        return;
-                    }
-                });
-            }, done: function (res, index, upload) {
-                console.log("ceshi")
-                delete this.files[index];
-                $('#showImage').append(' <div style="display: inline-block">\n' +
-                    '                    <img class="layui-upload-images" src="' + res.data + '"  class="layui-upload-img" style="height: 150px;width: 150px">\n' +
-                    '                    <button type="button" value="' + res.data + '" class="delete">删除</button>\n' +
-                    '                </div>');
-                //上传完毕
-                imgURL.push(res.data);
-
+            before: function(){
+                //显示加载
+                layer.load();
+            },
+            done: function (res, index, upload) {
+                var div = $("#showImage");
+                if (res.status === 200) {
+                    div.css("display", "block");
+                    div.append(' <div style="display: inline-block">\n' +
+                        '                    <img class="layui-upload-images" src="' + res.data + '"  class="layui-upload-img layui-btn layui-btn-danger" style="height: 150px;width: 150px;display: block">\n' +
+                        '                    <button type="button" value="' + res.data + '" class="delete layui-btn layui-btn-danger">删除</button>\n' +
+                        '                </div>');
+                    //上传完毕
+                    imgURL.push(res.data);
+                } else {
+                    layer.msg(res.msg);
+                }
+                layer.closeAll("loading");
             },
             error: function (index, upload) {
                 layer.msg("上传失败！");
+                layer.closeAll("loading");
             }
         });
 
-        $("#showImage").on('click','.delete', function () {
+        $("#showImage").on('click', '.delete', function () {
 
             var va = $(this).attr('value');
             $(this).parent().remove();
-            imgURL.splice($.inArray(va,imgURL),1);
+            imgURL.splice($.inArray(va, imgURL), 1);
         });
 
         $.ajax({
@@ -358,53 +391,22 @@
                 if (res.status === 200) {
                     $("#updateImage").css("display", "block");
                     $.each(res.data, function (index, item) {
-                        $("#updateImage").append(' <div id="'+item.id+'" style="display: inline-block">\n' +
-                            '                    <img src="' + item.imageURL + '" style="width: 150px;height: 150px">\n' +
-                            '                    <button type="button" value='+item.id+' class="deleteImage">删除</button>\n' +
+                        $("#updateImage").append(' <div id="' + item.id + '" style="display: inline-block">\n' +
+                            '                    <img src="' + item.imageURL + '" style="width: 150px;height: 150px;display: block">\n' +
+                            '                    <button type="button" value=' + item.id + ' class="deleteImage layui-btn layui-btn-danger">删除</button>\n' +
                             '                </div>');
 
                     });
                 }
-
-
             }
         });
 
-        $("#updateImage").on('click','.deleteImage', function () {
+        $("#updateImage").on('click', '.deleteImage', function () {
             $(this).parent().remove();
             imageID = $(this).attr('value');
-
-        });
-
-
-        $.ajax({
-            url: "/baseTradeType/list",
-            method: 'POST',
-            data: {
-                page: 1,
-                limit: 10
-            },
-            success: function (res) {
-                if (res.code == 0) {
-                    var data = res.data;
-                    $.each(data, function (index, item) {
-                        if ($("#type").val() == item.type) {
-                            $("#tradeType").html($("#tradeType").html() + "<input type='radio' name='tradeType' value='" + item.type + "' title='" + item.type + "'checked=\"true\">");
-
-                        } else {
-                            $("#tradeType").html($("#tradeType").html() + "<input type='radio' name='tradeType' value='" + item.type + "' title='" + item.type + "'>");
-
-                        }
-
-                    });
-                    form.render();
-                }
-
-            }
         });
 
     });
-
 
 </script>
 </body>
