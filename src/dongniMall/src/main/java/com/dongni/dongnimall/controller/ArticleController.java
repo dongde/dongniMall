@@ -67,6 +67,20 @@ public class ArticleController {
             return JsonResult.errorMsg("数据不能为空");
         }
 
+
+        if(StringUtils.isBlank(title)){
+            return JsonResult.errorMsg("标题不能为空");
+        }
+        if(StringUtils.isBlank(source)){
+            return JsonResult.errorMsg("来源不能为空");
+        }
+        if(StringUtils.isBlank(summary)){
+            return JsonResult.errorMsg("摘要不能为空");
+        }
+        if(StringUtils.isBlank(content)){
+            return JsonResult.errorMsg("内容不能为空");
+        }
+
         ActicleDO acticleDO = articleService.findByID(id);
         boolean exist = acticleDO != null;
         if (!exist) {

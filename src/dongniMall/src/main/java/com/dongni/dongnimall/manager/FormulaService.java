@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.manager;
 
 import com.dongni.dongnimall.pojo.FormulaDO;
+import com.dongni.dongnimall.vo.FormulaVO;
 import com.dongni.dongnimall.vo.PageData;
 
 public interface FormulaService {
@@ -39,4 +40,11 @@ public interface FormulaService {
      * @return
      */
     FormulaDO selectByID(String id);
+
+    /**
+     * 通过id查询单条信息详情
+     * @param id
+     * @return
+     */
+    FormulaVO selectDetails(String id);
 }

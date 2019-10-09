@@ -19,16 +19,19 @@
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
 
     <style>
-        .imageSize{
+        .imageSize {
             height: 150px;
             width: 150px;
         }
-        #topSet{
+
+        #topSet {
             margin-top: 20px;
         }
     </style>
 </head>
 <body>
+<input  name="price"οnkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="单价" autocomplete="off"
+       class="layui-input">
 <form class="layui-form" type="multipart" style="padding-top: 20px">
 
     <div class="layui-form-item" hidden>
@@ -41,7 +44,8 @@
     <div class="layui-form-item" id="topSet">
         <label class="layui-form-label">模板名称</label>
         <div class="layui-input-block">
-            <input type="text"  id="templateName" name="templateName" lay-verify="templateName" autocomplete="off" placeholder="请输入模板名称"
+            <input type="text" id="templateName" name="templateName" lay-verify="templateName" autocomplete="off"
+                   placeholder="请输入模板名称"
                    class="layui-input">
         </div>
     </div>
@@ -57,7 +61,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">价格</label>
         <div class="layui-input-inline">
-            <input type="number" id="price" name="price" lay-verify="price" placeholder="单价" autocomplete="off" class="layui-input">
+            <input id="price" name="price"οnkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="单价" autocomplete="off"
+                   class="layui-input">
         </div>
         <div class="layui-form-mid layui-word-aux">单位：元</div>
     </div>
@@ -90,91 +95,98 @@
 </form>
 
 <script>
-    layui.use(['form','upload',"layer", "element"],function () {
+    layui.use(['form', 'upload', "layer", "element"], function () {
         var form = layui.form,
             ayer = layui.layer,
             $ = layui.jquery;
         element = layui.element;
         upload = layui.upload;
 
-        $("#formSubmit").on('click',function () {
-            layer.load();
-            $("#formSubmit").attr("disabled","disabled");
-            if($("#upload").attr("src")===undefined && $("#updateload").attr("src")===undefined){
-                layer.closeAll('loading');
-                layer.msg("请选择图片");
-                $("#formSubmit").removeAttr("disabled");
-            }else if($("#upload").attr("src")===undefined && $("#updateload").attr("src")!==undefined){
-                $.ajax({
-                    method:"post",
-                    url:'/template/add',
-                    data:{
-                        id: $("#id").val().trim(),
-                        templateName: $("#templateName").val().trim(),
-                        templateType: $("input[type='radio']:checked").val().trim(),
-                        price: $("#price").val().trim(),
-                        file: $("#updateload").file,
-                        description:$("#description").val().trim()
-                    },
-                    success:function (res) {
-                        layer.closeAll('loading');
-                        $("#formSubmit").removeAttr("disabled");
-                        if(res.status==200){
-                            //上传成功重写加载数据表格
-                            parent.layui.table.reload('templateList', {page: {curr: 1}});
-                            var index = parent.layer.getFrameIndex(window.name);
-                            parent.layer.close(index);
-                            parent.layer.msg("上传成功");
-                        }else{
-                            layer.msg(res.msg);
+        $("#formSubmit").on('click', function () {
+            var prices = $("#price").val();
+
+            var juge = /^(0|[1-9][0-9]*\.[0-9]{0,2})$/;
+            if (!juge.test(prices)) {
+                layer.msg("输入的价格必须为非零整数");
+            } else {
+                layer.load();
+                $("#formSubmit").attr("disabled", "disabled");
+                if ($("#upload").attr("src") === undefined && $("#updateload").attr("src") === undefined) {
+                    layer.closeAll('loading');
+                    layer.msg("请选择图片");
+                    $("#formSubmit").removeAttr("disabled");
+                } else if ($("#upload").attr("src") === undefined && $("#updateload").attr("src") !== undefined) {
+                    $.ajax({
+                        method: "post",
+                        url: '/template/add',
+                        data: {
+                            id: $("#id").val().trim(),
+                            templateName: $("#templateName").val().trim(),
+                            templateType: $("input[type='radio']:checked").val().trim(),
+                            price: prices,
+                            file: $("#updateload").file,
+                            description: $("#description").val().trim()
+                        },
+                        success: function (res) {
+                            layer.closeAll('loading');
+                            $("#formSubmit").removeAttr("disabled");
+                            if (res.status == 200) {
+                                //上传成功重写加载数据表格
+                                parent.layui.table.reload('templateList', {page: {curr: 1}});
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                                parent.layer.msg("上传成功");
+                            } else {
+                                layer.msg(res.msg);
+                            }
+                        },
+                        error: function () {
+                            layer.closeAll('loading');
+                            $("#formSubmit").removeAttr("disabled");
+                            layer.msg("遇到未知错误！");
                         }
-                    },
-                    error:function () {
-                        layer.closeAll('loading');
-                        $("#formSubmit").removeAttr("disabled");
-                        layer.msg("遇到未知错误！");
-                    }
-                })
+                    })
+                }
             }
         });
 
         var uploadInst = upload.render({
-            elem:"#uploadImage",
-            url:"/template/add",
-            auto:false,
-            bindAction:"#formSubmit",
-            accept: 'images' ,//只允许上传图片
+            elem: "#uploadImage",
+            url: "/template/add",
+            auto: false,
+            bindAction: "#formSubmit",
+            accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
-            data:{
-                id:function(){
+            data: {
+                id: function () {
                     return $("#id").val()
                 },
-                templateName:function(){
+                templateName: function () {
                     return $("#templateName").val();
                 },
-                templateType:function () {
+                templateType: function () {
                     return $("input[type='radio']:checked").val();
                 },
-                price:function () {
+                price: function () {
                     return $("#price").val();
                 },
-                description:function(){
+                description: function () {
                     return $("#description").val();
                 }
 
             },
-            choose:function (obj) {
+            choose: function (obj) {
                 // $("#showImage").css("display","block");
                 //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                 obj.preview(function (index, file, result) {
 
-                    $("#updateImage").css("display","none");
-                    $("#hide").css("display","block");
+                    $("#updateImage").css("display", "none");
+                    $("#hide").css("display", "block");
                     $('#upload').attr('src', result); //图片链接（base64）
                 });
 
             },
-            done:function (res) {
+            done: function (res) {
                 layer.closeAll('loading');
                 $("#formSubmit").removeAttr("disabled");
                 if (res.status === 200) {
@@ -188,7 +200,7 @@
                     layer.msg(res.msg)
                 }
             },
-            error:function (index,upload) {
+            error: function (index, upload) {
                 layer.closeAll('loading');
                 $("#formSubmit").removeAttr("disabled");
                 layer.msg("上传失败！");

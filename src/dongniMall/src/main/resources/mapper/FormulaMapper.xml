@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dongni.dongnimall.dao.FormulaMapper">
     <sql id="formula_col">
-        id,formulaURL,formulaPrice,formulaDescription,samplePrice,flyPrice,factoryAdress,updateTime,formulaName
+        id,formulaPrice,formulaDescription,samplePrice,flyPrice,factoryAdress,updateTime,formulaName,alipay,wechat,bigPicture
     </sql>
 
     <select id="selectAllFormula" resultType="com.dongni.dongnimall.pojo.FormulaDO">
@@ -17,15 +17,16 @@
 
     <insert id="insertFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
         insert into formula (<include refid="formula_col"></include>) values
-         (#{formulaDO.id},#{formulaDO.formulaURL},#{formulaDO.formulaPrice},#{formulaDO.formulaDescription},#{formulaDO.samplePrice},#{formulaDO.flyPrice},#{formulaDO.factoryAdress},#{formulaDO.updateTime},#{formulaDO.formulaName})
+         (#{formulaDO.id},#{formulaDO.formulaPrice},#{formulaDO.formulaDescription},#{formulaDO.samplePrice},#{formulaDO.flyPrice},#{formulaDO.factoryAdress},#{formulaDO.updateTime},#{formulaDO.formulaName},#{formulaDO.alipay},#{formulaDO.wechat},#{formulaDO.bigPicture})
     </insert>
 
     <delete id="deleteFormula" parameterType="java.lang.String">
         delete from formula where id = #{id}
     </delete>
     <update id="updateFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
-        update formula set formulaName=#{formulaDO.formulaName},formulaPrice=#{formulaDO.formulaPrice},formulaDescription=#{formulaDO.formulaDescription},
-        formulaURL=#{formulaDO.formulaURL},samplePrice=#{formulaDO.samplePrice},flyPrice=#{formulaDO.flyPrice},factoryAdress=#{formulaDO.factoryAdress},updateTime=#{formulaDO.updateTime}
+        update formula set formulaName=#{formulaDO.formulaName},formulaPrice=#{formulaDO.formulaPrice},formulaDescription=#{formulaDO.formulaDescription}
+        ,samplePrice=#{formulaDO.samplePrice},flyPrice=#{formulaDO.flyPrice},factoryAdress=#{formulaDO.factoryAdress},updateTime=#{formulaDO.updateTime}
+        ,alipay=#{formulaDO.alipay},wechat=#{formulaDO.wechat},bigPicture=#{formulaDO.bigPicture}
         where id = #{formulaDO.id}
     </update>
 </mapper>

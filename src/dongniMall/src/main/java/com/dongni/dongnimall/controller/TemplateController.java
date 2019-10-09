@@ -46,9 +46,21 @@ public class TemplateController {
     //添加模板文件
     @RequestMapping("add")
     public JsonResult insertTemplate(String id,String templateName, String templateType, Float price, String description,MultipartFile file) throws IOException {
-        if (StringUtils.isBlank(templateName)|| StringUtils.isBlank(templateType) || StringUtils.isBlank(description)|| price == null) {
-            return JsonResult.errorMsg("数据不能为空");
+
+        if(StringUtils.isBlank(templateName)){
+            return JsonResult.errorMsg("模板名称不能为空");
         }
+        if(StringUtils.isBlank(templateType)){
+            return JsonResult.errorMsg("类型不能为空");
+        }
+        if(StringUtils.isBlank(description)){
+            return JsonResult.errorMsg("模板描述不能为空");
+        }
+        if(price == null){
+            return JsonResult.errorMsg("价格不能为空");
+        }
+
+
 
         TemplateDO templateDO = templateService.selectByID(id);
         boolean exist = templateDO != null;

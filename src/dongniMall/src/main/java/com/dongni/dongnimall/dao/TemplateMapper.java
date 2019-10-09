@@ -38,7 +38,7 @@ public interface TemplateMapper {
      * @return
      */
     @Select("select * from publicitytemplate where templateName like concat(concat('%',#{templateName}),'%') and templateType = #{templateType}")
-    TemplateDO findByNameAndType(@Param("templateName") String templateName, @Param("templateType") String templateType);
+    List<TemplateDO> findByNameAndType(@Param("templateName") String templateName, @Param("templateType") String templateType);
 
     /**
      * 插入数据到数据库

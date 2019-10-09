@@ -141,8 +141,15 @@
                         body.contents().find("#samplePrice").val(obj.data.samplePrice);
                         body.contents().find("#flyPrice").val(obj.data.flyPrice);
                         body.contents().find("#factoryAdress").val(obj.data.factoryAdress);
-                        body.contents().find("#updateImage").css("display","block");
-                        body.contents().find("#updateload").attr("src",obj.data.formulaURL);
+
+                        body.contents().find("#updateAlipayImage").css("display","block");
+                        body.contents().find("#updateloadAlipay").attr("src",obj.data.alipay);
+
+                        body.contents().find("#updateWechatImage").css("display","block");
+                        body.contents().find("#updateloadWechat").attr("src",obj.data.wechat);
+
+                        body.contents().find("#updateBigImage").css("display","block");
+                        body.contents().find("#updateload").attr("src",obj.data.bigPicture);
                     }
                 });
             }

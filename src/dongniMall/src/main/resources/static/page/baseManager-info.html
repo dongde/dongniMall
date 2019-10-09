@@ -167,7 +167,7 @@
         var alipay = null;
         var wechat = null;
         var bigImage = null;
-        var imageID = null;
+        var imageID = [];
 
         $.ajax({
             url: "/baseTradeType/list",
@@ -265,14 +265,11 @@
             before: function (obj) {
                 //显示加载
                 layer.load();
-                //预读本地文件示例，不支持ie8
-                obj.preview(function (index, file, result) {
-                    $("#updateBigImage").css("display", "none");
-                    $("#showBigImage").css("display", "block");
-                    $('#upload').attr('src', result); //图片链接（base64）
-                });
             }
             , done: function (res) {
+                $("#updateBigImage").css("display", "none");
+                $("#showBigImage").css("display", "block");
+                $('#upload').attr('src', res.data); //图片链接（base64）
                 layer.closeAll("loading");
                 bigImage = res.data;
             },
@@ -289,17 +286,14 @@
             url: "/baseTrade/uploadImages",
             accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
-            before: function (obj) {
+            before: function () {
                 //显示加载
                 layer.load();
-                //预读本地文件示例，不支持ie8
-                obj.preview(function (index, file, result) {
-                    $("#updateAlipayImage").css("display", "none");
-                    $("#showAlipayImage").css("display", "block");
-                    $('#uploadAlipay').attr('src', result); //图片链接（base64）
-                });
             }
             , done: function (res) {
+                $("#updateAlipayImage").css("display", "none");
+                $("#showAlipayImage").css("display", "block");
+                $('#uploadAlipay').attr('src', res.data); //图片链接（base64）
                 alipay = res.data;
                 layer.closeAll("loading");
             },
@@ -316,17 +310,14 @@
             url: "/baseTrade/uploadImages",
             accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
-            before: function (obj) {
+            before: function () {
                 //显示加载
                 layer.load();
-                //预读本地文件示例，不支持ie8
-                obj.preview(function (index, file, result) {
-                    $("#updateWechatImage").css("display", "none");
-                    $("#showWechatImage").css("display", "block");
-                    $('#uploadWechat').attr('src', result); //图片链接（base64）
-                });
             }
             , done: function (res) {
+                $("#updateWechatImage").css("display", "none");
+                $("#showWechatImage").css("display", "block");
+                $('#uploadWechat').attr('src', res.data); //图片链接（base64）
                 layer.closeAll("loading");
                 wechat = res.data;
             },
@@ -403,7 +394,7 @@
 
         $("#updateImage").on('click', '.deleteImage', function () {
             $(this).parent().remove();
-            imageID = $(this).attr('value');
+            imageID.push($(this).attr('value'));
         });
 
     });

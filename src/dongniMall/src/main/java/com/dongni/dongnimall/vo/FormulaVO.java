@@ -1,13 +1,15 @@
-package com.dongni.dongnimall.pojo;
+package com.dongni.dongnimall.vo;
 
 import lombok.Data;
 
-import java.io.Serializable;
+import java.util.List;
+
 @Data
-public class FormulaDO implements Serializable {
+public class FormulaVO {
 
     private String id;
     private String formulaName;
+    private String formulaURL;
     private Float formulaPrice;
     private String formulaDescription;
     private Float samplePrice;
@@ -17,5 +19,6 @@ public class FormulaDO implements Serializable {
     private String alipay;
     private String wechat;
     private String bigPicture;
+    private List<String> images;
 
 }

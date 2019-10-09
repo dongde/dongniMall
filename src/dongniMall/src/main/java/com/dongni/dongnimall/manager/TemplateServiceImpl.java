@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -59,20 +58,19 @@ public class TemplateServiceImpl implements TemplateService {
             return pageData;
 
         }else if(!StringUtils.isBlank(templateName) && !StringUtils.isBlank(templateType)){
-            List<TemplateDO> lists = new ArrayList<>();
-            TemplateDO templateDO = templateMapper.findByNameAndType(templateName, templateType);
-            if(templateDO == null){
+            List<TemplateDO> templateDOs = templateMapper.findByNameAndType(templateName, templateType);
+            PageInfo<TemplateDO> pageInfo = new PageInfo<>(templateDOs);
+            if(templateDOs == null){
                 pageData.setCode(0);
                 pageData.setCount(1);
                 pageData.setMsg("");
                 pageData.setData(null);
                 return pageData;
             }
-            lists.add(templateDO);
             pageData.setCode(0);
-            pageData.setCount(1);
+            pageData.setCount(pageInfo.getTotal());
             pageData.setMsg("");
-            pageData.setData(lists);
+            pageData.setData(templateDOs);
             return pageData;
         }else{
             return pageData;

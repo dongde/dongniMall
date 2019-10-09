@@ -49,15 +49,15 @@ public class BaseTradeController {
         return baseTradeService.selectAllTrade(page,limit,tradeName,tradeType);
     }
 
-    //底料商品总览
+    //小图商品总览
     @RequestMapping("smallimage")
     public JsonResult smallimage(String id){
         return baseImageService.findAllbyID(id);
     }
 
 
-    //底料商品总览
-    @RequestMapping("listAll")
+    //单条详情总览
+    @RequestMapping("details")
     public BaseStoreVO trademessage(String id){
         return baseTradeService.selectDetails(id);
     }
