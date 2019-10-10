@@ -72,6 +72,7 @@ public class BaseTradeServiceImpl implements BaseTradeService {
     public BaseStoreVO selectDetails(String id) {
         BaseStoreVO baseStoreVO = new BaseStoreVO();
         BaseStoreDO baseStoreDO = baseTradeMapper.selectByID(id);
+
         List<BaseImageDO> baseImageDOS = baseImageMapper.findByID(id);
         List<String> lists = new ArrayList<>();
         BeanUtils.copyProperties(baseStoreDO,baseStoreVO);
@@ -79,7 +80,8 @@ public class BaseTradeServiceImpl implements BaseTradeService {
             lists.add(baseImageDO.getImageURL());
         }
         baseStoreVO.setImages(lists);
-
+        Integer newViewCount = baseStoreDO.getViewCount() + 1;
+        baseTradeMapper.updateViewCount(newViewCount,id);
         return baseStoreVO;
     }
 }

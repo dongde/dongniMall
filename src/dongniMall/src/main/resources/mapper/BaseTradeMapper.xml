@@ -33,4 +33,8 @@
         price=#{baseStoreDO.price},tradeURL=#{baseStoreDO.tradeURL},bigimage = #{baseStoreDO.bigImage},updateTime=#{baseStoreDO.updateTime},content=#{baseStoreDO.content},alipay=#{baseStoreDO.Alipay},wechat=#{baseStoreDO.wechat}
         where id = #{baseStoreDO.id}
     </update>
+
+    <update id="updateViewCount" parameterType="java.lang.Integer">
+        update basestore set viewCount=#{newViewCount} where id = #{id}
+    </update>
 </mapper>

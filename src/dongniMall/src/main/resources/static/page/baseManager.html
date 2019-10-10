@@ -29,6 +29,8 @@
 
     <button lay-event="addTrade" class="layui-btn layui-btn-sm top-btn" id="addTrade">添加底料</button>
 
+
+
 </script>
 <body>
 
@@ -50,6 +52,11 @@
         var form = layui.form,
             layer = layui.layer,
             $ = layui.jquery;
+
+        var oop = [];
+
+
+
 
 
         table.render({
@@ -91,6 +98,7 @@
                             curr: 1
                         }
                     });
+                    reloadType();
                     break;
                 case 'addTrade':
                     layer.open({
@@ -129,9 +137,21 @@
                             curr: 1
                         }
                     });
+                    reloadType();
                     break;
             }
         });
+
+        reloadType = function(){
+            console.log(oop.length)
+            console.log(oop);
+            console.log("***********");
+            $.each(oop, function (index, item) {
+                $("#tradeType").html($("#tradeType").html() + "<option>" + item.type + "</option>");
+
+            });
+            form.render();
+        }
 
         $.ajax({
             url: "/baseTradeType/list",
@@ -141,9 +161,11 @@
                 limit: 10
             },
             success: function (res) {
+                console.log(res);
+                console.log("############");
                 if (res.code == 0) {
-                    var data = res.data;
-                    $.each(data, function (index, item) {
+                    oop = res.data;
+                    $.each(res.data, function (index, item) {
                         $("#tradeType").html($("#tradeType").html() + "<option>" + item.type + "</option>");
 
                     });

@@ -40,4 +40,11 @@ public interface BaseTradeMapper {
      * @return
      */
     BaseStoreDO selectByID(@Param("id") String id);
+
+    /**
+     * 更新浏览次数
+     * @param newViewCount
+     * @param id
+     */
+    void updateViewCount(@Param("newViewCount") Integer newViewCount, @Param("id") String id);
 }
