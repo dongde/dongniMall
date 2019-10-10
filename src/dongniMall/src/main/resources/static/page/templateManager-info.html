@@ -59,7 +59,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">价格</label>
         <div class="layui-input-inline">
-            <input id="price" name="price"οnkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="单价" autocomplete="off"
+            <input id="price" name="price" placeholder="单价" autocomplete="off"
                    class="layui-input">
         </div>
         <div class="layui-form-mid layui-word-aux">单位：元</div>
@@ -101,11 +101,11 @@
         upload = layui.upload;
 
         $("#formSubmit").on('click', function () {
-            var prices = $("#price").val();
 
-            var juge = /^(0|[1-9][0-9]*\.[0-9]{0,2})$/;
-            if (!juge.test(prices)) {
-                layer.msg("输入的价格必须为非零整数");
+            if (!/^([0-9]+(.[0-9]+)?)$/.test($("#price").val())) {
+                layer.msg("价格格式错误");
+            } else if (!/^([0-9]+(.[0-9]{1,2})?)$/.test($("#price").val())) {
+                layer.msg("价格小数不能超过两位");
             } else {
                 layer.load();
                 $("#formSubmit").attr("disabled", "disabled");
@@ -121,7 +121,7 @@
                             id: $("#id").val().trim(),
                             templateName: $("#templateName").val().trim(),
                             templateType: $("input[type='radio']:checked").val().trim(),
-                            price: prices,
+                            price: $("#price").val(),
                             file: $("#updateload").file,
                             description: $("#description").val().trim()
                         },

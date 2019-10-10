@@ -59,7 +59,7 @@
             ,cellMinWidth: 100
             ,page:true
             ,toolbar:"#toolbar"
-            ,height:"full-200"
+            ,height:"full-160"
             ,cols:[[
                 {field: 'templateName', title: '模板名称',align:"center"}
                 ,{field: 'templateType', title: '模板类型',align:"center"}
@@ -167,39 +167,7 @@
 
         });
 
-        /*//查找
-        $("#findBySources").on("click",function () {
-            var templateName = $("#templateName").val();
-            var templateType = $("#type option:selected").val();
 
-            table.reload('templateList',{
-                url:"/template/list",
-                where:{
-                    templateName:templateName,
-                    templateType:templateType
-                },
-                page:{
-                    curr:1
-                }
-            });
-        });
-
-        //重置
-        $("#reloadList").on("click",function () {
-            $("#templateName").val(null);
-            var options=$("#type option:selected");
-            options.val(null);
-            table.reload('templateList',{
-                url:"/template/list",
-                where:{
-                    templateName:null,
-                    templateType:null
-                },
-                page:{
-                    curr:1
-                }
-            });
-        });*/
         //删除数据
         function deleteObject(id){
             if(id==null){
@@ -223,29 +191,6 @@
             })
         }
 
-        /*$("#addTemplate").on('click',function () {
-
-            layer.open({
-                area: ['80%','80%'],
-                title: "添加模板",
-                type: 2,
-                shadeClose: true,
-                shade: 0.8,
-                id:"",
-                content: ['/page/templateManager-info.html'],
-                success: function(res){
-                    if(res.status == 200){
-                        layer.msg("添加成功！");
-                        table.reload('templateList', {
-                            page: {
-                                curr: 1
-                                //重新从第 1 页开始
-                            }
-                        });
-                    }
-                }
-            });
-        });*/
     });
 
 </script>

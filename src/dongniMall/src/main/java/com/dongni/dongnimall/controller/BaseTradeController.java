@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 import static com.dongni.dongnimall.controller.BaseController.REGEX;
@@ -67,7 +66,6 @@ public class BaseTradeController {
     public JsonResult insertTrade(String id, String tradeName, @RequestParam(value = "tradeType", required = false)String tradeType, Float price, String tradeURL, String content,
                                   @RequestParam(value = "allURL[]", required = false) String[] allURL, String bigImage, String alipay, String weChat) throws IOException {
 
-        System.out.println(Arrays.toString(allURL));
         if(StringUtils.isBlank(tradeName)){
             return JsonResult.errorMsg("底料名称不能为空");
         }
@@ -88,9 +86,6 @@ public class BaseTradeController {
         }
         if(StringUtils.isBlank(content)){
             return JsonResult.errorMsg("内容不能为空");
-        }
-        if(allURL == null){
-            return JsonResult.errorMsg("小图不能为空");
         }
         if(price == null){
             return JsonResult.errorMsg("价格不能为空");
@@ -116,6 +111,9 @@ public class BaseTradeController {
 
         if(StringUtils.isBlank(id)){
 
+            if(allURL == null){
+                return JsonResult.errorMsg("小图不能为空");
+            }
             String ids = sid.nextShort();
             for (String imageURL : allURL) {
                 String id1 = sid.nextShort();
@@ -129,13 +127,15 @@ public class BaseTradeController {
             baseTradeService.insertTrade(baseStoreDO);
             return JsonResult.ok(baseStoreDO);
         }else {
-            for (String imageURL : allURL) {
-                String id1 = sid.nextShort();
-                BaseImageDO baseImageDO = new BaseImageDO();
-                baseImageDO.setId(id1);
-                baseImageDO.setImageURL(imageURL);
-                baseImageDO.setBaseStoreId(id);
-                baseImageService.insertImageURL(baseImageDO);
+            if(allURL != null) {
+                for (String imageURL : allURL) {
+                    String id1 = sid.nextShort();
+                    BaseImageDO baseImageDO = new BaseImageDO();
+                    baseImageDO.setId(id1);
+                    baseImageDO.setImageURL(imageURL);
+                    baseImageDO.setBaseStoreId(id);
+                    baseImageService.insertImageURL(baseImageDO);
+                }
             }
             baseStoreDO.setId(id);
             baseTradeService.updateTrade(baseStoreDO);
