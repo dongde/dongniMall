@@ -143,7 +143,7 @@ layui.define(["element", "jquery", "layer"], function (exports) {
                             }
                         };
                         addMenuClass($(this).parent(), 1);
-                        var pageHeaderHtml = '<a lay-href href="/">主页</a><span lay-separator="">/</span>\n';
+                        var pageHeaderHtml = '<a lay-href href="/admin">主页</a><span lay-separator="">/</span>\n';
                         for (var i = pageHeader.length - 1; i >= 0; i--) {
                             pageHeader[i] = pageHeader[i].replace(/\s+/g, "");
                             if (i != 0) {
