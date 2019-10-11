@@ -46,6 +46,18 @@ public class MenuController extends BaseController {
         return JsonResult.ok();
     }
 
+    @RequestMapping("/addTeachVideoCount")
+    public JsonResult addTeachVideoCount(String id){
+        if(StringUtils.isBlank(id)){
+            return JsonResult.errorMsg("访问错误");
+        }
+        TeachVideoDO teachVideoDO = new TeachVideoDO();
+        teachVideoDO.setId(id);
+        teachVideoDO.setCounts(1);
+        teachVideoService.modifyTeachVideo(teachVideoDO);
+        return JsonResult.ok();
+    }
+
     @RequestMapping("/addOrUpdateTeachVideo")
     public JsonResult addOrUpdateTeachVideo(@RequestParam(value = "file", required = false) MultipartFile file, String title, String videoUrl, String introduction, String content, String id) throws IOException {
 
