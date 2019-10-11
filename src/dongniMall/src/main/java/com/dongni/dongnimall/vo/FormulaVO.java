@@ -9,7 +9,7 @@ public class FormulaVO {
 
     private String id;
     private String formulaName;
-    private String formulaURL;
+
     private Float formulaPrice;
     private String formulaDescription;
     private Float samplePrice;

@@ -25,7 +25,8 @@
     <delete id="deleteTrade" parameterType="java.lang.String">
         delete from basestore where id = #{id}
     </delete>
-    <select id="selectByID" parameterType="java.lang.String">
+    <select id="selectByID" parameterType="java.lang.String" resultType="com.dongni.dongnimall.pojo.BaseStoreDO">
+
         select * from basestore where id = #{id}
     </select>
     <update id="updateTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
@@ -34,7 +35,7 @@
         where id = #{baseStoreDO.id}
     </update>
 
-    <update id="updateViewCount" parameterType="java.lang.Integer">
+    <update id="updateViewCount">
         update basestore set viewCount=#{newViewCount} where id = #{id}
     </update>
 </mapper>
