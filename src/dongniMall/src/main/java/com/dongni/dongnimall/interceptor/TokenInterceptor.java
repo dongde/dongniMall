@@ -2,6 +2,8 @@ package com.dongni.dongnimall.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.dongni.dongnimall.vo.JsonResult;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,7 +34,12 @@ public class TokenInterceptor implements HandlerInterceptor {
 //                }
 //            }
 //        }
-
+        String token = (String) request.getSession().getAttribute("token");
+        if (StringUtils.isEmpty(token)) {
+            response.setStatus(HttpStatus.SC_MOVED_TEMPORARILY);
+            response.addHeader("location", "/admin/login");
+            return false;
+        }
         return true;
     }
 

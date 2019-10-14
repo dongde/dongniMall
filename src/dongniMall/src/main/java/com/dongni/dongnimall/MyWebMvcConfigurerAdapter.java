@@ -1,11 +1,11 @@
 package com.dongni.dongnimall;
 
-import com.dongni.dongnimall.interceptor.TokenInterceptor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+        import com.dongni.dongnimall.interceptor.TokenInterceptor;
+        import org.springframework.context.annotation.Bean;
+        import org.springframework.context.annotation.Configuration;
+        import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+        import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+        import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author cengshuai on 2019-09-05.
@@ -15,7 +15,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MyWebMvcConfigurerAdapter implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(getTokenInterceptor()).addPathPatterns("/home/**","/menu/**","/order/**","/user/**");
+//        registry.addInterceptor(getTokenInterceptor()).addPathPatterns("/home/**","/menu/**","/order/**","/user/**");
+        registry.addInterceptor(getTokenInterceptor()).addPathPatterns("/admin", "/index.html");
     }
 
     @Override
