@@ -53,7 +53,8 @@ public class OrderController {
     }
 
     @PostMapping("/removeGoodsById")
-    public JsonResult removeGoodsById(@RequestBody String id) {
+    public JsonResult removeGoodsById(@RequestBody JSONObject jsonObject) {
+        String id = jsonObject.getString("id");
         if (StringUtils.isBlank(id)) {
             return JsonResult.errorMsg("删除出错");
         }
