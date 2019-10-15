@@ -51,7 +51,7 @@ public interface GoodsService {
     /**
      * @Description: 给商品添加订单号
      * @param order_number
-     * @param goodsIdList
+     * @param goodsIds
      */
-    void addOrder(String order_number,List<String> goodsIdList);
+    void modifyGoodsOrderNumber(String order_number,List<String> goodsIds);
 }

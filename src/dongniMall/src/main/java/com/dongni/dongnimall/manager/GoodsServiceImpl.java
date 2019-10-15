@@ -50,7 +50,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public void addOrder(String order_number, List<String> goodsIdList) {
+    public void modifyGoodsOrderNumber(String order_number, List<String> goodsIdList) {
         goodsMapper.updateGoodsOrderNumber(order_number,goodsIdList);
     }
 }

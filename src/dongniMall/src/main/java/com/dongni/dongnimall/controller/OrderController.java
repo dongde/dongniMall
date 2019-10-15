@@ -77,15 +77,26 @@ public class OrderController {
 
     @PostMapping(value = "/addOrder", produces = "application/json;charset=UTF-8")
     public JsonResult addOrder(@RequestBody JSONObject jsonObject) {
-//        String order_number= jsonObject.getString("order_number");
-        List<String> goodsIdList = Arrays.asList((String[]) jsonObject.get("goodsList"));
-
-
-        if (goodsIdList.size() == 0) {
+        List<String> goodsIds = Arrays.asList((String[]) jsonObject.get("goodsIds[]"));
+        String user_phone = jsonObject.getString("user_phone");
+        BigDecimal payment_amount = jsonObject.getBigDecimal("payment_amount");
+        Integer payment_method = jsonObject.getInteger("payment_method");
+        if (StringUtils.isBlank(user_phone) || payment_amount == null || payment_method == null) {
+            return JsonResult.errorMsg("数据空异常");
+        }
+        if (goodsIds.size() == 0) {
             return JsonResult.errorMsg("创建订单出错");
         }
         String order_number = UUID.randomUUID().toString();
-        goodsService.addOrder(order_number, goodsIdList);
+        OrderDO orderDO = new OrderDO();
+        orderDO.setOrder_number(order_number);
+        orderDO.setUser_phone(user_phone);
+        orderDO.setPayment_amount(payment_amount);
+        orderDO.setPayment_method(payment_method);
+        orderDO.setOrder_status(1);
+        orderDO.setCreate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        orderService.addOrder(orderDO);
+        goodsService.modifyGoodsOrderNumber(order_number, goodsIds);
         return JsonResult.ok();
     }
 
