@@ -12,9 +12,15 @@ import java.util.List;
 public interface GoodsService {
     /**
      * @param goodsDO
-     * @Description: 添加交易商品信息
+     * @Description: 添加购物车商品信息
      */
     void addGoods(GoodsDO goodsDO);
+
+    /**
+     * @Description: 修改购物车商品信息
+     * @param goodsDO
+     */
+    void modifyGoods(GoodsDO goodsDO);
 
     /**
      * @param order_number

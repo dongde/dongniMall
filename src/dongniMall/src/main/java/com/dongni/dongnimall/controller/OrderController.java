@@ -38,33 +38,39 @@ public class OrderController {
     private GoodsService goodsService;
 
     @PostMapping("/addGoods")
-    public JsonResult addGoods(String user_phone, BigDecimal goods_price, String goods_name, String goods_img, Integer goods_count, BigDecimal subtotal) {
-        if (StringUtils.isBlank(user_phone) || StringUtils.isBlank(goods_name) || StringUtils.isBlank(goods_img) || goods_price == null || goods_count == null || subtotal == null) {
+    public JsonResult addGoods(@RequestBody GoodsDO goodsDO) {
+        if (StringUtils.isBlank(goodsDO.getUser_phone()) || StringUtils.isBlank(goodsDO.getGoods_name()) || StringUtils.isBlank(goodsDO.getGoods_img()) || goodsDO.getGoods_price() == null || goodsDO.getGoods_count() == null || goodsDO.getSubtotal() == null) {
             return JsonResult.errorMsg("添加出错");
         }
-        GoodsDO goodsDO = new GoodsDO();
         goodsDO.setId(sid.nextShort());
-        goodsDO.setGoods_name(goods_name);
-        goodsDO.setUser_phone(user_phone);
-        goodsDO.setGoods_price(goods_price);
-        goodsDO.setGoods_img(goods_img);
-        goodsDO.setGoods_count(goods_count);
-        goodsDO.setSubtotal(subtotal);
         goodsService.addGoods(goodsDO);
         return JsonResult.ok();
     }
 
     @GetMapping("/queryGoods")
-    public JsonResult queryGoods(String user_phone){
+    public JsonResult queryGoods(String user_phone) {
         return JsonResult.ok(goodsService.queryGoods(user_phone));
     }
 
     @PostMapping("/removeGoodsById")
-    public JsonResult removeGoodsById(String id){
-        if(StringUtils.isBlank(id)){
+    public JsonResult removeGoodsById(@RequestBody String id) {
+        if (StringUtils.isBlank(id)) {
             return JsonResult.errorMsg("删除出错");
         }
         goodsService.removeGoodsById(id);
+        return JsonResult.ok();
+    }
+
+    @PostMapping("/modifyGoods")
+    public JsonResult modifyGoods(@RequestBody String id, @RequestBody BigDecimal goods_price, @RequestBody BigDecimal subtotal) {
+        if (StringUtils.isBlank(id) || goods_price == null || subtotal == null) {
+            return JsonResult.errorMsg("异常出错");
+        }
+        GoodsDO goodsDO = new GoodsDO();
+        goodsDO.setId(id);
+        goodsDO.setGoods_price(goods_price);
+        goodsDO.setSubtotal(subtotal);
+        goodsService.modifyGoods(goodsDO);
         return JsonResult.ok();
     }
 
@@ -76,14 +82,14 @@ public class OrderController {
     @PostMapping(value = "/addOrder", produces = "application/json;charset=UTF-8")
     public JsonResult addOrder(@RequestBody JSONObject jsonObject) {
 //        String order_number= jsonObject.getString("order_number");
-        List<String> goodsIdList = Arrays.asList((String[])jsonObject.get("goodsList"));
+        List<String> goodsIdList = Arrays.asList((String[]) jsonObject.get("goodsList"));
 
 
         if (goodsIdList.size() == 0) {
             return JsonResult.errorMsg("创建订单出错");
         }
         String order_number = UUID.randomUUID().toString();
-        goodsService.addOrder(order_number,goodsIdList);
+        goodsService.addOrder(order_number, goodsIdList);
         return JsonResult.ok();
     }
 

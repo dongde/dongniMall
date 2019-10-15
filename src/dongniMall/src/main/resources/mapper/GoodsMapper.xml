@@ -6,8 +6,21 @@
     </sql>
     <insert id="insertGoods" parameterType="com.dongni.dongnimall.pojo.GoodsDO">
         insert into goods(<include refid="goods_col"></include>)
-        values(#{goodsDO.id},#{goodsDO.user_phone},#{goodsDO.order_number},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_count},#{goodsDO.subtotal})
+        values(#{goodsDO.id},#{goodsDO.user_phone},#{goodsDO.order_number},#{goodsDO.price},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_count},#{goodsDO.subtotal})
     </insert>
+
+    <update id="updateGoods" parameterType="com.dongni.dongnimall.pojo.GoodsDO">
+        update goods
+        <set>
+            <if test="goodsDO.goods_count!=null and goodsDO.goods_count!=''">
+                goods_count=#{goodsDO.goods_count},
+            </if>
+            <if test="goodsDO.goods_count!=null and goodsDO.goods_count!=''">
+                subtotal=#{goodsDO.subtotal},
+            </if>
+        </set>
+        where id=#{goodsDO.id}
+    </update>
 
     <delete id="deleteGoodsById" parameterType="String">
         delete from goods
@@ -23,7 +36,7 @@
         select
         <include refid="goods_col"></include>
         from goods
-        where user_phone=#{user_phone} and order_number=null
+        where user_phone=#{user_phone} and (order_number=null or order_number='')
     </select>
 
     <select id="selectOrderGoods" parameterType="String" resultType="com.dongni.dongnimall.pojo.GoodsDO">

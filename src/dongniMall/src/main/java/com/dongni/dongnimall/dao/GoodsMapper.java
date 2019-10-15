@@ -18,8 +18,22 @@ public interface GoodsMapper {
      */
     void insertGoods(@Param("goodsDO") GoodsDO goodsDO);
 
+    /**
+     * @Description: 修改购物车商品信息
+     * @param goodsDO
+     */
+    void updateGoods(GoodsDO goodsDO);
+
+    /**
+     * @Description: 删除订单相关商品
+     * @param order_number
+     */
     void deleteGoodsByOrderNumber(String order_number);
 
+    /**
+     * @Description: 根据ID删除购物车商品信息
+     * @param id
+     */
     void deleteGoodsById(String id);
 
     /**

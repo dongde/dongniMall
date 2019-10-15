@@ -25,6 +25,11 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public void modifyGoods(GoodsDO goodsDO) {
+        goodsMapper.updateGoods(goodsDO);
+    }
+
+    @Override
     public void removeGoodsByOrderNumber(String order_number) {
         goodsMapper.deleteGoodsByOrderNumber(order_number);
     }
