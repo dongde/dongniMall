@@ -9,7 +9,7 @@
         values(#{leaveMessageDO.id},#{leaveMessageDO.content},#{leaveMessageDO.user_id},#{leaveMessageDO.recipient_id},#{leaveMessageDO.create_time},#{leaveMessageDO.verify})
     </insert>
 
-    <select id="selectLeaveMessageList" resultType="com.dongni.dongnimall.pojo.LeaveMessageDO">
+    <select id="selectLeaveMessageList" parameterType="String" resultType="com.dongni.dongnimall.pojo.LeaveMessageDO">
         select
         <include refid="leave_message_col"></include>
         from leave_message

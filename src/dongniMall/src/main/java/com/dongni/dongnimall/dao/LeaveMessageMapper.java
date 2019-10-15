@@ -14,7 +14,7 @@ import java.util.List;
 public interface LeaveMessageMapper {
     void insertLeaveMessage(@Param("leaveMessageDO") LeaveMessageDO leaveMessageDO);
 
-    List<LeaveMessageDO> selectLeaveMessageList(String recipient_id);
+    List<LeaveMessageDO> selectLeaveMessageList(@Param("recipient_id") String recipient_id);
 
     void deleteById(String id);
 
