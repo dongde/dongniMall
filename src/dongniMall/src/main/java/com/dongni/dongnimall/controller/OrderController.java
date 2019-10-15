@@ -62,14 +62,10 @@ public class OrderController {
     }
 
     @PostMapping("/modifyGoods")
-    public JsonResult modifyGoods(@RequestBody String id, @RequestBody BigDecimal goods_price, @RequestBody BigDecimal subtotal) {
-        if (StringUtils.isBlank(id) || goods_price == null || subtotal == null) {
+    public JsonResult modifyGoods(@RequestBody GoodsDO goodsDO) {
+        if (StringUtils.isBlank(goodsDO.getId()) || goodsDO.getGoods_count() == null || goodsDO.getSubtotal() == null) {
             return JsonResult.errorMsg("异常出错");
         }
-        GoodsDO goodsDO = new GoodsDO();
-        goodsDO.setId(id);
-        goodsDO.setGoods_price(goods_price);
-        goodsDO.setSubtotal(subtotal);
         goodsService.modifyGoods(goodsDO);
         return JsonResult.ok();
     }

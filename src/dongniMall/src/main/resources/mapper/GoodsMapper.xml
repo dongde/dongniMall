@@ -6,7 +6,7 @@
     </sql>
     <insert id="insertGoods" parameterType="com.dongni.dongnimall.pojo.GoodsDO">
         insert into goods(<include refid="goods_col"></include>)
-        values(#{goodsDO.id},#{goodsDO.user_phone},#{goodsDO.order_number},#{goodsDO.price},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_count},#{goodsDO.subtotal})
+        values(#{goodsDO.id},#{goodsDO.user_phone},#{goodsDO.order_number},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_price},#{goodsDO.goods_count},#{goodsDO.subtotal})
     </insert>
 
     <update id="updateGoods" parameterType="com.dongni.dongnimall.pojo.GoodsDO">
@@ -36,7 +36,7 @@
         select
         <include refid="goods_col"></include>
         from goods
-        where user_phone=#{user_phone} and (order_number=null or order_number='')
+        where user_phone=#{user_phone} and (order_number is null or order_number='')
     </select>
 
     <select id="selectOrderGoods" parameterType="String" resultType="com.dongni.dongnimall.pojo.GoodsDO">

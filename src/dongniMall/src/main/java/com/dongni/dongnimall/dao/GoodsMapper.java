@@ -22,7 +22,7 @@ public interface GoodsMapper {
      * @Description: 修改购物车商品信息
      * @param goodsDO
      */
-    void updateGoods(GoodsDO goodsDO);
+    void updateGoods(@Param("goodsDO") GoodsDO goodsDO);
 
     /**
      * @Description: 删除订单相关商品
