@@ -30,9 +30,9 @@ public class orderServiceImpl implements OrderService {
     }
 
     @Override
-    public PageData queryOrderList(Integer page, Integer pageSize) {
+    public PageData queryOrderList(Integer page, Integer pageSize, String user_phone) {
         PageHelper.startPage(page, pageSize);
-        List<OrderDO> list = orderMapper.selectOrderList();
+        List<OrderDO> list = orderMapper.selectOrderList(user_phone);
         PageInfo<OrderDO> pageInfo = new PageInfo<>(list);
         PageData pageData = new PageData();
         pageData.setCode(0);

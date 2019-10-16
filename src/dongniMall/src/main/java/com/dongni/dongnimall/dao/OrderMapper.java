@@ -18,7 +18,7 @@ public interface OrderMapper {
 
     void deleteOrder(String order_number);
 
-    List<OrderDO> selectOrderList();
+    List<OrderDO> selectOrderList(@Param("user_phone") String user_phone);
 
     void updateOrder(@Param("orderDO") OrderDO orderDO);
 }

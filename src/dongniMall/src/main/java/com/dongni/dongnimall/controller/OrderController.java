@@ -71,9 +71,9 @@ public class OrderController {
         return JsonResult.ok();
     }
 
-    @RequestMapping("/queryOrderList")
-    public PageData queryOrderList(Integer page, Integer limit) {
-        return orderService.queryOrderList(page, limit);
+    @GetMapping("/queryOrderList")
+    public PageData queryOrderList(Integer page, Integer limit,@RequestParam(value = "user_phone",required = false) String user_phone) {
+        return orderService.queryOrderList(page, limit, user_phone);
     }
 
     @PostMapping(value = "/addOrder", produces = "application/json;charset=UTF-8")

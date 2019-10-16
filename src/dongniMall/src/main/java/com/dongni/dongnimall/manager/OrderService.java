@@ -25,10 +25,11 @@ public interface OrderService {
     /**
      * @param page
      * @param pageSize
+     * @param user_phone
      * @return
-     * @Description: 查询所有订单信息
+     * @Description: 查询订单信息
      */
-    PageData queryOrderList(Integer page, Integer pageSize);
+    PageData queryOrderList(Integer page, Integer pageSize, String user_phone);
 
     /**
      * @param orderDO

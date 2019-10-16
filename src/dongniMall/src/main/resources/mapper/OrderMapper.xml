@@ -13,9 +13,13 @@
         delete from `order`
         where order_number=#{order_number}
     </delete>
-    <select id="selectOrderList" resultType="com.dongni.dongnimall.pojo.OrderDO">
+    <select id="selectOrderList" parameterType="String" resultType="com.dongni.dongnimall.pojo.OrderDO">
         select <include refid="order_col"></include>
         from `order`
+        where 1=1
+        <if test="user_phone!=null and user_phone!=''">
+            and user_phone=#{user_phone}
+        </if>
     </select>
 
     <update id="updateOrder" parameterType="com.dongni.dongnimall.pojo.OrderDO">
