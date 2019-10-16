@@ -159,9 +159,8 @@ public class OrderController {
         return JsonResult.ok();
     }
 
-
-    @GetMapping("/queryGoodsByOrderNumber")
-    public JsonResult queryGoodsByOrderNumber(String order_number) {
-        return JsonResult.ok(goodsService.queryGoods(order_number));
+    @GetMapping("/queryOrderGoods")
+    public JsonResult queryOrderGoods(String order_number) {
+        return JsonResult.ok(goodsService.queryOrderGoods(order_number));
     }
 }
