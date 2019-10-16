@@ -55,5 +55,5 @@ public interface GoodsMapper {
      * @param order_number
      * @param goodsIdList
      */
-    void updateGoodsOrderNumber(String order_number,List<String> goodsIdList);
+    void updateGoodsOrderNumber(@Param("order_number") String order_number,@Param("goodsIdList") List<String> goodsIdList);
 }

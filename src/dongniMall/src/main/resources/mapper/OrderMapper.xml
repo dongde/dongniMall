@@ -6,7 +6,7 @@
     </sql>
     <insert id="insertOrder" parameterType="com.dongni.dongnimall.pojo.OrderDO">
         insert into `order`(<include refid="order_col"></include>)
-        values(#{orderDo.order_number},#{orderDO.user_phone},#{orderDO.payment_amount},#{orderDO.payment_method},#{orderDO.order_status},#{orderDO.create_time},#{orderDO.complete_time})
+        values(#{orderDO.order_number},#{orderDO.user_phone},#{orderDO.payment_amount},#{orderDO.payment_method},#{orderDO.order_status},#{orderDO.create_time},#{orderDO.complete_time})
     </insert>
 
     <delete id="deleteOrder" parameterType="String">

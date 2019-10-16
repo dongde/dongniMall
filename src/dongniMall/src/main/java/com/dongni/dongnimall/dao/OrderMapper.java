@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface OrderMapper {
 
-    void insertOrder(OrderDO orderDO);
+    void insertOrder(@Param("orderDO") OrderDO orderDO);
 
     void deleteOrder(String order_number);
 

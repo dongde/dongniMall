@@ -78,7 +78,7 @@ public class OrderController {
 
     @PostMapping(value = "/addOrder", produces = "application/json;charset=UTF-8")
     public JsonResult addOrder(@RequestBody JSONObject jsonObject) {
-        List<String> goodsIds = Arrays.asList((String[]) jsonObject.get("goodsIds[]"));
+        List<String> goodsIds = (List<String>) jsonObject.get("goodsIds");
         String user_phone = jsonObject.getString("user_phone");
         BigDecimal payment_amount = jsonObject.getBigDecimal("payment_amount");
         Integer payment_method = jsonObject.getInteger("payment_method");

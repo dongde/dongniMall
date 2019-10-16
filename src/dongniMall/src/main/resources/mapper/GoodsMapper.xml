@@ -47,9 +47,8 @@
     </select>
 
     <update id="updateGoodsOrderNumber">
-        <foreach collection="list" index="index" item="id">
+        <foreach collection="goodsIdList" index="index" item="id">
             update goods
-            <include refid="goods_col"></include>
             set order_number=#{order_number}
             where id=#{id}
         </foreach>
