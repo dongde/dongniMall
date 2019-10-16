@@ -99,7 +99,7 @@
 
                                     $.ajax({
                                         method: 'GET',
-                                        url: "/order/queryGoodsByOrderNumber?order_number="+data.order_number,
+                                        url: "/order/queryOrderGoods?order_number="+data.order_number,
                                         success: function (goodsRes) {
                                             if (goodsRes.status === 200) {
                                                 goods = goodsRes.data;
