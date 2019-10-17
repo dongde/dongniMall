@@ -14,11 +14,9 @@ public class FormulaVO {
     private String formulaDescription;
     private Float samplePrice;
     private Float flyPrice;
-    private String factoryAdress;
+    private String factoryAddress;
     private String updateTime;
-    private String alipay;
-    private String wechat;
     private String bigPicture;
     private List<String> images;
-
+    private String baseStoreId;
 }
