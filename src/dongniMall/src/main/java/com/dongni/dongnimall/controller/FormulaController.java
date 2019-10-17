@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.dongni.dongnimall.manager.BaseImageService;
 import com.dongni.dongnimall.manager.FormulaService;
 import com.dongni.dongnimall.manager.FormulaTransactionRecordService;
+import com.dongni.dongnimall.manager.UserFormulaService;
 import com.dongni.dongnimall.pojo.BaseImageDO;
 import com.dongni.dongnimall.pojo.FormulaDO;
 import com.dongni.dongnimall.pojo.FormulaTransactionRecordDO;
+import com.dongni.dongnimall.pojo.UserFormulaDO;
 import com.dongni.dongnimall.vo.FormulaVO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
@@ -35,6 +37,9 @@ public class FormulaController {
 
     @Autowired
     private FormulaTransactionRecordService formulaTransactionRecordService;
+
+    @Autowired
+    private UserFormulaService userFormulaService;
 
     @Autowired
     private Sid sid;
@@ -134,36 +139,58 @@ public class FormulaController {
 
     //添加配方交易记录
     @PostMapping("/addFormulaTransactionRecord")
-    public JsonResult addFormulaTransactionRecord(FormulaTransactionRecordDO formulaTransactionRecordDO) {
-        if (StringUtils.isBlank(formulaTransactionRecordDO.getUser_phone()) || StringUtils.isBlank(formulaTransactionRecordDO.getFormulaId()) || formulaTransactionRecordDO.getPayment_amount() != null) {
+    public JsonResult addFormulaTransactionRecord(@RequestBody FormulaTransactionRecordDO formulaTransactionRecordDO) {
+        if (StringUtils.isBlank(formulaTransactionRecordDO.getUser_phone()) || StringUtils.isBlank(formulaTransactionRecordDO.getFormulaId()) || formulaTransactionRecordDO.getPayment_amount() == null || formulaTransactionRecordDO.getPayment_method() == null) {
             return JsonResult.errorMsg("错误添加");
         }
         formulaTransactionRecordDO.setId(sid.nextShort());
         formulaTransactionRecordDO.setPayment_status(0);
         formulaTransactionRecordDO.setCreate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        formulaTransactionRecordService.addFormulaTransactionRecord(formulaTransactionRecordDO);
         return JsonResult.ok();
     }
 
+    //删除交易记录
     @PostMapping("/removeFormulaTransactionRecord")
-    public JsonResult removeFormulaTransactionRecord(JSONObject jsonObject) {
-        String id = jsonObject.getString("id");
+    public JsonResult removeFormulaTransactionRecord(String id) {
         if (StringUtils.isBlank(id)) {
             return JsonResult.errorMsg("删除错误");
         }
+        formulaTransactionRecordService.removeFormulaTransactionRecord(id);
         return JsonResult.ok();
     }
 
+    //获取所有交易记录
     @GetMapping("/queryFormulaTransactionRecord")
     public PageData queryFormulaTransactionRecord(Integer page, Integer limit) {
         return formulaTransactionRecordService.queryFormulaTransactionRecord(page, limit);
     }
 
+    //修改交易信息
     @PostMapping("/modifyFormulaTransactionRecord")
-    public JsonResult modifyFormulaTransactionRecord(FormulaTransactionRecordDO formulaTransactionRecordDO){
-        if(StringUtils.isBlank(formulaTransactionRecordDO.getId())){
+    public JsonResult modifyFormulaTransactionRecord(FormulaTransactionRecordDO formulaTransactionRecordDO) {
+        if (StringUtils.isBlank(formulaTransactionRecordDO.getId())) {
             return JsonResult.errorMsg("修改出错");
         }
         formulaTransactionRecordService.modifyFormulaTransactionRecord(formulaTransactionRecordDO);
         return JsonResult.ok();
+    }
+
+    //添加用户购买的配方记录
+    @PostMapping("/addUserFormula")
+    public JsonResult addUserFormula(@RequestBody UserFormulaDO userFormulaDO) {
+        if (StringUtils.isBlank(userFormulaDO.getUser_phone()) || StringUtils.isBlank(userFormulaDO.getFormula_id())) {
+            return JsonResult.errorMsg("添加错误");
+        }
+        userFormulaDO.setId(sid.nextShort());
+        userFormulaDO.setCreate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        userFormulaService.addUserFormula(userFormulaDO);
+        return JsonResult.ok();
+    }
+
+    //查询用户购买的配方的记录
+    @GetMapping("/queryUserFormula")
+    public JsonResult queryUserFormula(String user_phone) {
+        return JsonResult.ok(userFormulaService.queryUserFormla(user_phone));
     }
 }

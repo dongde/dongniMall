@@ -10,10 +10,12 @@ import com.dongni.dongnimall.vo.FormulaTransactionRecordVO;
 import com.dongni.dongnimall.vo.PageData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,14 +53,18 @@ public class FormulaTransactionRecordServiceImpl implements FormulaTransactionRe
         pageData.setCode(0);
         pageData.setCount(pageInfo.getTotal());
         pageData.setMsg("");
-        List<FormulaTransactionRecordVO> list = null;
+        List<FormulaTransactionRecordVO> list = new ArrayList<>();
         for(FormulaTransactionRecordDO formulaTransactionRecordDO:formulaTransactionRecordDOS){
             FormulaDO formulaDO = formulaMapper.selectByID(formulaTransactionRecordDO.getFormulaId());
             UserDO userDO = userMapper.selectUserByPhone(formulaTransactionRecordDO.getUser_phone());
             FormulaTransactionRecordVO formulaTransactionRecordVO = new FormulaTransactionRecordVO();
             BeanUtils.copyProperties(formulaTransactionRecordDO,formulaTransactionRecordVO);
             formulaTransactionRecordVO.setFormula_name(formulaDO.getFormulaName());
-            formulaTransactionRecordVO.setUser_name(userDO.getName());
+            if(StringUtils.isBlank(userDO.getName())){
+                formulaTransactionRecordVO.setUser_name("<无>");
+            }else {
+                formulaTransactionRecordVO.setUser_name(userDO.getName());
+            }
             list.add(formulaTransactionRecordVO);
         }
         pageData.setData(list);

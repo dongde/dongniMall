@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.dao;
 
 import com.dongni.dongnimall.pojo.FormulaTransactionRecordDO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 @Repository
 public interface FormulaTransactionRecordMapper {
-    void insertFormulaTransactionRecord(FormulaTransactionRecordDO formulaTransactionRecordDO);
+    void insertFormulaTransactionRecord(@Param("formulaTransactionRecordDO") FormulaTransactionRecordDO formulaTransactionRecordDO);
 
     void deleteFormulaTransactionRecord(String id);
 
