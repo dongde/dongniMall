@@ -49,8 +49,8 @@ public class FormulaController {
 
     //添加和修改配方
     @RequestMapping("add")
-    public JsonResult insertformula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAdress,String alipay,String wechat,String bigPicture,
-                                    @RequestParam(value = "allURL[]", required = false) String[] allURL) throws IOException {
+    public JsonResult insertFormula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAddress,String bigPicture,
+                                    @RequestParam(value = "allURL[]", required = false) String[] allURL,String baseStoreId) {
         if(StringUtils.isBlank(formulaName)){
             return JsonResult.errorMsg("配方名称不能为空");
         }
@@ -60,7 +60,7 @@ public class FormulaController {
         if(formulaPrice==null){
             return JsonResult.errorMsg("配方价格不能为空");
         }
-        if(StringUtils.isBlank(factoryAdress)){
+        if(StringUtils.isBlank(factoryAddress)){
             return JsonResult.errorMsg("料场地址不能为空");
         }
         if(samplePrice==null){
@@ -69,26 +69,21 @@ public class FormulaController {
         if(flyPrice==null){
             return JsonResult.errorMsg("炒制价格不能为空");
         }
-        if(StringUtils.isBlank(alipay)){
-            return JsonResult.errorMsg("支付宝图片不能为空");
-        }
-        if(StringUtils.isBlank(wechat)){
-            return JsonResult.errorMsg("微信图片能为空");
-        }
         if(StringUtils.isBlank(formulaName)){
             return JsonResult.errorMsg("封面大图不能为空");
         }
-
+        if(StringUtils.isBlank(baseStoreId)){
+            return JsonResult.errorMsg("请选择试经营底料");
+        }
         FormulaDO formulaDO = new FormulaDO();
         formulaDO.setFormulaName(formulaName);
         formulaDO.setFormulaPrice(formulaPrice);
         formulaDO.setFormulaDescription(formulaDescription);
         formulaDO.setSamplePrice(samplePrice);
         formulaDO.setFlyPrice(flyPrice);
-        formulaDO.setFactoryAdress(factoryAdress);
-        formulaDO.setAlipay(alipay);
-        formulaDO.setWechat(wechat);
+        formulaDO.setFactoryAddress(factoryAddress);
         formulaDO.setBigPicture(bigPicture);
+        formulaDO.setBaseStoreId(baseStoreId);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         formulaDO.setUpdateTime(dateString);

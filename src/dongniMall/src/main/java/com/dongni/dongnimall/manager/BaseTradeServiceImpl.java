@@ -28,24 +28,32 @@ public class BaseTradeServiceImpl implements BaseTradeService {
 
     @Override
     public PageData selectAllTrade(Integer page, Integer limit, String tradeName, String tradeType) {
-        if(page==null){
+        if (page == null) {
             page = 1;
         }
-        if(limit==null){
+        if (limit == null) {
             limit = 10;
         }
-        PageHelper.startPage(page, limit);
-        List<BaseStoreDO> baseStoreDOS = baseTradeMapper.selectAllTrade(tradeName, tradeType);
-        PageInfo<BaseStoreDO> pageInfo = new PageInfo<>(baseStoreDOS);
         PageData pageData = new PageData();
-        pageData.setCode(0);
-        pageData.setCount(pageInfo.getTotal());
-        pageData.setMsg("");
-        pageData.setData(baseStoreDOS);
+        if (page != 0 && limit != 0) {
+            PageHelper.startPage(page, limit);
+            List<BaseStoreDO> baseStoreDOS = baseTradeMapper.selectAllTrade(tradeName, tradeType);
+            PageInfo<BaseStoreDO> pageInfo = new PageInfo<>(baseStoreDOS);
+            pageData.setCode(0);
+            pageData.setCount(pageInfo.getTotal());
+            pageData.setMsg("");
+            pageData.setData(baseStoreDOS);
+        } else {
+            List<BaseStoreDO> baseStoreDOS = baseTradeMapper.selectAllTrade(tradeName, tradeType);
+            pageData.setCode(0);
+            pageData.setCount(baseStoreDOS.size());
+            pageData.setMsg("");
+            pageData.setData(baseStoreDOS);
+        }
+
         return pageData;
 
     }
-
 
 
     @Override
@@ -75,13 +83,13 @@ public class BaseTradeServiceImpl implements BaseTradeService {
 
         List<BaseImageDO> baseImageDOS = baseImageMapper.findByID(id);
         List<String> lists = new ArrayList<>();
-        BeanUtils.copyProperties(baseStoreDO,baseStoreVO);
+        BeanUtils.copyProperties(baseStoreDO, baseStoreVO);
         for (BaseImageDO baseImageDO : baseImageDOS) {
             lists.add(baseImageDO.getImageURL());
         }
         baseStoreVO.setImages(lists);
         Integer newViewCount = baseStoreDO.getViewCount() + 1;
-        baseTradeMapper.updateViewCount(newViewCount,id);
+        baseTradeMapper.updateViewCount(newViewCount, id);
         return baseStoreVO;
     }
 }

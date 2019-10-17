@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dongni.dongnimall.dao.BaseTradeMapper">
     <sql id="BaseStore_col">
-        id,tradeName,tradeType,price,tradeURL,viewCount,updateTime,content,bigimage,alipay,wechat
+        id,tradeName,tradeType,price,tradeURL,viewCount,updateTime,content,bigimage
     </sql>
 
     <select id="selectAllTrade" resultType="com.dongni.dongnimall.pojo.BaseStoreDO">
@@ -19,19 +19,18 @@
 
     <insert id="insertTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
         insert into basestore (<include refid="BaseStore_col"></include>) values
-        (#{baseStoreDO.id},#{baseStoreDO.tradeName},#{baseStoreDO.tradeType},#{baseStoreDO.price},#{baseStoreDO.tradeURL},#{baseStoreDO.viewCount},#{baseStoreDO.updateTime},#{baseStoreDO.content},#{baseStoreDO.bigImage},#{baseStoreDO.Alipay},#{baseStoreDO.wechat})
+        (#{baseStoreDO.id},#{baseStoreDO.tradeName},#{baseStoreDO.tradeType},#{baseStoreDO.price},#{baseStoreDO.tradeURL},#{baseStoreDO.viewCount},#{baseStoreDO.updateTime},#{baseStoreDO.content},#{baseStoreDO.bigImage})
     </insert>
 
     <delete id="deleteTrade" parameterType="java.lang.String">
         delete from basestore where id = #{id}
     </delete>
     <select id="selectByID" parameterType="java.lang.String" resultType="com.dongni.dongnimall.pojo.BaseStoreDO">
-
         select * from basestore where id = #{id}
     </select>
     <update id="updateTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
         update basestore set tradeName=#{baseStoreDO.tradeName},tradeType=#{baseStoreDO.tradeType},
-        price=#{baseStoreDO.price},tradeURL=#{baseStoreDO.tradeURL},bigimage = #{baseStoreDO.bigImage},updateTime=#{baseStoreDO.updateTime},content=#{baseStoreDO.content},alipay=#{baseStoreDO.Alipay},wechat=#{baseStoreDO.wechat}
+        price=#{baseStoreDO.price},tradeURL=#{baseStoreDO.tradeURL},bigimage = #{baseStoreDO.bigImage},updateTime=#{baseStoreDO.updateTime},content=#{baseStoreDO.content}
         where id = #{baseStoreDO.id}
     </update>
 

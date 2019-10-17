@@ -42,6 +42,7 @@ public class BaseTradeController {
     @Autowired
     private Sid sid;
 
+
     //底料商品总览
     @RequestMapping("list")
     public PageData tradeList(Integer page, Integer limit, String tradeName, String tradeType){
@@ -64,19 +65,13 @@ public class BaseTradeController {
     //添加和修改底料
     @RequestMapping("add")
     public JsonResult insertTrade(String id, String tradeName, @RequestParam(value = "tradeType", required = false)String tradeType, Float price, String tradeURL, String content,
-                                  @RequestParam(value = "allURL[]", required = false) String[] allURL, String bigImage, String alipay, String weChat) throws IOException {
+                                  @RequestParam(value = "allURL[]", required = false) String[] allURL, String bigImage, String alipay, String weChat) {
 
         if(StringUtils.isBlank(tradeName)){
             return JsonResult.errorMsg("底料名称不能为空");
         }
-        if(StringUtils.isBlank(alipay)){
-            return JsonResult.errorMsg("支付宝图片不能为空");
-        }
         if(StringUtils.isBlank(bigImage)){
             return JsonResult.errorMsg("封面大图不能为空");
-        }
-        if(StringUtils.isBlank(weChat)){
-            return JsonResult.errorMsg("微信图片不能为空");
         }
         if(StringUtils.isBlank(tradeType)){
             return JsonResult.errorMsg("类型不能为空");
@@ -97,8 +92,6 @@ public class BaseTradeController {
         }
         BaseStoreDO baseStoreDO = new BaseStoreDO();
         baseStoreDO.setPrice(price);
-        baseStoreDO.setAlipay(alipay);
-        baseStoreDO.setWechat(weChat);
         baseStoreDO.setContent(content);
         baseStoreDO.setTradeName(tradeName);
         baseStoreDO.setTradeType(tradeType);

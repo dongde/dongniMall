@@ -7,8 +7,6 @@ import lombok.Data;
  */
 @Data
 public class BaseStoreDO {
-
-
     private String id;
     private String tradeName;
     private String tradeType;
@@ -18,7 +16,4 @@ public class BaseStoreDO {
     private Integer viewCount;
     private String updateTime;
     private String content;
-    private String Alipay;
-    private String wechat;
-
 }
