@@ -2,10 +2,11 @@
 <html>
 <head>
     <style>
-        .layui-select-title > input{
+        .layui-select-title > input {
             width: 150px;
         }
-        .layui-inline{
+
+        .layui-inline {
             padding-right: 50px;
         }
     </style>
@@ -30,17 +31,9 @@
     <button lay-event="addTrade" class="layui-btn layui-btn-sm top-btn" id="addTrade">添加配方</button>
 
 
-
 </script>
 <body>
-
-
-<div class="layuimini-container">
-    <div class="layuimini-main">
-        <table class="layui-hide" id="baselist" lay-filter="baselist"></table>
-    </div>
-</div>
-
+<table class="layui-hide" id="baselist" lay-filter="baselist"></table>
 <script type="text/html" id="operation">
     <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -138,7 +131,7 @@
             }
         });
 
-        reloadType = function(){
+        reloadType = function () {
             console.log(oop.length)
             console.log(oop);
             console.log("***********");

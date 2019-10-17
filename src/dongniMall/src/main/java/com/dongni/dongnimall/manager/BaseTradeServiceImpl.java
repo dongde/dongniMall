@@ -83,13 +83,15 @@ public class BaseTradeServiceImpl implements BaseTradeService {
 
         List<BaseImageDO> baseImageDOS = baseImageMapper.findByID(id);
         List<String> lists = new ArrayList<>();
-        BeanUtils.copyProperties(baseStoreDO, baseStoreVO);
-        for (BaseImageDO baseImageDO : baseImageDOS) {
-            lists.add(baseImageDO.getImageURL());
+        if(baseStoreDO!=null){
+            BeanUtils.copyProperties(baseStoreDO, baseStoreVO);
+            for (BaseImageDO baseImageDO : baseImageDOS) {
+                lists.add(baseImageDO.getImageURL());
+            }
+            baseStoreVO.setImages(lists);
+            Integer newViewCount = baseStoreDO.getViewCount() + 1;
+            baseTradeMapper.updateViewCount(newViewCount, id);
         }
-        baseStoreVO.setImages(lists);
-        Integer newViewCount = baseStoreDO.getViewCount() + 1;
-        baseTradeMapper.updateViewCount(newViewCount, id);
         return baseStoreVO;
     }
 }

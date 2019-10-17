@@ -2,7 +2,7 @@
 <html>
 <head>
     <style>
-        .layui-inline {
+        .layui-inline{
             padding-right: 15px;
         }
     </style>
@@ -22,37 +22,42 @@
 
 </script>
 <body>
-<table class="layui-hide" id="formulaList" lay-filter="formulaList"></table>
+
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <table class="layui-hide" id="formulaList" lay-filter="formulaList"></table>
+    </div>
+</div>
 <script type="text/html" id="operation">
     <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
-    layui.use(['table', 'form'], function () {
+    layui.use(['table','form'],function () {
         var table = layui.table;
         var form = layui.form,
             layer = layui.layer,
             $ = layui.jquery;
 
         table.render({
-            elem: '#formulaList'
-            , url: "/formula/list"
-            , cellMinWidth: 100
-            , toolbar: "#toolbar"
-            , page: true
-            , height: "full-160"
-            , cols: [[
-                {field: 'formulaName', title: '配方名称', align: "center"}
-                , {field: 'formulaPrice', title: '配方价格', align: "center"}
-                , {field: 'samplePrice', title: '样品价格', align: "center"}
-                , {field: 'flyPrice', title: '炒制价格', align: "center"}
-                , {field: 'factoryAddress', title: '料场地址', align: "center"}
-                , {field: 'updateTime', title: '更新时间', align: "center"}
-                , {fixed: 'right', title: '操作', toolbar: '#operation', align: "center"}
+            elem:'#formulaList'
+            ,url:"/formula/list"
+            ,cellMinWidth: 100
+            ,toolbar:"#toolbar"
+            ,page:true
+            ,height:"full-160"
+            ,cols:[[
+                {field: 'formulaName', title: '配方名称',align:"center"}
+                ,{field: 'formulaPrice', title: '配方价格',align:"center"}
+                ,{field: 'samplePrice', title: '样品价格',align:"center"}
+                ,{field: 'flyPrice', title: '炒制价格',align:"center"}
+                ,{field: 'factoryAddress', title: '料场地址',align:"center"}
+                ,{field: 'updateTime', title: '更新时间',align:"center"}
+                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
             ]]
-            , id: "formulaList"
-            , limit: 10
-            , where: {tradeName: "", tradeType: ""}
+            ,id:"formulaList"
+            ,limit:10
+            ,where:{tradeName:"",tradeType:""}
         });
 
 
@@ -62,8 +67,8 @@
                 case 'find':
                     var formulaName = $("#formulaName").val();
                     table.reload('formulaList', {
-                        url: '/formula/list'
-                        , where: {
+                        url:'/formula/list'
+                        ,where: {
                             formulaName: formulaName
                         },
                         page: {
@@ -73,14 +78,14 @@
                     break;
                 case 'addFormula':
                     layer.open({
-                        area: ['80%', '80%'],
+                        area: ['80%','80%'],
                         title: "添加配方",
                         shadeClose: true,
                         shade: 0.8,
                         type: 2,
                         content: ['/page/formulaTrading-info.html'],
-                        success: function (res) {
-                            if (res.status == 200) {
+                        success: function(res){
+                            if(res.status == 200){
                                 layer.msg("添加成功！");
                                 table.reload('formulaList', {
                                     page: {
@@ -95,8 +100,8 @@
                 case 'reload':
                     $("#formulaName").val(null);
                     table.reload('formulaList', {
-                        url: '/formula/list'
-                        , where: {
+                        url:'/formula/list'
+                        ,where: {
                             formulaName: null
                         },
                         page: {
@@ -108,18 +113,18 @@
         });
 
         //监听行工具事件
-        table.on('tool(formulaList)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        table.on('tool(formulaList)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
 
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-            if (layEvent === 'del') { //删除
-                layer.confirm('真的删除行么', function (index) {
+            if(layEvent === 'del'){ //删除
+                layer.confirm('真的删除行么', function(index){
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     layer.close(index);
                     //向服务端发送删除指令
                     deleteListObject(data.id);
                 });
-            } else if (layEvent === 'edit') { //编辑
+            } else if(layEvent === 'edit') { //编辑
                 layer.open({
                     type: 2,
                     title: '修改配方',
@@ -137,25 +142,25 @@
                         body.contents().find("#samplePrice").val(obj.data.samplePrice);
                         body.contents().find("#flyPrice").val(obj.data.flyPrice);
                         body.contents().find("#factoryAddress").val(obj.data.factoryAddress);
-                        body.contents().find("#modules").attr('name', obj.data.baseStoreId);
-                        body.contents().find("#updateBigImage").css("display", "block");
-                        body.contents().find("#updateload").attr("src", obj.data.bigPicture);
+                        body.contents().find("#modules").attr('name',obj.data.baseStoreId);
+                        body.contents().find("#updateBigImage").css("display","block");
+                        body.contents().find("#updateload").attr("src",obj.data.bigPicture);
                     }
                 });
             }
         });
 
         //删除所选行数据
-        function deleteListObject(id) {
+        function deleteListObject(id){
             if (id === null) {
                 layer.msg("请选择删除内容!");
             }
             $.ajax({
-                data: {"id": id},
-                url: "/formula/delete",
-                success: function (res) {
+                data:{"id":id},
+                url:"/formula/delete",
+                success:function (res) {
                     console.log(res.status);
-                    if (res.status == 200) {
+                    if(res.status == 200){
                         layer.msg("删除成功！");
                         table.reload('formulaList', {
                             page: {

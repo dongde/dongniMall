@@ -3,10 +3,11 @@
 
 <head>
     <style>
-        .layui-select-title > input{
+        .layui-select-title > input {
             width: 150px;
         }
-        .layui-inline{
+
+        .layui-inline {
             padding-right: 50px;
         }
     </style>
@@ -19,7 +20,7 @@
     </div>
 
     类型：
-    <div class="layui-inline" >
+    <div class="layui-inline">
         <select name="type" id="type" lay-filter="type" lay-verify="required" lay-search="">
             <option value="">全部</option>
             <option value="菜单">菜单</option>
@@ -34,43 +35,37 @@
     <button lay-event="addTemplate" class="layui-btn layui-btn-sm top-btn" id="addTemplate">添加底料</button>
 
 </script>
+<script type="text/html" id="operation">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
 <body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
-    <table class="layui-hide" id="templateList" lay-filter="templateList"></table>
-    </div>
-</div>
-
-    <script type="text/html" id="operation">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    </script>
-
+<table class="layui-hide" id="templateList" lay-filter="templateList"></table>
 <script>
-    layui.use(['table','form'],function () {
+    layui.use(['table', 'form'], function () {
         var table = layui.table;
         var form = layui.form,
             layer = layui.layer,
             $ = layui.jquery;
 
         table.render({
-            elem:'#templateList'
-            ,url:"/template/list"
-            ,cellMinWidth: 100
-            ,page:true
-            ,toolbar:"#toolbar"
-            ,height:"full-160"
-            ,cols:[[
-                {field: 'templateName', title: '模板名称',align:"center"}
-                ,{field: 'templateType', title: '模板类型',align:"center"}
-                ,{field: 'price', title: '价格',align:"center"}
-                ,{field: 'updateTime', title: '更新时间',align:"center"}
-                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
+            elem: '#templateList'
+            , url: "/template/list"
+            , cellMinWidth: 100
+            , page: true
+            , toolbar: "#toolbar"
+            , height: "full-160"
+            , cols: [[
+                {field: 'templateName', title: '模板名称', align: "center"}
+                , {field: 'templateType', title: '模板类型', align: "center"}
+                , {field: 'price', title: '价格', align: "center"}
+                , {field: 'updateTime', title: '更新时间', align: "center"}
+                , {fixed: 'right', title: '操作', toolbar: '#operation', align: "center"}
 
             ]]
-            ,id:"templateList"
-            ,limit:10
-            ,where:{templateName:"",templateType:""}
+            , id: "templateList"
+            , limit: 10
+            , where: {templateName: "", templateType: ""}
         });
 
         //头工具栏事件
@@ -80,28 +75,28 @@
                     var templateName = $("#templateName").val();
                     var templateType = $("#type option:selected").val();
 
-                    table.reload('templateList',{
-                        url:"/template/list",
-                        where:{
-                            templateName:templateName,
-                            templateType:templateType
+                    table.reload('templateList', {
+                        url: "/template/list",
+                        where: {
+                            templateName: templateName,
+                            templateType: templateType
                         },
-                        page:{
-                            curr:1
+                        page: {
+                            curr: 1
                         }
                     });
                     break;
                 case 'addTemplate':
                     layer.open({
-                        area: ['80%','80%'],
+                        area: ['80%', '80%'],
                         title: "添加模板",
                         type: 2,
                         shadeClose: true,
                         shade: 0.8,
-                        id:"",
+                        id: "",
                         content: ['/page/templateManager-info.html'],
-                        success: function(res){
-                            if(res.status == 200){
+                        success: function (res) {
+                            if (res.status == 200) {
                                 layer.msg("添加成功！");
                                 table.reload('templateList', {
                                     page: {
@@ -115,16 +110,16 @@
                     break;
                 case 'reload':
                     $("#templateName").val(null);
-                    var options=$("#type option:selected");
+                    var options = $("#type option:selected");
                     options.val(null);
-                    table.reload('templateList',{
-                        url:"/template/list",
-                        where:{
-                            templateName:null,
-                            templateType:null
+                    table.reload('templateList', {
+                        url: "/template/list",
+                        where: {
+                            templateName: null,
+                            templateType: null
                         },
-                        page:{
-                            curr:1
+                        page: {
+                            curr: 1
                         }
                     });
                     break;
@@ -132,17 +127,17 @@
         });
 
 
-        table.on('tool(templateList)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        table.on('tool(templateList)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event参数对应的值）
-            if(layEvent === 'del'){ //删除
-                layer.confirm('真的删除行么', function(index){
+            if (layEvent === 'del') { //删除
+                layer.confirm('真的删除行么', function (index) {
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     layer.close(index);
                     //向服务端发送删除指令
                     deleteObject(data.id);
                 });
-            } else if(layEvent === 'edit') { //编辑
+            } else if (layEvent === 'edit') { //编辑
 
                 layer.open({
                     type: 2,
@@ -156,10 +151,10 @@
                         var body = layer.getChildFrame('body', index);
                         body.contents().find("#id").val(obj.data.id);
                         body.contents().find("#templateName").val(obj.data.templateName);
-                        body.contents().find("input[name='templateType'][value='"+obj.data.templateType+"']").attr("checked",true);
+                        body.contents().find("input[name='templateType'][value='" + obj.data.templateType + "']").attr("checked", true);
                         body.contents().find("#price").val(obj.data.price);
-                        body.contents().find("#updateImage").css("display","block");
-                        body.contents().find("#updateload").attr("src",obj.data.image);
+                        body.contents().find("#updateImage").css("display", "block");
+                        body.contents().find("#updateload").attr("src", obj.data.image);
                         body.contents().find("#description").val(obj.data.textDescription);
                     }
                 });
@@ -169,16 +164,17 @@
 
 
         //删除数据
-        function deleteObject(id){
-            if(id==null){
+        function deleteObject(id) {
+            if (id == null) {
                 layer.msg("查询不到数据");
             }
             $.ajax({
-                url:"/template/delete",
-                data:{
-                    id:id},
-                success:function (res) {
-                    if(res.status == 200){
+                url: "/template/delete",
+                data: {
+                    id: id
+                },
+                success: function (res) {
+                    if (res.status == 200) {
                         layer.msg("删除成功！");
                         table.reload('templateList', {
                             page: {

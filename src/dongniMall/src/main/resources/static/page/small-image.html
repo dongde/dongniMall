@@ -16,11 +16,7 @@
     </style>
 </head>
 <body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
-        <table class="layui-hide" id="smallImage-table" lay-filter="smallImage-table"></table>
-    </div>
-</div>
+<table class="layui-hide" id="smallImage-table" lay-filter="smallImage-table"></table>
 </body>
 <!-- 表格顶部按钮-->
 <script type="text/html" id="toolbar">
@@ -223,7 +219,7 @@
                             body.contents().find("#description").val(obj.data.description);
                             body.contents().find("#modules").val(obj.data.position);
                             body.contents().find(".imageBorderForUpdate").removeAttr("hidden");
-                            body.contents().find("#imageForUpdate").attr("src",obj.data.smallImage_img);
+                            body.contents().find("#imageForUpdate").attr("src", obj.data.smallImage_img);
                         }
                     });
                     break;

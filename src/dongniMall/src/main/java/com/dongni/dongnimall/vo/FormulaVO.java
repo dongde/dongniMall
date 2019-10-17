@@ -2,14 +2,13 @@ package com.dongni.dongnimall.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
-
 @Data
-public class FormulaVO {
+public class FormulaVO implements Serializable {
 
     private String id;
     private String formulaName;
-
     private Float formulaPrice;
     private String formulaDescription;
     private Float samplePrice;
@@ -17,6 +16,6 @@ public class FormulaVO {
     private String factoryAddress;
     private String updateTime;
     private String bigPicture;
-    private List<String> images;
     private String baseStoreId;
+    private List<String> images;
 }

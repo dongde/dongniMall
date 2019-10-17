@@ -5,11 +5,7 @@
     <title>order</title>
 </head>
 <body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
-        <table class="layui-hide" id="order-table" lay-filter="order-table"></table>
-    </div>
-</div>
+<table class="layui-hide" id="order-table" lay-filter="order-table"></table>
 </body>
 <!-- 操作栏-->
 <script type="text/html" id="bar">
@@ -92,21 +88,21 @@
                         var goods = null;
                         $.ajax({
                             method: 'GET',
-                            url: "/user/queryUserByPhone?phone="+data.user_phone,
+                            url: "/user/queryUserByPhone?phone=" + data.user_phone,
                             success: function (userRes) {
                                 if (userRes.status === 200) {
                                     user = userRes.data;
 
                                     $.ajax({
                                         method: 'GET',
-                                        url: "/order/queryOrderGoods?order_number="+data.order_number,
+                                        url: "/order/queryOrderGoods?order_number=" + data.order_number,
                                         success: function (goodsRes) {
                                             if (goodsRes.status === 200) {
                                                 goods = goodsRes.data;
 
                                                 $.ajax({
                                                     method: 'GET',
-                                                    url: "/order/queryLogistics?order_number="+data.order_number,
+                                                    url: "/order/queryLogistics?order_number=" + data.order_number,
                                                     success: function (logisticsRes) {
                                                         if (logisticsRes.status === 200) {
                                                             logistics = logisticsRes.data;
@@ -282,6 +278,7 @@
                         break;
                 }
             });
+
             //根据ID删除行
             function deleteOrder(order_number) {
                 $.ajax({

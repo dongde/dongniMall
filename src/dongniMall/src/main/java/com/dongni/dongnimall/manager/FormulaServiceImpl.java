@@ -68,12 +68,13 @@ public class FormulaServiceImpl implements FormulaService {
         FormulaDO formulaDO = formulaMapper.selectByID(id);
         List<BaseImageDO> baseImages = baseImageMapper.findByID(id);
         List<String> lists = new ArrayList<>();
-        BeanUtils.copyProperties(formulaDO,formulaVO);
-        for (BaseImageDO baseImageDO : baseImages) {
-            lists.add(baseImageDO.getImageURL());
+        if(formulaDO!=null){
+            BeanUtils.copyProperties(formulaDO,formulaVO,"images");
+            for (BaseImageDO baseImageDO : baseImages) {
+                lists.add(baseImageDO.getImageURL());
+            }
+            formulaVO.setImages(lists);
         }
-        formulaVO.setImages(lists);
-
         return formulaVO;
     }
 }

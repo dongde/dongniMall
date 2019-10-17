@@ -5,11 +5,7 @@
     <title>banner</title>
 </head>
 <body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
-        <table class="layui-hide" id="manager-table" lay-filter="manager-table"></table>
-    </div>
-</div>
+<table class="layui-hide" id="manager-table" lay-filter="manager-table"></table>
 </body>
 <!-- 表格顶部按钮-->
 <script type="text/html" id="toolbar">
@@ -70,27 +66,27 @@
                 var currentManagerInfo = window.localStorage.getItem("currentManagerInfo");
                 var currentManagerObj = JSON.parse(currentManagerInfo);
                 // if (currentManagerObj != null) {
-                    layer.open({
-                        type: 2,
-                        title: '添加管理员',
-                        shadeClose: true,
-                        shade: 0.8,
-                        area: ['800px', '500px'],
-                        offset: 'auto',
-                        content: '/page/manager-info.html', //iframe的url，no代表不显示滚动条
-                        success: function (layero, index) {
-                            var body = layer.getChildFrame('body', index);
-                            body.contents().find("#isHidden").attr('hidden', true);
-                            //如果当前登录管理员权限为一级，则可添加一级和二级管理员，否则只能添加二级
-                            if (currentManagerObj.permission === 2) {
-                                var Select1 = 'dd[lay-value=1]';
-                                var Select = 'dd[lay-value=2]'; //设置要选择的值 --option的value
-                                body.contents().find("#modules").html('<option value="2">二级权限</option>');
-                                body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select1).remove();
-                                body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
-                            }
+                layer.open({
+                    type: 2,
+                    title: '添加管理员',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['800px', '500px'],
+                    offset: 'auto',
+                    content: '/page/manager-info.html', //iframe的url，no代表不显示滚动条
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#isHidden").attr('hidden', true);
+                        //如果当前登录管理员权限为一级，则可添加一级和二级管理员，否则只能添加二级
+                        if (currentManagerObj.permission === 2) {
+                            var Select1 = 'dd[lay-value=1]';
+                            var Select = 'dd[lay-value=2]'; //设置要选择的值 --option的value
+                            body.contents().find("#modules").html('<option value="2">二级权限</option>');
+                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select1).remove();
+                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
                         }
-                    });
+                    }
+                });
                 // } else {
                 //     layer.msg("未登录");
                 // }
@@ -103,7 +99,7 @@
 
             var currentManagerInfo = window.localStorage.getItem("currentManagerInfo");
             var currentManagerObj = JSON.parse(currentManagerInfo);
-            if(currentManagerObj!=null) {
+            if (currentManagerObj != null) {
                 switch (obj.event) {
                     case 'del':
                         if (currentManagerObj.permission <= obj.data.permission) {
@@ -164,7 +160,7 @@
                         }
                         break;
                 }
-            }else{
+            } else {
                 layer.msg("未登录");
             }
         });

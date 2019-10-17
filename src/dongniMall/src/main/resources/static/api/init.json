@@ -60,19 +60,39 @@
               "target": "_self"
             },
             {
-              "title": "配方交易管理",
-              "href": "page/formulaTrading.html",
-              "icon": "fa fa-gears",
-              "target": "_self"
-            },
-            {
-              "title": "底料商城管理",
+              "title": "配方管理",
               "href": "",
               "icon": "fa fa-gears",
               "target": "_self",
               "child": [
                 {
-                  "title": "底料管理",
+                  "title": "商城管理",
+                  "href": "page/formulaTrading.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                },
+                {
+                  "title": "交易管理",
+                  "href": "page/formulaTradeManager.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                },
+                {
+                  "title": "配方上传管理",
+                  "href": "page/formulaUploadManager.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                }
+              ]
+            },
+            {
+              "title": "底料管理",
+              "href": "",
+              "icon": "fa fa-gears",
+              "target": "_self",
+              "child": [
+                {
+                  "title": "商城管理",
                   "href": "page/baseManager.html",
                   "icon": "fa fa-gears",
                   "target": "_self"

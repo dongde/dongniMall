@@ -15,11 +15,7 @@
     </style>
 </head>
 <body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
-        <table class="layui-hide" id="banner-table" lay-filter="banner-table"></table>
-    </div>
-</div>
+<table class="layui-hide" id="banner-table" lay-filter="banner-table"></table>
 </body>
 <!-- 表格顶部按钮-->
 <script type="text/html" id="toolbar">
@@ -215,7 +211,7 @@
                                 body.contents().find("#id").val(obj.data.id);
                                 body.contents().find("#url").val(obj.data.url);
                                 body.contents().find(".imageBorderForUpdate").removeAttr("hidden");
-                                body.contents().find("#imageForUpdate").attr("src",obj.data.banner_img);
+                                body.contents().find("#imageForUpdate").attr("src", obj.data.banner_img);
                             }
                         });
                         break;

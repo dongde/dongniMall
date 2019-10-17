@@ -11,11 +11,7 @@
     }
 </style>
 <body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
-        <table class="layui-hide" id="teach-video-table" lay-filter="teach-video-table"></table>
-    </div>
-</div>
+<table class="layui-hide" id="teach-video-table" lay-filter="teach-video-table"></table>
 </body>
 <!-- 表格顶部按钮-->
 <script type="text/html" id="toolbar">
@@ -58,7 +54,7 @@
                 , cellMinWidth: 80
                 , height: 'full-160'
                 , cols: [[
-                    {field: 'title', title: '视频标题',fixed: 'left', unresize: true, align: 'center'}
+                    {field: 'title', title: '视频标题', fixed: 'left', unresize: true, align: 'center'}
                     , {
                         field: 'cover',
                         title: '视频封面',
@@ -134,7 +130,7 @@
                                 body.contents().find("#introduction").val(obj.data.introduction);
                                 body.contents().find("#content").val(obj.data.content);
                                 body.contents().find(".imageBorderForUpdate").removeAttr("hidden");
-                                body.contents().find("#imageForUpdate").attr("src",obj.data.cover);
+                                body.contents().find("#imageForUpdate").attr("src", obj.data.cover);
                             }
                         });
                         break;

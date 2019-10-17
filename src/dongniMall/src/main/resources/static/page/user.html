@@ -5,34 +5,31 @@
     <title>user</title>
 </head>
 <style>
-    .layui-input{
+    .layui-input {
         height: 30px;
     }
+
     .top-btn {
         margin-left: 10px;
         margin-bottom: 0 !important;
     }
 </style>
 <body>
-<div class="layuimini-container">
-    <div class="layuimini-main">
-        <table class="layui-hide" id="user-table" lay-filter="user-table"></table>
-    </div>
-</div>
+<table class="layui-hide" id="user-table" lay-filter="user-table"></table>
 </body>
 <!-- 表格顶部按钮-->
 <script type="text/html" id="toolbar">
 
-        账号：
-        <div class="layui-inline">
-            <input class="layui-input" name="searchPhone" id="searchPhone" placeholder="请输入账号" autocomplete="off">
-        </div>
-        昵称：
-        <div class="layui-inline">
-            <input class="layui-input" name="searchName" id="searchName" placeholder="请输入昵称" autocomplete="off">
-        </div>
-        <button class="layui-btn layui-btn-sm top-btn" lay-event="search" data-type="search">搜索</button>
-        <button class="layui-btn layui-btn-sm" lay-event="delAll" data-type="delAll">批量删除</button>
+    账号：
+    <div class="layui-inline">
+        <input class="layui-input" name="searchPhone" id="searchPhone" placeholder="请输入账号" autocomplete="off">
+    </div>
+    昵称：
+    <div class="layui-inline">
+        <input class="layui-input" name="searchName" id="searchName" placeholder="请输入昵称" autocomplete="off">
+    </div>
+    <button class="layui-btn layui-btn-sm top-btn" lay-event="search" data-type="search">搜索</button>
+    <button class="layui-btn layui-btn-sm" lay-event="delAll" data-type="delAll">批量删除</button>
 
 </script>
 <!-- 操作栏-->
