@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.FormulaTransactionRecordMapper">
+    <sql id="formula_transaction_record_col">
+        id,formulaId,user_phone,payment_amount,payment_status,payment_method,appointment,create_time
+    </sql>
+    <insert id="insertFormulaTransactionRecord" parameterType="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">
+        insert into formula_transaction_record(<include refid="formula_transaction_record_col"></include>)
+        values (#{formulaTransactionRecordDO.id},#{formulaTransactionRecordDO.formulaId},#{formulaTransactionRecordDO.user_phone},#{formulaTransactionRecordDO.payment_amount},#{formulaTransactionRecordDO.payment_status},#{formulaTransactionRecordDO.payment_method},#{formulaTransactionRecordDO.appointment},#{formulaTransactionRecordDO.create_time})
+    </insert>
+
+    <delete id="deleteFormulaTransactionRecord" parameterType="String">
+        delete from formula_transaction_record
+        where id=#{id}
+    </delete>
+
+    <select id="selectFormulaTransactionRecord" resultType="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">
+        select <include refid="formula_transaction_record_col"></include>
+        from formula_transaction_record
+    </select>
+
+    <update id="updateFormulaTransactionRecord" parameterType="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">
+        update formula_transaction_record
+        <set>
+            <if test="formulaTransactionRecordDO.payment_status!=null">
+                payment_status=#{formulaTransactionRecordDO.payment_status}
+            </if>
+            <if test="formulaTransactionRecordDO.appointment!=null and formulaTransactionRecordDO.appointment!=''">
+                appointment=#{formulaTransactionRecordDO.appointment}
+            </if>
+        </set>
+    </update>
+</mapper>
