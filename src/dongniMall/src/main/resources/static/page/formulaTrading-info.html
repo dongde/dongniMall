@@ -18,17 +18,22 @@
     <link rel="stylesheet" href="../css/public.css" media="all">
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <style>
-        .imageSize{
+        .formula-trade-container {
+            padding: 50px;
+        }
+        .imageSize {
             height: 150px;
             width: 150px;
         }
-        .deleteImage{
+
+        .deleteImage {
             margin-top: 2px;
             line-height: 20px;
             padding: 0 61px;
             height: 20px;
         }
-        .delete{
+
+        .delete {
             margin-top: 2px;
             line-height: 20px;
             padding: 0 61px;
@@ -40,7 +45,7 @@
 </head>
 <body>
 
-<form class="layui-form" type="multipart" style="padding-top: 20px">
+<form class="layui-form formula-trade-container" type="multipart" style="padding-top: 20px">
 
     <div class="layui-form-item" hidden>
         <label class="layui-form-label">ID：</label>
@@ -51,14 +56,15 @@
     <div class="layui-form-item">
         <label class="layui-form-label">配方名称：</label>
         <div class="layui-input-block">
-            <input type="text" id="formulaName" name="formulaName" lay-verify="formulaName" autocomplete="off" placeholder="请输入配方名称"
+            <input type="text" id="formulaName" name="formulaName" lay-verify="formulaName" autocomplete="off"
+                   placeholder="请输入配方名称"
                    class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">配方价格:</label>
+        <label class="layui-form-label">配方价格：</label>
         <div class="layui-input-inline">
-            <input name="formulaPrice" id="formulaPrice"  placeholder="单价" autocomplete="off" class="layui-input">
+            <input name="formulaPrice" id="formulaPrice" placeholder="单价" autocomplete="off" class="layui-input">
         </div>
         <div class="layui-form-mid layui-word-aux">单位：元</div>
     </div>
@@ -66,7 +72,8 @@
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">配方描述：</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入内容" id="formulaDescription" name="formulaDescription" class="layui-textarea"></textarea>
+            <textarea placeholder="请输入内容" id="formulaDescription" name="formulaDescription"
+                      class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
@@ -98,16 +105,23 @@
 
         </div>
     </div>
-
     <div class="layui-form-item">
-        <label class="layui-form-label">样品价格:</label>
+        <label class="layui-form-label">试经营：</label>
+        <div class="layui-input-inline">
+            <select id="modules" lay-verify="required" lay-search="">
+                <option value="">请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">样品价格：</label>
         <div class="layui-input-inline">
             <input name="samplePrice" id="samplePrice" placeholder="单价" autocomplete="off" class="layui-input">
         </div>
         <div class="layui-form-mid layui-word-aux">单位：元</div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">代炒价格:</label>
+        <label class="layui-form-label">代炒价格：</label>
         <div class="layui-input-inline">
             <input name="flyPrice" id="flyPrice" autocomplete="off" class="layui-input">
         </div>
@@ -116,35 +130,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">料场地址：</label>
         <div class="layui-input-block">
-            <input type="text" id="factoryAdress" name="factoryAdress" lay-verify="factoryAdress" autocomplete="off"
+            <input type="text" id="factoryAddress" name="factoryAddress" lay-verify="factoryAddress" autocomplete="off"
                    class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">支付宝：</label>
-        <div class="layui-input-block">
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="alipay">上传图片</button>
-            <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
-            <div class="layui-upload-list" id="showAlipayImage" style="display: none">
-                <img class="imageSize" id="uploadAlipay">
-            </div>
-            <div class="layui-upload-list" id="updateAlipayImage" style="display: none">
-                <img class="imageSize" id="updateloadAlipay">
-            </div>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">微信：</label>
-        <div class="layui-input-block">
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="wechatImage">上传图片</button>
-            <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
-            <div class="layui-upload-list" id="showWechatImage" style="display: none">
-                <img class="imageSize" id="uploadWechat">
-            </div>
-            <div class="layui-upload-list" id="updateWechatImage" style="display: none">
-                <img class="imageSize" id="updateloadWechat">
-            </div>
         </div>
     </div>
     <div class="layui-form-item">
@@ -155,9 +142,8 @@
 </form>
 
 
-
 <script>
-    layui.use(['form','upload',"layer", "element"],function () {
+    layui.use(['form', 'upload', "layer", "element"], function () {
         var form = layui.form,
             layer = layui.layer,
             $ = layui.jquery;
@@ -166,32 +152,42 @@
 
         var imageID = [];
         var imgURL = [];
-
-        var alipay = null;
-        var wechat = null;
         var bigImage = null;
 
         var charge1 = /^([0-9]+(.[0-9]+)?)$/;
         var charge2 = /^([0-9]+(.[0-9]{1,2})?)$/;
+
+        //加载底料列表
+        $.ajax({
+            url: '/baseTrade/list?page=0&limit=0',
+            method: 'GET',
+            success: function (res) {
+                $.each(res.data, function (index, item) {
+                    if($("#modules").attr('name')==item.id){
+                        $("#modules").append("<option value=\'"+item.id+"\' selected>"+item.tradeName+"</option>\n");
+                    }else{
+                        $("#modules").append("<option value=\'"+item.id+"\'>"+item.tradeName+"</option>\n");
+                    }
+                });
+                form.render();
+            },
+            error: function (res) {
+
+            }
+        });
 
 
         //绑定提交
         $("#formSubmit").on('click', function () {
             if (!charge1.test($("#formulaPrice").val()) || !charge1.test($("#samplePrice").val()) || !charge1.test($("#flyPrice").val())) {
                 layer.msg("价格格式错误");
-            } else if (!charge2.test($("#formulaPrice").val()) || !charge2.test($("#samplePrice").val())||!charge2.test($("#flyPrice").val())) {
+            } else if (!charge2.test($("#formulaPrice").val()) || !charge2.test($("#samplePrice").val()) || !charge2.test($("#flyPrice").val())) {
                 layer.msg("价格小数不能超过两位");
             } else {
 
                 $("#formSubmit").attr('disabled', 'disabled');
                 if (bigImage == null) {
                     bigImage = $("#updateload").attr("src");
-                }
-                if (alipay == null) {
-                    alipay = $("#updateloadAlipay").attr("src");
-                }
-                if (wechat == null) {
-                    wechat = $("#updateloadWechat").attr("src");
                 }
                 layer.load();
                 $.ajax({
@@ -212,12 +208,10 @@
                                     formulaDescription: $("#formulaDescription").val().trim(),
                                     samplePrice: $("#samplePrice").val().trim(),
                                     flyPrice: $("#flyPrice").val().trim(),
-                                    factoryAdress: $("#factoryAdress").val().trim(),
-                                    alipay: alipay,
-                                    wechat: wechat,
+                                    factoryAddress: $("#factoryAddress").val().trim(),
                                     bigPicture: bigImage,
-                                    allURL: imgURL
-
+                                    allURL: imgURL,
+                                    baseStoreId: $("#modules").val()
                                 },
                                 success: function (res) {
                                     layer.closeAll('loading');
@@ -256,7 +250,7 @@
             url: "/baseTrade/uploadImages",
             accept: 'images',//只允许上传图片
             acceptMime: 'image/*', //只筛选图片
-            before:function () {
+            before: function () {
                 layer.load();
             }
             , done: function (res) {
@@ -281,8 +275,8 @@
             accept: 'images',//只允许上传图片
             multiple: true,
             acceptMime: 'image/*', //只筛选图片
-            before: function(obj){
-                if(obj.getLength() + fileCount > 3){
+            before: function (obj) {
+                if (obj.getLength() + fileCount > 3) {
                     layer.msg("图片数量不能超过3");
                     return false;
                 }
@@ -319,7 +313,7 @@
         });
 
 
-        if($("#id").val()){
+        if ($("#id").val()) {
             //小图回显
             $.ajax({
                 url: "/baseTrade/smallimage",
@@ -349,53 +343,6 @@
             $(this).parent().remove();
             imageID.push($(this).attr('value'));
         });
-
-        //支付宝图片上传
-        var uploadInstapliy = upload.render({
-            elem: "#alipay",
-            url: "/baseTrade/uploadImages",
-            accept: 'images',//只允许上传图片
-            acceptMime: 'image/*', //只筛选图片
-            before: function (obj) {
-                layer.load();
-            }
-            , done: function (res) {
-                $("#updateAlipayImage").css("display", "none");
-                $("#showAlipayImage").css("display", "block");
-                $('#uploadAlipay').attr('src', res.data); //图片链接（base64）
-                layer.closeAll("loading");
-                alipay = res.data;
-
-            },
-            error: function (index, upload) {
-                layer.closeAll("loading");
-                layer.msg("上传失败！");
-            }
-        });
-
-
-        //微信图片上传
-        var uploadInsWechat = upload.render({
-            elem: "#wechatImage",
-            url: "/baseTrade/uploadImages",
-            accept: 'images',//只允许上传图片
-            acceptMime: 'image/*', //只筛选图片
-            before: function (obj) {
-                layer.load();
-            }
-            , done: function (res) {
-                $("#updateWechatImage").css("display", "none");
-                $("#showWechatImage").css("display", "block");
-                $('#uploadWechat').attr('src', res.data); //图片链接（base64）
-                layer.closeAll("loading");
-                wechat = res.data;
-            },
-            error: function (index, upload) {
-                layer.closeAll("loading");
-                layer.msg("上传失败！");
-            }
-        });
-
 
     });
 

@@ -123,34 +123,6 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">支付宝：</label>
-        <div class="layui-input-block">
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="alipay">上传图片</button>
-            <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
-            <div class="layui-upload-list" id="showAlipayImage" style="display: none">
-                <img class="imageSize" id="uploadAlipay">
-            </div>
-            <div class="layui-upload-list" id="updateAlipayImage" style="display: none">
-                <img class="imageSize" id="updateloadAlipay">
-            </div>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">微信：</label>
-        <div class="layui-input-block">
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="wechatImage">上传图片</button>
-            <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
-            <div class="layui-upload-list" id="showWechatImage" style="display: none">
-                <img class="imageSize" id="uploadWechat">
-            </div>
-            <div class="layui-upload-list" id="updateWechatImage" style="display: none">
-                <img class="imageSize" id="updateloadWechat">
-            </div>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" type="button" id="formSubmit">上传底料</button>
         </div>
@@ -167,8 +139,6 @@
         upload = layui.upload;
         var imgURL = [];
 
-        var alipay = null;
-        var wechat = null;
         var bigImage = null;
         var imageID = [];
 
@@ -206,12 +176,6 @@
                 if (bigImage == null) {
                     bigImage = $("#updateload").attr("src");
                 }
-                if (alipay == null) {
-                    alipay = $("#updateloadAlipay").attr("src");
-                }
-                if (wechat == null) {
-                    wechat = $("#updateloadWechat").attr("src");
-                }
                 layer.load();
                 $.ajax({
                     method: "post",
@@ -231,8 +195,6 @@
                                     price: $("#price").val(),
                                     tradeURL: $("#tradeURL").val(),
                                     content: $("#contents").val(),
-                                    alipay: alipay,
-                                    weChat: wechat,
                                     bigImage: bigImage,
                                     allURL: imgURL
                                 },
@@ -286,54 +248,6 @@
                 bigImage = res.data;
             },
             error: function () {
-                layer.closeAll("loading");
-                layer.msg("上传失败！");
-            }
-        });
-
-
-        //支付宝图片上传
-        var uploadInstapliy = upload.render({
-            elem: "#alipay",
-            url: "/baseTrade/uploadImages",
-            accept: 'images',//只允许上传图片
-            acceptMime: 'image/*', //只筛选图片
-            before: function () {
-                //显示加载
-                layer.load();
-            }
-            , done: function (res) {
-                $("#updateAlipayImage").css("display", "none");
-                $("#showAlipayImage").css("display", "block");
-                $('#uploadAlipay').attr('src', res.data); //图片链接（base64）
-                alipay = res.data;
-                layer.closeAll("loading");
-            },
-            error: function (index, upload) {
-                layer.closeAll("loading");
-                layer.msg("上传失败！");
-            }
-        });
-
-
-        //微信图片上传
-        var uploadInsWechat = upload.render({
-            elem: "#wechatImage",
-            url: "/baseTrade/uploadImages",
-            accept: 'images',//只允许上传图片
-            acceptMime: 'image/*', //只筛选图片
-            before: function () {
-                //显示加载
-                layer.load();
-            }
-            , done: function (res) {
-                $("#updateWechatImage").css("display", "none");
-                $("#showWechatImage").css("display", "block");
-                $('#uploadWechat').attr('src', res.data); //图片链接（base64）
-                layer.closeAll("loading");
-                wechat = res.data;
-            },
-            error: function (index, upload) {
                 layer.closeAll("loading");
                 layer.msg("上传失败！");
             }
