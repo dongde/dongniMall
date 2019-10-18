@@ -16,4 +16,6 @@ public class FormulaDO implements Serializable {
     private String updateTime;
     private String bigPicture;
     private String baseStoreId;
+    private String noAppointment;
+    private String formulaFile;
 }

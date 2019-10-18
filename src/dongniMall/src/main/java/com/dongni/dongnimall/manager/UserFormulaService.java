@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.manager;
 
 import com.dongni.dongnimall.pojo.UserFormulaDO;
+import com.dongni.dongnimall.vo.UserFormulaVO;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface UserFormulaService {
      * @param user_phone
      * @return
      */
-    List<UserFormulaDO> queryUserFormla(String user_phone);
+    List<UserFormulaVO> queryUserFormla(String user_phone);
 
     /**
      * 查询用户是否够购买配方

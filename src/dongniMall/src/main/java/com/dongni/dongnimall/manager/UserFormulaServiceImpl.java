@@ -1,10 +1,15 @@
 package com.dongni.dongnimall.manager;
 
+import com.dongni.dongnimall.dao.FormulaMapper;
 import com.dongni.dongnimall.dao.UserFormulaMapper;
+import com.dongni.dongnimall.pojo.FormulaDO;
 import com.dongni.dongnimall.pojo.UserFormulaDO;
+import com.dongni.dongnimall.vo.UserFormulaVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +20,8 @@ import java.util.List;
 public class UserFormulaServiceImpl implements UserFormulaService {
     @Autowired
     private UserFormulaMapper userFormulaMapper;
+    @Autowired
+    private FormulaMapper formulaMapper;
 
     @Override
     public void addUserFormula(UserFormulaDO userFormulaDO) {
@@ -22,8 +29,22 @@ public class UserFormulaServiceImpl implements UserFormulaService {
     }
 
     @Override
-    public List<UserFormulaDO> queryUserFormla(String user_phone) {
-        return userFormulaMapper.selectUserFormula(user_phone);
+    public List<UserFormulaVO> queryUserFormla(String user_phone) {
+        List<UserFormulaDO> userFormulaDOS = userFormulaMapper.selectUserFormula(user_phone);
+        List<UserFormulaVO> list = new ArrayList<>();
+        for (UserFormulaDO userFormulaDO : userFormulaDOS) {
+            FormulaDO formulaDO = formulaMapper.selectByID(userFormulaDO.getFormula_id());
+            if (formulaDO != null) {
+                UserFormulaVO userFormulaVO = new UserFormulaVO();
+                BeanUtils.copyProperties(userFormulaDO,userFormulaVO);
+                userFormulaVO.setFormula_file(formulaDO.getFormulaFile());
+                userFormulaVO.setFormula_img(formulaDO.getBigPicture());
+                userFormulaVO.setFormula_name(formulaDO.getFormulaName());
+                userFormulaVO.setFormula_price(formulaDO.getFormulaPrice());
+                list.add(userFormulaVO);
+            }
+        }
+        return list;
     }
 
     @Override

@@ -18,7 +18,7 @@
     <button lay-event="find" class="layui-btn layui-btn-sm top-btn" data-type="find">查找</button>
     <button lay-event="reload" class="layui-btn layui-btn-sm top-btn" data-type="reload">重置</button>
 
-    <button lay-event="addFormula" class="layui-btn layui-btn-sm top-btn" id="addFormula">添加底料</button>
+    <button lay-event="addFormula" class="layui-btn layui-btn-sm top-btn" id="addFormula">添加配方</button>
 
 </script>
 <body>
@@ -139,6 +139,7 @@
                         body.contents().find("#factoryAddress").val(obj.data.factoryAddress);
                         body.contents().find("#modules").attr('name', obj.data.baseStoreId);
                         body.contents().find("#updateBigImage").css("display", "block");
+                        body.contents().find(".upload-choose").text(obj.data.formulaFile);
                         body.contents().find("#updateload").attr("src", obj.data.bigPicture);
                     }
                 });

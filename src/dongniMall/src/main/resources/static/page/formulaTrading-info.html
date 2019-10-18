@@ -21,6 +21,7 @@
         .formula-trade-container {
             padding: 50px;
         }
+
         .imageSize {
             height: 150px;
             width: 150px;
@@ -106,6 +107,19 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">配方文件：</label>
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="uploadFile">上传文件</button>
+            <i style="font-size: 10px;color: gray;" class="upload-choose"></i>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">不可预约时间：</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="noAppointment" placeholder="yyyy-MM-dd">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">试经营：</label>
         <div class="layui-input-inline">
             <select id="modules" lay-verify="required" lay-search="">
@@ -130,7 +144,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">料场地址：</label>
         <div class="layui-input-block">
-            <input type="text" id="factoryAddress" name="factoryAddress" lay-verify="factoryAddress" autocomplete="off"
+            <input type="text" id="factoryAddress" name="factoryAddress" lay-verify="factoryAddress"
+                   autocomplete="off"
                    class="layui-input">
         </div>
     </div>
@@ -140,22 +155,28 @@
         </div>
     </div>
 </form>
-
-
 <script>
-    layui.use(['form', 'upload', "layer", "element"], function () {
-        var form = layui.form,
+    layui.use(['form', 'upload', "layer", "laydate"], function () {
+        let form = layui.form,
             layer = layui.layer,
-            $ = layui.jquery;
-        element = layui.element;
-        upload = layui.upload;
+            $ = layui.jquery,
+            laydate = layui.laydate,
+            upload = layui.upload,
+            imageID = [],
+            imgURL = [],
+            bigImage = null,
+            fileUrl = "",
+            charge1 = /^([0-9]+(.[0-9]+)?)$/,
+            charge2 = /^([0-9]+(.[0-9]{1,2})?)$/,
+            date = new Date();
 
-        var imageID = [];
-        var imgURL = [];
-        var bigImage = null;
-
-        var charge1 = /^([0-9]+(.[0-9]+)?)$/;
-        var charge2 = /^([0-9]+(.[0-9]{1,2})?)$/;
+        //格子主题
+        laydate.render({
+            elem: '#noAppointment'
+            , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+            , calendar: true
+            , theme: 'grid'
+        });
 
         //加载底料列表
         $.ajax({
@@ -163,10 +184,10 @@
             method: 'GET',
             success: function (res) {
                 $.each(res.data, function (index, item) {
-                    if($("#modules").attr('name')==item.id){
-                        $("#modules").append("<option value=\'"+item.id+"\' selected>"+item.tradeName+"</option>\n");
-                    }else{
-                        $("#modules").append("<option value=\'"+item.id+"\'>"+item.tradeName+"</option>\n");
+                    if ($("#modules").attr('name') == item.id) {
+                        $("#modules").append("<option value=\'" + item.id + "\' selected>" + item.tradeName + "</option>\n");
+                    } else {
+                        $("#modules").append("<option value=\'" + item.id + "\'>" + item.tradeName + "</option>\n");
                     }
                 });
                 form.render();
@@ -211,7 +232,8 @@
                                     factoryAddress: $("#factoryAddress").val().trim(),
                                     bigPicture: bigImage,
                                     allURL: imgURL,
-                                    baseStoreId: $("#modules").val()
+                                    baseStoreId: $("#modules").val(),
+                                    formulaFile: fileUrl
                                 },
                                 success: function (res) {
                                     layer.closeAll('loading');
@@ -242,6 +264,37 @@
                 });
             }
 
+        });
+
+        //上传配方文件
+        upload.render({ //允许上传的文件后缀
+            elem: '#uploadFile'
+            , url: '/formula/uploadFormulaFile'
+            , accept: 'file' //普通文件
+            , choose: function (obj) {
+                obj.preview(function (index, file, result) {
+                    if(!$(".upload-choose").text()){
+                        $(".upload-choose").attr("hidden",'hidden');
+                    }
+                    $(".upload-choose").text(file.name);
+                })
+            },
+            before: function () {
+                layer.load();
+            }
+            , done: function (res) {
+                layer.closeAll("loading");
+                if (res.status === 200) {
+                    fileUrl = res.data;
+                    $(".upload-choose").removeAttr("hidden");
+                } else {
+                    layer.msg(res.msg);
+                }
+            },
+            error: function () {
+                layer.closeAll("loading");
+                layer.msg("上传失败！");
+            }
         });
 
         //封面图片上传

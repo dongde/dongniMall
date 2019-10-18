@@ -1,6 +1,8 @@
 package com.dongni.dongnimall.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.dongni.dongnimall.base.storage.FileUploadManager;
+import com.dongni.dongnimall.base.storage.Response;
 import com.dongni.dongnimall.manager.BaseImageService;
 import com.dongni.dongnimall.manager.FormulaService;
 import com.dongni.dongnimall.manager.FormulaTransactionRecordService;
@@ -17,6 +19,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -42,6 +45,9 @@ public class FormulaController {
     private UserFormulaService userFormulaService;
 
     @Autowired
+    private FileUploadManager fileUploadManager;
+
+    @Autowired
     private Sid sid;
 
     //配方总览
@@ -59,7 +65,7 @@ public class FormulaController {
     //添加和修改配方
     @RequestMapping("add")
     public JsonResult insertFormula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAddress, String bigPicture,
-                                    @RequestParam(value = "allURL[]", required = false) String[] allURL, String baseStoreId) {
+                                    @RequestParam(value = "allURL[]", required = false) String[] allURL, String baseStoreId, String formulaFile) {
         if (StringUtils.isBlank(formulaName)) {
             return JsonResult.errorMsg("配方名称不能为空");
         }
@@ -84,6 +90,9 @@ public class FormulaController {
         if (StringUtils.isBlank(baseStoreId)) {
             return JsonResult.errorMsg("请选择试经营底料");
         }
+        if (StringUtils.isBlank(formulaFile)) {
+            return JsonResult.errorMsg("请上传配方文件");
+        }
         FormulaDO formulaDO = new FormulaDO();
         formulaDO.setFormulaName(formulaName);
         formulaDO.setFormulaPrice(formulaPrice);
@@ -93,6 +102,7 @@ public class FormulaController {
         formulaDO.setFactoryAddress(factoryAddress);
         formulaDO.setBigPicture(bigPicture);
         formulaDO.setBaseStoreId(baseStoreId);
+        formulaDO.setFormulaFile(formulaFile);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         formulaDO.setUpdateTime(dateString);
@@ -128,6 +138,15 @@ public class FormulaController {
             return JsonResult.ok();
         }
 
+    }
+
+    @PostMapping("/uploadFormulaFile")
+    public JsonResult uploadFormulaFile(MultipartFile file) throws IOException {
+        if (file == null) {
+            return JsonResult.errorMsg("配方上传出错");
+        }
+        Response response = fileUploadManager.upload(file.getInputStream());
+        return JsonResult.ok(response.getUrl());
     }
 
     //删除配方信息
@@ -178,7 +197,7 @@ public class FormulaController {
 
     //添加用户购买的配方记录
     @PostMapping("/addUserFormula")
-    public JsonResult addUserFormula(String user_phone, String formula_id,String formula_transaction_record_id) {
+    public JsonResult addUserFormula(String user_phone, String formula_id, String formula_transaction_record_id) {
         if (StringUtils.isBlank(user_phone) || StringUtils.isBlank(formula_id)) {
             return JsonResult.errorMsg("添加错误");
         }
@@ -203,10 +222,10 @@ public class FormulaController {
 
     //查询用户是否有配方的购买记录
     @GetMapping("/queryUserFormulaByUserAndFormula")
-    public JsonResult queryUserFormulaByUserAndFormula(String user_phone,String formula_id){
-        if(StringUtils.isBlank(user_phone)||StringUtils.isBlank(formula_id)){
+    public JsonResult queryUserFormulaByUserAndFormula(String user_phone, String formula_id) {
+        if (StringUtils.isBlank(user_phone) || StringUtils.isBlank(formula_id)) {
             return JsonResult.errorMsg("查询出错");
         }
-        return JsonResult.ok(userFormulaService.queryUserFormulaByUserAndFormula(user_phone,formula_id));
+        return JsonResult.ok(userFormulaService.queryUserFormulaByUserAndFormula(user_phone, formula_id));
     }
 }
