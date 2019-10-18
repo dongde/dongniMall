@@ -140,7 +140,7 @@ public class FormulaController {
     //添加配方交易记录
     @PostMapping("/addFormulaTransactionRecord")
     public JsonResult addFormulaTransactionRecord(@RequestBody FormulaTransactionRecordDO formulaTransactionRecordDO) {
-        if (StringUtils.isBlank(formulaTransactionRecordDO.getUser_phone()) || StringUtils.isBlank(formulaTransactionRecordDO.getFormulaId()) || formulaTransactionRecordDO.getPayment_amount() == null || formulaTransactionRecordDO.getPayment_method() == null) {
+        if (StringUtils.isBlank(formulaTransactionRecordDO.getUser_phone()) || StringUtils.isBlank(formulaTransactionRecordDO.getFormula_id()) || formulaTransactionRecordDO.getPayment_amount() == null || formulaTransactionRecordDO.getPayment_method() == null) {
             return JsonResult.errorMsg("错误添加");
         }
         formulaTransactionRecordDO.setId(sid.nextShort());
@@ -166,6 +166,15 @@ public class FormulaController {
         return formulaTransactionRecordService.queryFormulaTransactionRecord(page, limit);
     }
 
+    //查询用户是否有配方的购买记录
+    @GetMapping("/queryFormulaTransactionRecordByUserAndFormula")
+    public JsonResult queryFormulaTransactionRecordByUserAndFormula(String user_phone,String formula_id){
+        if(StringUtils.isBlank(user_phone)||StringUtils.isBlank(formula_id)){
+            return JsonResult.errorMsg("查询出错");
+        }
+        return JsonResult.ok(formulaTransactionRecordService.queryFormulaTransactionRecordByUserAndFormula(user_phone,formula_id));
+    }
+
     //修改交易信息
     @PostMapping("/modifyFormulaTransactionRecord")
     public JsonResult modifyFormulaTransactionRecord(FormulaTransactionRecordDO formulaTransactionRecordDO) {
@@ -178,13 +187,20 @@ public class FormulaController {
 
     //添加用户购买的配方记录
     @PostMapping("/addUserFormula")
-    public JsonResult addUserFormula(@RequestBody UserFormulaDO userFormulaDO) {
-        if (StringUtils.isBlank(userFormulaDO.getUser_phone()) || StringUtils.isBlank(userFormulaDO.getFormula_id())) {
+    public JsonResult addUserFormula(String user_phone, String formula_id,String formula_transaction_record_id) {
+        if (StringUtils.isBlank(user_phone) || StringUtils.isBlank(formula_id)) {
             return JsonResult.errorMsg("添加错误");
         }
+        UserFormulaDO userFormulaDO = new UserFormulaDO();
+        userFormulaDO.setUser_phone(user_phone);
+        userFormulaDO.setFormula_id(formula_id);
         userFormulaDO.setId(sid.nextShort());
         userFormulaDO.setCreate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         userFormulaService.addUserFormula(userFormulaDO);
+        FormulaTransactionRecordDO formulaTransactionRecordDO = new FormulaTransactionRecordDO();
+        formulaTransactionRecordDO.setId(formula_transaction_record_id);
+        formulaTransactionRecordDO.setPayment_status(1);
+        formulaTransactionRecordService.modifyFormulaTransactionRecord(formulaTransactionRecordDO);
         return JsonResult.ok();
     }
 

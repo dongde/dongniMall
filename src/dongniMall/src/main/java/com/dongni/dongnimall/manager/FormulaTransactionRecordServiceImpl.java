@@ -44,7 +44,7 @@ public class FormulaTransactionRecordServiceImpl implements FormulaTransactionRe
     }
 
     @Override
-    public PageData queryFormulaTransactionRecord(Integer page,Integer limit) {
+    public PageData queryFormulaTransactionRecord(Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         List<FormulaTransactionRecordDO> formulaTransactionRecordDOS = formulaTransactionRecordMapper.selectFormulaTransactionRecord();
         PageInfo<FormulaTransactionRecordDO> pageInfo = new PageInfo<>(formulaTransactionRecordDOS);
@@ -54,21 +54,28 @@ public class FormulaTransactionRecordServiceImpl implements FormulaTransactionRe
         pageData.setCount(pageInfo.getTotal());
         pageData.setMsg("");
         List<FormulaTransactionRecordVO> list = new ArrayList<>();
-        for(FormulaTransactionRecordDO formulaTransactionRecordDO:formulaTransactionRecordDOS){
-            FormulaDO formulaDO = formulaMapper.selectByID(formulaTransactionRecordDO.getFormulaId());
+        for (FormulaTransactionRecordDO formulaTransactionRecordDO : formulaTransactionRecordDOS) {
+            FormulaDO formulaDO = formulaMapper.selectByID(formulaTransactionRecordDO.getFormula_id());
             UserDO userDO = userMapper.selectUserByPhone(formulaTransactionRecordDO.getUser_phone());
-            FormulaTransactionRecordVO formulaTransactionRecordVO = new FormulaTransactionRecordVO();
-            BeanUtils.copyProperties(formulaTransactionRecordDO,formulaTransactionRecordVO);
-            formulaTransactionRecordVO.setFormula_name(formulaDO.getFormulaName());
-            if(StringUtils.isBlank(userDO.getName())){
-                formulaTransactionRecordVO.setUser_name("<无>");
-            }else {
-                formulaTransactionRecordVO.setUser_name(userDO.getName());
+            if (formulaDO != null && userDO != null) {
+                FormulaTransactionRecordVO formulaTransactionRecordVO = new FormulaTransactionRecordVO();
+                BeanUtils.copyProperties(formulaTransactionRecordDO, formulaTransactionRecordVO);
+                formulaTransactionRecordVO.setFormula_name(formulaDO.getFormulaName());
+                if (StringUtils.isBlank(userDO.getName())) {
+                    formulaTransactionRecordVO.setUser_name("<无>");
+                } else {
+                    formulaTransactionRecordVO.setUser_name(userDO.getName());
+                }
+                list.add(formulaTransactionRecordVO);
             }
-            list.add(formulaTransactionRecordVO);
         }
         pageData.setData(list);
         return pageData;
+    }
+
+    @Override
+    public boolean queryFormulaTransactionRecordByUserAndFormula(String user_phone, String formula_id) {
+        return formulaTransactionRecordMapper.selectFormulaTransactionRecordByUserAndFormula(user_phone, formula_id).size() != 0 ? true : false;
     }
 
     @Override

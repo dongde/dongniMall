@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Repository
 public interface UserFormulaMapper {
-    void insertUserFormula(@Param("userFormula")UserFormulaDO userFormulaDO);
+    void insertUserFormula(@Param("userFormulaDO")UserFormulaDO userFormulaDO);
 
     List<UserFormulaDO> selectUserFormula(String user_phone);
 }

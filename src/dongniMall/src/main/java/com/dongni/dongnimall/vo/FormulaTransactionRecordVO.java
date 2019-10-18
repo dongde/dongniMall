@@ -15,7 +15,7 @@ public class FormulaTransactionRecordVO {
     //id
     private String id;
     //配方ID
-    private String formulaId;
+    private String formula_id;
     //用户账号
     private String user_phone;
     //支付金额

@@ -18,12 +18,18 @@
     <span class="label label-defaunt radius">微信</span>
     {{#  } }}
 </script>
+<!-- 支付状态-->
+<script type="text/html" id="templet-status">
+    {{#  if(d.payment_status == 0){  }}
+    <span class="label label-success radius">未支付</span>
+    {{#  } else if(d.payment_status == 1){  }}
+    <span class="label label-defaunt radius">已支付</span>
+    {{#  } }}
+</script>
 <script type="text/html" id="operation">
     {{#  if(d.payment_status == 0){  }}
     <a id="state" class="layui-btn layui-btn-xs" lay-event="confirm"
        style='text-decoration:none;'>确认收款</a>
-    {{#  } else { }}
-    <a id="state" class="layui-btn-primary layui-btn-xs" style='text-decoration:none;'>已确认</a>
     {{#  } }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -46,7 +52,8 @@
                 , {field: 'user_name', title: '用户昵称', unresize: true, align: "center"}
                 , {field: 'user_phone', title: '用户账号', unresize: true, align: "center"}
                 , {field: 'payment_amount', title: '支付金额', unresize: true, align: "center"}
-                , {field: 'payment_method', title: '支付方式', unresize: true, templet: "#templet-method", align: "center"}
+                , {field: 'payment_method', title: '支付方式', unresize: true, templet: "#templet-method",width:120, align: "center"}
+                , {field: 'payment_status', title: '支付状态', unresize: true, templet: "#templet-status",width:120, align: "center"}
                 , {field: 'create_time', title: '创建时间', unresize: true, align: "center"}
                 , {fixed: 'right', title: '操作', toolbar: '#operation', unresize: true, align: "center"}
             ]]
@@ -68,7 +75,34 @@
             } else if (layEvent === 'confirm') { //
                 layer.confirm('确认收款并发送配方？', function (index) {
                     layer.close(index);
-                    $.ajax({})
+                    layer.load();
+                    $.ajax({
+                        method: 'POST',
+                        url: '/formula/addUserFormula',
+                        data: {
+                            user_phone: data.user_phone,
+                            formula_id: data.formula_id,
+                            formula_transaction_record_id: data.id
+                        },
+                        success: function (res) {
+                            layer.closeAll('loading');
+                            if (res.status == 200) {
+                                layer.msg('确认成功');
+                                table.reload('formulaTransactionRecord', {
+                                    page: {
+                                        curr: 1
+                                        //重新从第 1 页开始
+                                    }
+                                });
+                            } else {
+                                layer.msg(res.msg);
+                            }
+                        },
+                        error: function () {
+                            layer.closeAll('loading');
+                            layer.msg("确认出错");
+                        }
+                    })
                 });
             }
         });
@@ -76,7 +110,7 @@
         //删除所选行数据
         function deleteListObject(id) {
             $.ajax({
-                method:'POST',
+                method: 'POST',
                 data: {"id": id},
                 url: "/formula/removeFormulaTransactionRecord",
                 success: function (res) {
