@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.TeachVideoMapper">
+    <sql id="teach_video_col">
+        id,cover,videoUrl,title,introduction,create_time,counts,content
+    </sql>
+    <select id="selectTeachVideoList" resultType="com.dongni.dongnimall.pojo.TeachVideoDO" parameterType="String">
+        select
+        <include refid="teach_video_col"></include>
+        from teach_video
+        where 1=1
+        <if test="title!=null and title!=''">
+            and title like concat(concat('%',#{title}),'%')
+        </if>
+        order by create_time desc
+    </select>
+
+    <delete id="deleteTeachVideo" parameterType="String">
+        delete from teach_video
+        where id = #{id}
+    </delete>
+
+    <insert id="insertTeachVideo" parameterType="com.dongni.dongnimall.pojo.TeachVideoDO">
+        insert into teach_video(<include refid="teach_video_col"></include>)
+        values
+        (#{teachVideoDO.id},#{teachVideoDO.cover},#{teachVideoDO.videoUrl},#{teachVideoDO.title},#{teachVideoDO.introduction},#{teachVideoDO.create_time},#{teachVideoDO.counts},#{teachVideoDO.content})
+    </insert>
+
+    <update id="updateTeachVideo" parameterType="com.dongni.dongnimall.pojo.TeachVideoDO">
+        update teach_video
+        <set>
+            <if test="teachVideoDO.title!=null and teachVideoDO.title!=''">
+                title=#{teachVideoDO.title},
+            </if>
+            <if test="teachVideoDO.cover!=null and teachVideoDO.cover!=''">
+                cover=#{teachVideoDO.cover},
+            </if>
+            <if test="teachVideoDO.videoUrl!=null and teachVideoDO.videoUrl!=''">
+                videoUrl=#{teachVideoDO.videoUrl},
+            </if>
+            <if test="teachVideoDO.introduction!=null and teachVideoDO.introduction!=''">
+                introduction=#{teachVideoDO.introduction},
+            </if>
+            <if test="teachVideoDO.create_time!=null and teachVideoDO.create_time!=''">
+                create_time=#{teachVideoDO.create_time},
+            </if>
+            <if test="teachVideoDO.counts==1">
+                counts=counts+1,
+            </if>
+            <if test="teachVideoDO.content!=null and teachVideoDO.content!=''">
+                content=#{teachVideoDO.content},
+            </if>
+        </set>
+        where id=#{teachVideoDO.id}
+    </update>
+</mapper>

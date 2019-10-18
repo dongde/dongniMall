@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <style>
+        form {
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form ">
+    <div class="layui-form-item" hidden>
+        <label class="layui-form-label">id</label>
+        <div class="layui-input-block">
+            <input type="text" id="id" name="id" lay-verify="id" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">管理员名：</label>
+        <div class="layui-input-block">
+            <input type="text" id="managerName" name="managerName" lay-verify="managername" autocomplete="off"
+                   placeholder="请输入管理员名"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" id="isHidden">
+        <label class="layui-form-label">原密码：</label>
+        <div class="layui-input-block">
+            <input type="password" id="oldPassword" name="oldPassword" lay-verify="oldPassword" autocomplete="off"
+                   placeholder="请输入原密码"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">新密码：</label>
+        <div class="layui-input-block">
+            <input type="password" id="newPassword" name="newPassword" lay-verify="newPassword" autocomplete="off"
+                   placeholder="请输入新密码"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认密码：</label>
+        <div class="layui-input-block">
+            <input type="password" id="againPassword" name="againPassword" lay-verify="againPassword" autocomplete="off"
+                   placeholder="请再次输入新密码" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">权限等级</label>
+            <div class="layui-input-inline">
+                <select id="modules" name="modules" lay-verify="required" lay-search="">
+                    <option value="1">一级权限</option>
+                    <option value="2">二级权限</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" id="submit" type="button">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+</body>
+<script src="../lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script src="../jquery/jquery.js" charset="utf-8"></script>
+<script>
+    layui.use('form', function () {
+        $("#submit").on('click', function () {
+            $("#submit").attr("disabled","disabled");
+            var name = $("input[name='managerName']").val().trim();
+            var oldPassword = $("input[name='oldPassword']").val().trim();
+            var newPassword = $("input[name='newPassword']").val().trim();
+            var againPassword = $("input[name='againPassword']").val().trim();
+            var permission = $("select[name='modules']").val();
+            var id = $("#id").val();
+            if (newPassword !== againPassword) {
+                layer.msg("两次密码不相同，请重新输入");
+            } else {
+                if (id != null && id != "") {
+                    if (oldPassword == "" || oldPassword == null) {
+                        layer.msg("请输入原密码")
+                    } else {
+                        layer.load();
+                        $.ajax({
+                            method: "POST",
+                            data: {
+                                id: id,
+                                name: name,
+                                oldPassword: oldPassword,
+                                newPassword: newPassword,
+                                permission: permission
+                            },
+                            url: "/user/modifyManager",
+                            success: function (res) {
+                                layer.closeAll('loading');
+                                $("#submit").removeAttr("disabled");
+                                if (res.status === 200) {
+                                    parent.layui.table.reload('manager-table', {page: {curr: 1}});
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    parent.layer.close(index);
+                                    parent.layer.msg("修改成功");
+
+                                } else {
+                                    layer.msg(res.msg);
+                                }
+                            },
+                            error:function () {
+                                layer.closeAll('loading');
+                                $("#submit").removeAttr("disabled");
+                                layer.msg("修改失败");
+                            }
+                        })
+                    }
+                } else {
+                    layer.load();
+                    $.ajax({
+                        method: 'POST',
+                        data: {
+                            name: name,
+                            password: newPassword,
+                            permission: permission
+                        },
+                        url: "/user/addManager",
+                        success: function (res) {
+                            layer.closeAll('loading');
+                            if (res.status === 200) {
+                                parent.layui.table.reload('manager-table', {page: {curr: 1}});
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                                layer.msg("添加成功");
+                            } else {
+                                layer.msg(res.msg);
+                            }
+                        },
+                        error:function () {
+                            layer.closeAll('loading');
+                            layer.msg("添加出错");
+                        }
+                    })
+                }
+            }
+        })
+    });
+</script>
+</html>

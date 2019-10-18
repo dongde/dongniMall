@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.FormulaMapper">
+    <sql id="formula_col">
+        id,formulaPrice,formulaDescription,samplePrice,flyPrice,factoryAddress,updateTime,formulaName,bigPicture,baseStoreId
+    </sql>
+
+    <select id="selectAllFormula" resultType="com.dongni.dongnimall.pojo.FormulaDO">
+        select * from formula
+        WHERE 1=1
+        <if test="formulaName!=null and formulaName!=''">
+            and formulaName like concat(concat('%',#{formulaName}),'%')
+        </if>
+        order by updateTime desc
+
+    </select>
+
+    <insert id="insertFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
+        insert into formula (<include refid="formula_col"></include>) values
+        (#{formulaDO.id},#{formulaDO.formulaPrice},#{formulaDO.formulaDescription},#{formulaDO.samplePrice},#{formulaDO.flyPrice},#{formulaDO.factoryAddress},#{formulaDO.updateTime},#{formulaDO.formulaName},#{formulaDO.bigPicture},#{formulaDO.baseStoreId})
+    </insert>
+
+    <delete id="deleteFormula" parameterType="java.lang.String">
+        delete from formula where id = #{id}
+    </delete>
+    <update id="updateFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
+        update formula set formulaName=#{formulaDO.formulaName},formulaPrice=#{formulaDO.formulaPrice},formulaDescription=#{formulaDO.formulaDescription}
+        ,samplePrice=#{formulaDO.samplePrice},flyPrice=#{formulaDO.flyPrice},factoryAddress=#{formulaDO.factoryAddress},updateTime=#{formulaDO.updateTime}
+       ,bigPicture=#{formulaDO.bigPicture},baseStoreId=#{formulaDO.baseStoreId}
+        where id = #{formulaDO.id}
+    </update>
+</mapper>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>leaveMessage</title>
+</head>
+<body>
+<table class="layui-hide" id="leave-message-table" lay-filter="leave-message-table"></table>
+</body>
+<!-- 审核状态-->
+<script type="text/html" id="templet-state">
+    {{#  if(d.verify == 0){  }}
+    <span id="verify" class="label">未审核</span>
+    {{#  } else if(d.verify == 1){ }}
+    <span id="verify" class="label">通过</span>
+    {{#  } else if(d.verify == 2){ }}
+    <span id="verify" class="label">未通过</span>
+    {{#  } }}
+</script>
+<!-- 操作栏-->
+<script type="text/html" id="bar">
+
+    <a id="modify" class="layui-btn layui-btn layui-btn-xs" lay-event="modify" style='text-decoration:none;'>审核</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style='text-decoration:none;'>删除</a>
+</script>
+<script>
+    layui.use('table', function () {
+            var table = layui.table
+                , $ = layui.jquery;
+
+            /**
+             * 渲染表格
+             */
+            table.render({
+                elem: '#leave-message-table'
+                , url: '/leaveMessage/queryLeaveMessageList'
+                , toolbar: '#toolbar'
+                , title: '留言数据表'
+                , cellMinWidth: 80
+                , height: 'full-110'
+                , cols: [[
+                    {field: 'user_id', title: '用户账号', fixed: 'left', width: 200, unresize: true, align: 'center'}
+                    , {field: 'content', title: '留言内容', unresize: true, align: 'center'}
+                    , {field: 'create_time', title: '上传时间', sort: true, width: 200, unresize: true, align: 'center'}
+                    , {
+                        field: 'verify',
+                        title: '审核状态',
+                        templet: '#templet-state',
+                        width: 100,
+                        unresize: true,
+                        align: 'center'
+                    }
+                    , {fixed: 'right', title: '操作', toolbar: '#bar', width: 180, unresize: true, align: 'center'}
+                ]]
+                , page: true
+                , limit: 10
+            });
+
+            /**
+             * 监听行工具事件
+             */
+            table.on('tool(leave-message-table)', function (obj) {
+                var data = obj.data;
+                switch (obj.event) {
+                    case 'del':
+                        layer.confirm('确定删除？', function (index) {
+                            deleteLeaveMessage(data.id);
+                            layer.close(index);
+                        });
+                        break;
+                    case 'modify':
+                        layer.confirm('该留言是否通过审核', {
+                            btn: ['通过', '不通过'] //按钮
+                        }, function () {
+                            $.ajax({
+                                method: 'GET',
+                                url: '/leaveMessage/modifyVerify?id=' + obj.data.id + "&verify=" + 1,
+                                success: function (res) {
+                                    if (res.status == 200) {
+                                        layer.msg("审核成功");
+                                        table.reload('leave-message-table', {
+                                            page: {
+                                                curr: 1
+                                            }
+                                        });
+                                    } else {
+                                        layer.msg(res.msg)
+                                    }
+                                },
+                                error: function (res) {
+                                    layer.msg(res.msg);
+                                }
+                            })
+                        }, function () {
+                            $.ajax({
+                                method: 'GET',
+                                url: '/leaveMessage/modifyVerify?id=' + obj.data.id + "&verify=" + 2,
+                                success: function (res) {
+                                    if (res.status == 200) {
+                                        layer.msg("审核成功");
+                                        table.reload('leave-message-table', {
+                                            page: {
+                                                curr: 1
+                                            }
+                                        });
+                                    } else {
+                                        layer.msg(res.msg)
+                                    }
+                                },
+                                error: function (res) {
+                                    layer.msg(res.msg);
+                                }
+                            })
+                        });
+                        break;
+                }
+            });
+
+            /**
+             *  根据ID删除行
+             */
+            function deleteLeaveMessage(id) {
+                $.ajax({
+                    method: 'GET',
+                    url: '/leaveMessage/removeLeaveMessage?id=' + id,
+                    success: function (res) {
+                        if (res.status === 200) {
+                            layer.msg("删除成功");
+                            table.reload('leave-message-table', {
+                                page: {
+                                    curr: 1
+                                }
+                            });
+                        }
+                    }
+                })
+
+            }
+        }
+    );
+</script>
+</html>

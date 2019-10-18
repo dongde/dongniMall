@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.GoodsMapper">
+    <sql id="goods_col">
+        id,user_phone,order_number,goods_name,goods_img,goods_price,goods_count,subtotal
+    </sql>
+    <insert id="insertGoods" parameterType="com.dongni.dongnimall.pojo.GoodsDO">
+        insert into goods(<include refid="goods_col"></include>)
+        values(#{goodsDO.id},#{goodsDO.user_phone},#{goodsDO.order_number},#{goodsDO.goods_name},#{goodsDO.goods_img},#{goodsDO.goods_price},#{goodsDO.goods_count},#{goodsDO.subtotal})
+    </insert>
+
+    <update id="updateGoods" parameterType="com.dongni.dongnimall.pojo.GoodsDO">
+        update goods
+        <set>
+            <if test="goodsDO.goods_count!=null and goodsDO.goods_count!=''">
+                goods_count=#{goodsDO.goods_count},
+            </if>
+            <if test="goodsDO.goods_count!=null and goodsDO.goods_count!=''">
+                subtotal=#{goodsDO.subtotal},
+            </if>
+        </set>
+        where id=#{goodsDO.id}
+    </update>
+
+    <delete id="deleteGoodsById" parameterType="String">
+        delete from goods
+        where id=#{id}
+    </delete>
+
+    <delete id="deleteGoodsByOrderNumber" parameterType="String">
+        delete from goods
+        where order_number=#{order_number}
+    </delete>
+
+    <select id="selectGoods" parameterType="String" resultType="com.dongni.dongnimall.pojo.GoodsDO">
+        select
+        <include refid="goods_col"></include>
+        from goods
+        where user_phone=#{user_phone} and (order_number is null or order_number='')
+    </select>
+
+    <select id="selectOrderGoods" parameterType="String" resultType="com.dongni.dongnimall.pojo.GoodsDO">
+        select
+        <include refid="goods_col"></include>
+        from goods
+        where order_number=#{order_number}
+    </select>
+
+    <update id="updateGoodsOrderNumber">
+        <foreach collection="goodsIdList" index="index" item="id">
+            update goods
+            set order_number=#{order_number}
+            where id=#{id}
+        </foreach>
+    </update>
+</mapper>

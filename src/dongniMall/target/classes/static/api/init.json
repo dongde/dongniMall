@@ -1,0 +1,157 @@
+{
+  "clearInfo": {
+    "clearUrl": "api/clear.json"
+  },
+  "homeInfo": {
+    "title": "首页",
+    "icon": "fa fa-home",
+    "href": "page/welcome.html"
+  },
+  "logoInfo": {
+    "title": "智选后台管理系统",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": {
+    "0": {
+      "child": [
+        {
+          "title": "首页管理",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "轮播大图管理",
+              "href": "page/banner.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "推荐小图管理",
+              "href": "page/small-image.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "菜单管理",
+          "href": "",
+          "icon": "fa fa-bars",
+          "target": "_self",
+          "child": [
+            {
+              "title": "新闻资讯管理",
+              "href": "page/articleManager.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "宣传模版管理",
+              "href": "page/templateManager.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "教学视频管理",
+              "href": "page/teach-video.html",
+              "icon": "fa fa-video-camera",
+              "target": "_self"
+            },
+            {
+              "title": "配方管理",
+              "href": "",
+              "icon": "fa fa-gears",
+              "target": "_self",
+              "child": [
+                {
+                  "title": "商城管理",
+                  "href": "page/formulaTrading.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                },
+                {
+                  "title": "交易管理",
+                  "href": "page/formulaTradeManager.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                },
+                {
+                  "title": "配方上传管理",
+                  "href": "page/formulaUploadManager.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                }
+              ]
+            },
+            {
+              "title": "底料管理",
+              "href": "",
+              "icon": "fa fa-gears",
+              "target": "_self",
+              "child": [
+                {
+                  "title": "商城管理",
+                  "href": "page/baseManager.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                },
+                {
+                  "title": "类型管理",
+                  "href": "page/tradeTypeManager.html",
+                  "icon": "fa fa-gears",
+                  "target": "_self"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "留言管理",
+          "href": "page/leave-message.html",
+          "icon": "fa fa-envelope-o",
+          "target": "_self"
+        },
+        {
+          "title": "消息管理",
+          "href": "page/message.html",
+          "icon": "fa fa-envelope-o",
+          "target": "_self"
+        },
+        {
+          "title": "订单管理",
+          "href": "page/order.html",
+          "icon": "fa fa-credit-card",
+          "target": "_self"
+        },
+        {
+          "title": "用户管理",
+          "href": "",
+          "icon": "fa fa-user-circle-o",
+          "target": "_self",
+          "child": [
+            {
+              "title": "普通用户管理",
+              "href": "page/user.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "管理员管理",
+              "href": "page/manager.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "系统状态信息",
+          "href": "page/system-info.html",
+          "icon": "fa fa-cogs",
+          "target": "_self"
+        }
+      ]
+    }
+  }
+}

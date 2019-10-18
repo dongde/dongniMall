@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>user</title>
+</head>
+<style>
+    .layui-input {
+        height: 30px;
+    }
+
+    .top-btn {
+        margin-left: 10px;
+        margin-bottom: 0 !important;
+    }
+</style>
+<body>
+<table class="layui-hide" id="user-table" lay-filter="user-table"></table>
+</body>
+<!-- 表格顶部按钮-->
+<script type="text/html" id="toolbar">
+
+    账号：
+    <div class="layui-inline">
+        <input class="layui-input" name="searchPhone" id="searchPhone" placeholder="请输入账号" autocomplete="off">
+    </div>
+    昵称：
+    <div class="layui-inline">
+        <input class="layui-input" name="searchName" id="searchName" placeholder="请输入昵称" autocomplete="off">
+    </div>
+    <button class="layui-btn layui-btn-sm top-btn" lay-event="search" data-type="search">搜索</button>
+    <button class="layui-btn layui-btn-sm" lay-event="delAll" data-type="delAll">批量删除</button>
+
+</script>
+<!-- 操作栏-->
+<script type="text/html" id="bar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="modify" style='text-decoration:none;'>修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style='text-decoration:none;'>删除</a>
+</script>
+<!-- 性别-->
+<script type="text/html" id="templet-gender">
+    {{#  if(d.gender == 0){  }}
+    <span class="label">男</span>
+    {{#  } else if(d.gender == 1){ }}
+    <span class="label">女</span>
+    {{#  } }}
+</script>
+<script>
+    layui.use('table', function () {
+        var table = layui.table
+            , $ = layui.jquery;
+
+        /**
+         * 渲染表格
+         */
+        table.render({
+            elem: '#user-table'
+            , url: '/user/queryUserList'
+            , toolbar: '#toolbar'
+            , title: '用户数据表'
+            , cellMinWidth: 80
+            , height: 'full-110'
+            , cols: [[
+                {type: 'checkbox', fixed: 'left', align: 'center'}
+                , {field: 'phone', title: '用户账号', unresize: true, align: 'center'}
+                , {field: 'name', title: '用户昵称', templet: '#templet-thumbnail', unresize: true, align: 'center'}
+                , {field: 'gender', title: '性别', unresize: true, templet: "#templet-gender", align: 'center'}
+                , {field: 'email', title: '邮箱', unresize: true, align: 'center'}
+                , {field: 'address', title: '收货地址', unresize: true, align: 'center'}
+                , {field: 'postal_code', title: '邮政编码', hide: true, unresize: true, align: 'center'}
+                , {field: 'create_time', title: '注册时间', sort: true, hide: true, unresize: true, align: 'center'}
+                , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center'}
+            ]]
+            , page: true
+            , limit: 10
+        });
+
+        /**
+         * 头工具栏事件
+         */
+        table.on('toolbar(user-table)', function (obj) {
+            switch (obj.event) {
+                case "delAll":
+                    layer.confirm('确定删除？', function (index) {
+                        var checkStatus = table
+                            .checkStatus('user-table'), data = checkStatus.data;
+                        var phones = [];
+                        for (var i = 0; i < data.length; i++) {
+                            phones.push(data[i]["phone"]);
+                        }
+                        deleteUsers(phones);
+                        layer.close(index);
+                    });
+                    break;
+                case "search":
+                    table.reload('user-table', {
+                        page: {
+                            curr: 1
+                            //重新从第 1 页开始
+                        },
+                        where: {
+                            phone: $("#searchPhone").val().trim(),
+                            name: $("#searchName").val().trim()
+                        }
+                    });
+            }
+        });
+        /**
+         * 监听行工具事件
+         */
+        table.on('tool(user-table)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case 'modify':
+                    layer.open({
+                        type: 2,
+                        title: '修改用户信息',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['800px', '500px'],
+                        offset: 'auto',
+                        content: '/page/user-info.html',//iframe的url，no代表不显示滚动条
+                        success: function (layero, index) {
+                            var body = layer.getChildFrame('body', index);
+                            body.contents().find("#phone").text(obj.data.phone);
+                        }
+                    });
+                    break;
+                case 'del':
+                    layer.confirm('确定删除？', function (index) {
+                        deleteUsers([data.phone]);
+                        layer.close(index);
+                    });
+                    break;
+            }
+        });
+
+
+        //根据ID删除行
+        function deleteUsers(phones) {
+            console.log(phones);
+            if (phones.length === 0) {
+                layer.msg("请选择删除内容!");
+            } else {
+                $.ajax({
+                    method: 'POST',
+                    url: '/user/removeUser',
+                    data: {
+                        'phones': phones
+                    },
+                    success: function (res) {
+                        if (res.status === 200) {
+                            layer.msg("删除成功");
+                            table.reload('user-table', {
+                                page: {
+                                    curr: 1
+                                    //重新从第 1 页开始
+                                }
+                            });
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error: function () {
+                        layer.msg("删除出错");
+                    }
+                })
+            }
+        }
+    });
+
+</script>
+</html>

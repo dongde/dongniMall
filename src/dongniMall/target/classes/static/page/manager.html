@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>banner</title>
+</head>
+<body>
+<table class="layui-hide" id="manager-table" lay-filter="manager-table"></table>
+</body>
+<!-- 表格顶部按钮-->
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addManager">添加管理员</button>
+    </div>
+</script>
+<!-- 操作栏-->
+<script type="text/html" id="bar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="modify" style='text-decoration:none;'>修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style='text-decoration:none;'>删除</a>
+</script>
+
+<script type="text/html" id="templet-permission">
+    {{#  if(d.permission == 1){  }}
+    <span id="permission">一级权限</span>
+    {{#  } else if(d.permission == 2){ }}
+    <span id="permission">二级权限</span>
+    {{#  } }}
+</script>
+<script>
+    layui.use('table', function () {
+        var table = layui.table
+            , $ = layui.jquery;
+
+        /**
+         * 渲染表格
+         */
+        table.render({
+            elem: '#manager-table'
+            , url: '/user/getManagerList'
+            , toolbar: '#toolbar'
+            , title: '管理员数据表'
+            , cellMinWidth: 80
+            , height: 'full-110'
+            , cols: [[
+                {field: 'name', title: '管理员名', templet: '#templet-thumbnail', unresize: true, align: 'center'}
+                , {field: 'create_time', title: '注册时间', sort: true, unresize: true, align: 'center'}
+                , {field: 'password', title: '密码', hide: true, unresize: true}
+                , {
+                    field: 'permission',
+                    title: '权限等级',
+                    sort: true,
+                    templet: '#templet-permission',
+                    unresize: true,
+                    align: 'center'
+                }
+                , {fixed: 'right', title: '操作', toolbar: '#bar', unresize: true, align: 'center'}
+            ]]
+            , page: true
+            , limit: 10
+        });
+        /**
+         * 头工具栏事件
+         */
+        table.on('toolbar(manager-table)', function (obj) {
+            if (obj.event == 'addManager') {
+                var currentManagerInfo = window.localStorage.getItem("currentManagerInfo");
+                var currentManagerObj = JSON.parse(currentManagerInfo);
+                // if (currentManagerObj != null) {
+                layer.open({
+                    type: 2,
+                    title: '添加管理员',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['800px', '500px'],
+                    offset: 'auto',
+                    content: '/page/manager-info.html', //iframe的url，no代表不显示滚动条
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        body.contents().find("#isHidden").attr('hidden', true);
+                        //如果当前登录管理员权限为一级，则可添加一级和二级管理员，否则只能添加二级
+                        if (currentManagerObj.permission === 2) {
+                            var Select1 = 'dd[lay-value=1]';
+                            var Select = 'dd[lay-value=2]'; //设置要选择的值 --option的value
+                            body.contents().find("#modules").html('<option value="2">二级权限</option>');
+                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select1).remove();
+                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
+                        }
+                    }
+                });
+                // } else {
+                //     layer.msg("未登录");
+                // }
+            }
+        });
+        /**
+         * 监听行工具事件
+         */
+        table.on('tool(manager-table)', function (obj) {
+
+            var currentManagerInfo = window.localStorage.getItem("currentManagerInfo");
+            var currentManagerObj = JSON.parse(currentManagerInfo);
+            if (currentManagerObj != null) {
+                switch (obj.event) {
+                    case 'del':
+                        if (currentManagerObj.permission <= obj.data.permission) {
+                            layer.confirm('确定删除？', function (index) {
+                                deleteManager(obj.data.id);
+                                layer.close(index);
+                            });
+                        } else {
+                            layer.msg("您没有此操作的权限");
+                        }
+                        break;
+                    case 'modify':
+                        if (currentManagerObj.permission <= obj.data.permission) {
+                            var data = JSON.stringify(obj.data);
+                            window.localStorage.setItem("tmpManagerInfo", data);
+                            layer.open({
+                                type: 2,
+                                title: '修改管理员信息',
+                                shadeClose: true,
+                                shade: 0.8,
+                                area: ['800px', '500px'],
+                                offset: 'auto',
+                                content: '/page/manager-info.html',//iframe的url，no代表不显示滚动条
+                                success: function (layero, index) {
+                                    var body = layer.getChildFrame('body', index);
+                                    body.contents().find("#managerName").val(obj.data.name);
+                                    body.contents().find("#id").val(obj.data.id);
+                                    console.log("当前权限等级：" + obj.data.permission);
+                                    switch (currentManagerObj.permission) {
+                                        //当前登录管理员权限为一级，可以修改管理员权限为一级或二级
+                                        case 1:
+                                            switch (obj.data.permission) {
+                                                case 1:
+                                                    var Select = 'dd[lay-value=1]'; //设置要选择的值 --option的value
+                                                    body.contents().find("#modules").html('<option value="1">一级权限</option><option value="2">二级权限</option>');
+                                                    body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
+                                                    break;
+                                                case 2:
+                                                    var Select = 'dd[lay-value=2]'; //设置要选择的值 --option的value
+                                                    body.contents().find("#modules").html('<option value="1">一级权限</option><option value="2">二级权限</option>');
+                                                    body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
+                                                    break;
+                                            }
+                                            break;
+                                        //当前登录管理员权限为二级，只能修改管理员权限为二级
+                                        case 2:
+                                            var Select1 = 'dd[lay-value=1]';
+                                            var Select = 'dd[lay-value=2]'; //设置要选择的值 --option的value
+                                            body.contents().find("#modules").html('<option value="2">二级权限</option>');
+                                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select1).remove();
+                                            body.contents().find("#modules").siblings("div.layui-form-select").find('dl').find(Select).click();
+                                            break;
+                                    }
+                                }
+                            });
+                        } else {
+                            layer.msg("您没有此操作的权限");
+                        }
+                        break;
+                }
+            } else {
+                layer.msg("未登录");
+            }
+        });
+
+
+        //根据ID删除行
+        function deleteManager(id) {
+            $.ajax({
+                method: 'POST',
+                url: '/user/removeManager',
+                data: {
+                    'id': id
+                },
+                success: function (res) {
+                    if (res.status === 200) {
+                        layer.msg("删除成功");
+                        table.reload('manager-table', {
+                            page: {
+                                curr: 1
+                                //重新从第 1 页开始
+                            }
+                        });
+                    } else {
+                        layer.msg(res.msg);
+                    }
+                }
+            })
+        }
+    });
+
+</script>
+</html>
