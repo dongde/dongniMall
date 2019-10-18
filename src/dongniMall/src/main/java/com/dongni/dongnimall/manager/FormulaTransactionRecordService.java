@@ -29,14 +29,6 @@ public interface FormulaTransactionRecordService {
     PageData queryFormulaTransactionRecord(Integer page,Integer pageSize);
 
     /**
-     * 查询用户是否有配方的订单记录
-     * @param user_phone
-     * @param formula_id
-     * @return
-     */
-    boolean queryFormulaTransactionRecordByUserAndFormula(String user_phone,String formula_id);
-
-    /**
      * 修改记录信息
      * @param formulaTransactionRecordDO
      */

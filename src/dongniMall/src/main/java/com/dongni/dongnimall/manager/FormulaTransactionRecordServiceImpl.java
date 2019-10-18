@@ -74,11 +74,6 @@ public class FormulaTransactionRecordServiceImpl implements FormulaTransactionRe
     }
 
     @Override
-    public boolean queryFormulaTransactionRecordByUserAndFormula(String user_phone, String formula_id) {
-        return formulaTransactionRecordMapper.selectFormulaTransactionRecordByUserAndFormula(user_phone, formula_id).size() != 0 ? true : false;
-    }
-
-    @Override
     public void modifyFormulaTransactionRecord(FormulaTransactionRecordDO formulaTransactionRecordDO) {
         formulaTransactionRecordMapper.updateFormulaTransactionRecord(formulaTransactionRecordDO);
     }

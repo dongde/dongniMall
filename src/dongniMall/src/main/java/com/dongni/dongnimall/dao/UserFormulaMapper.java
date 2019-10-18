@@ -15,4 +15,6 @@ public interface UserFormulaMapper {
     void insertUserFormula(@Param("userFormulaDO")UserFormulaDO userFormulaDO);
 
     List<UserFormulaDO> selectUserFormula(String user_phone);
+
+    List<UserFormulaDO> selectUserFormulaByUserAndFormula(@Param("user_phone") String user_phone,@Param("formula_id") String formula_id);
 }

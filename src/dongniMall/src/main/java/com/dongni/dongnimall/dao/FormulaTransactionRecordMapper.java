@@ -18,7 +18,5 @@ public interface FormulaTransactionRecordMapper {
 
     List<FormulaTransactionRecordDO> selectFormulaTransactionRecord();
 
-    List<FormulaTransactionRecordDO> selectFormulaTransactionRecordByUserAndFormula(@Param("user_phone") String user_phone,@Param("formula_id") String formula_id);
-
     void updateFormulaTransactionRecord(@Param("formulaTransactionRecordDO") FormulaTransactionRecordDO formulaTransactionRecordDO);
 }

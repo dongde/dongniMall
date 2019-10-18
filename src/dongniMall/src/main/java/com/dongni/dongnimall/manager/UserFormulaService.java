@@ -21,4 +21,12 @@ public interface UserFormulaService {
      * @return
      */
     List<UserFormulaDO> queryUserFormla(String user_phone);
+
+    /**
+     * 查询用户是否够购买配方
+     * @param user_phone
+     * @param formula_id
+     * @return
+     */
+    boolean queryUserFormulaByUserAndFormula(String user_phone,String formula_id);
 }

@@ -12,6 +12,12 @@
         order by create_time desc
     </select>
 
+    <select id="selectUserFormulaByUserAndFormula" resultType="com.dongni.dongnimall.pojo.UserFormulaDO">
+        select <include refid="user_formula_col"></include>
+        from user_formula
+        where user_phone=#{user_phone} and formula_id=#{formula_id}
+    </select>
+
     <insert id="insertUserFormula" parameterType="com.dongni.dongnimall.pojo.UserFormulaDO">
         insert into user_formula(<include refid="user_formula_col"></include>)
         values(#{userFormulaDO.id},#{userFormulaDO.user_phone},#{userFormulaDO.formula_id},#{userFormulaDO.create_time})

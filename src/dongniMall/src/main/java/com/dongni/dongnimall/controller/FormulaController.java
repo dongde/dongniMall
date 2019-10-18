@@ -166,15 +166,6 @@ public class FormulaController {
         return formulaTransactionRecordService.queryFormulaTransactionRecord(page, limit);
     }
 
-    //查询用户是否有配方的购买记录
-    @GetMapping("/queryFormulaTransactionRecordByUserAndFormula")
-    public JsonResult queryFormulaTransactionRecordByUserAndFormula(String user_phone,String formula_id){
-        if(StringUtils.isBlank(user_phone)||StringUtils.isBlank(formula_id)){
-            return JsonResult.errorMsg("查询出错");
-        }
-        return JsonResult.ok(formulaTransactionRecordService.queryFormulaTransactionRecordByUserAndFormula(user_phone,formula_id));
-    }
-
     //修改交易信息
     @PostMapping("/modifyFormulaTransactionRecord")
     public JsonResult modifyFormulaTransactionRecord(FormulaTransactionRecordDO formulaTransactionRecordDO) {
@@ -208,5 +199,14 @@ public class FormulaController {
     @GetMapping("/queryUserFormula")
     public JsonResult queryUserFormula(String user_phone) {
         return JsonResult.ok(userFormulaService.queryUserFormla(user_phone));
+    }
+
+    //查询用户是否有配方的购买记录
+    @GetMapping("/queryUserFormulaByUserAndFormula")
+    public JsonResult queryUserFormulaByUserAndFormula(String user_phone,String formula_id){
+        if(StringUtils.isBlank(user_phone)||StringUtils.isBlank(formula_id)){
+            return JsonResult.errorMsg("查询出错");
+        }
+        return JsonResult.ok(userFormulaService.queryUserFormulaByUserAndFormula(user_phone,formula_id));
     }
 }

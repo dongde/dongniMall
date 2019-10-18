@@ -21,14 +21,6 @@
         from formula_transaction_record
     </select>
 
-    <select id="selectFormulaTransactionRecordByUserAndFormula" parameterType="String"
-            resultType="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">
-        select
-        <include refid="formula_transaction_record_col"></include>
-        from formula_transaction_record
-        where user_phone=#{user_phone} and formula_id=#{formula_id} and payment_status=1
-    </select>
-
     <update id="updateFormulaTransactionRecord" parameterType="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">
         update formula_transaction_record
         <set>
