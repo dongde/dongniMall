@@ -34,12 +34,12 @@ public class TokenInterceptor implements HandlerInterceptor {
 //                }
 //            }
 //        }
-//        String token = (String) request.getSession().getAttribute("token");
-//        if (StringUtils.isEmpty(token)) {
-//            response.setStatus(HttpStatus.SC_MOVED_TEMPORARILY);
-//            response.addHeader("location", "/admin/login");
-//            return false;
-//        }
+        String token = (String) request.getSession().getAttribute("token");
+        if (StringUtils.isEmpty(token)) {
+            response.setStatus(HttpStatus.SC_MOVED_TEMPORARILY);
+            response.addHeader("location", "/admin/login");
+            return false;
+        }
         return true;
     }
 

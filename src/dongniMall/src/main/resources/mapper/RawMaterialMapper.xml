@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.RawMaterialMapper">
+    <sql id="raw_material_col">
+        id,formula_upload_id,raw_material_name,variety,weight,processing_method
+    </sql>
+    <insert id="insertRawMaterial" parameterType="com.dongni.dongnimall.pojo.RawMaterialDO">
+        insert into raw_material(<include refid="raw_material_col"></include>)
+        values
+        <foreach collection="list" item="rawMaterialDO" index="idnex" separator=",">
+            (#{rawMaterialDO.id},#{rawMaterialDO.formula_upload_id},#{rawMaterialDO.raw_material_name},#{rawMaterialDO.variety},#{rawMaterialDO.weight},#{rawMaterialDO.processing_method})
+        </foreach>
+    </insert>
+
+    <select id="selectRawMaterialList" parameterType="String" resultType="com.dongni.dongnimall.pojo.RawMaterialDO">
+        select <include refid="raw_material_col"></include>
+        from raw_material
+        where formula_upload_id=#{formula_upload_id}
+    </select>
+</mapper>

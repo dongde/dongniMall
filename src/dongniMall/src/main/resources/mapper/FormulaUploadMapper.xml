@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.FormulaUploadMapper">
+    <sql id="formula_upload_col">
+        id,formula_upload_name,user_phone,flour_process,cooking_pot_method,description,create_time,status
+    </sql>
+    <resultMap id="formula_upload_resultmap" type="com.dongni.dongnimall.pojo.FormulaUploadDO">
+        <id column="id" property="id"/>
+        <result column="formula_upload_name" property="formula_upload_name"/>
+        <result column="user_phone" property="user_phone"/>
+        <result column="flour_process" property="flour_process"/>
+        <result column="cooking_pot_method" property="cooking_pot_method"/>
+        <result column="description" property="description"/>
+        <result column="create_time" property="create_time"/>
+        <collection column="id" property="rawMaterialDOList"
+                    select="com.dongni.dongnimall.dao.RawMaterialMapper.selectRawMaterialList"/>
+    </resultMap>
+
+
+    <insert id="insertFormulaUpload" parameterType="com.dongni.dongnimall.pojo.FormulaUploadDO">
+        insert into formula_upload(<include refid="formula_upload_col"></include>)
+        values
+        (#{formulaUploadDO.id},#{formulaUploadDO.formula_upload_name},#{formulaUploadDO.user_phone},#{formulaUploadDO.flour_process},#{formulaUploadDO.cooking_pot_method},#{formulaUploadDO.description},#{formulaUploadDO.create_time},#{formulaUploadDO.status})
+    </insert>
+
+    <select id="selectFormulaUploadList" resultMap="formula_upload_resultmap">
+        select *
+        from formula_upload
+        where 1=1
+        <if test="user_phone!=null and user_phone!=''">
+            and user_phone=#{user_phone}
+        </if>
+        <if test="formula_upload_name!=null and formula_upload_name!=''">
+            and formula_upload_name like concat(concat('%',#{formula_upload_name}),'%')
+        </if>
+        order by create_time desc
+    </select>
+
+    <update id="updateFormlaUpload" parameterType="com.dongni.dongnimall.pojo.FormulaUploadDO">
+        update formula_upload
+        set status=#{formulaUploadDO.status}
+        where id=#{formulaUploadDO.id}
+    </update>
+</mapper>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <style>
-        .layui-inline{
+        .layui-inline {
             padding-right: 15px;
         }
     </style>
@@ -11,99 +11,76 @@
 
     配方名称：
     <div class="layui-inline">
-        <input type="text" autocomplete="off" id="formulaName" class="layui-input">
+        <input type="text" autocomplete="off" id="formula_upload_name" class="layui-input">
     </div>
-
-
-    <button lay-event="find" class="layui-btn layui-btn-sm top-btn" data-type="find">查找</button>
+    用户账号：
+    <div class="layui-inline">
+        <input type="text" autocomplete="off" id="user_phone" class="layui-input">
+    </div>
+    <button lay-event="search" class="layui-btn layui-btn-sm top-btn" data-type="search">查找</button>
     <button lay-event="reload" class="layui-btn layui-btn-sm top-btn" data-type="reload">重置</button>
-
-    <button lay-event="addFormula" class="layui-btn layui-btn-sm top-btn" id="addFormula">添加底料</button>
 
 </script>
 <body>
-
-<div class="layuimini-container">
-    <div class="layuimini-main">
-        <table class="layui-hide" id="formulaList" lay-filter="formulaList"></table>
-    </div>
-</div>
+<table class="layui-hide" id="formula-upload-table" lay-filter="formula-upload-table"></table>
+<script type="text/html" id="status">
+    {{#  if(d.status == 0){  }}
+    <span class="label">未审核</span>
+    {{#  } else if(d.status == 1){ }}
+    <span class="label">通过</span>
+    {{#  } else if(d.status == 2){ }}
+    <span class="label">未通过</span>
+    {{#  } }}
+</script>
 <script type="text/html" id="operation">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="review">审核</a>
 </script>
 <script>
-    layui.use(['table','form'],function () {
-        var table = layui.table;
-        var form = layui.form,
+    layui.use(['table', 'form'], function () {
+        let table = layui.table,
             layer = layui.layer,
             $ = layui.jquery;
 
         table.render({
-            elem:'#formulaList'
-            ,url:"/formula/list"
-            ,cellMinWidth: 100
-            ,toolbar:"#toolbar"
-            ,page:true
-            ,height:"full-160"
-            ,cols:[[
-                {field: 'formulaName', title: '配方名称',align:"center"}
-                ,{field: 'formulaPrice', title: '配方价格',align:"center"}
-                ,{field: 'samplePrice', title: '样品价格',align:"center"}
-                ,{field: 'flyPrice', title: '炒制价格',align:"center"}
-                ,{field: 'factoryAddress', title: '料场地址',align:"center"}
-                ,{field: 'updateTime', title: '更新时间',align:"center"}
-                ,{fixed: 'right', title:'操作', toolbar: '#operation',align:"center"}
+            elem: '#formula-upload-table'
+            , url: "/formula/queryFormulaUpload"
+            , cellMinWidth: 100
+            , toolbar: "#toolbar"
+            , page: true
+            , height: "full-110"
+            , cols: [[
+                {field: 'formula_upload_name', title: '配方名称', align: "center"}
+                , {field: 'user_phone', title: '用户账号', align: "center"}
+                , {field: 'flour_process', title: '炒料过程', align: "center"}
+                , {field: 'cooking_pot_method', title: '煮锅过程', align: "center"}
+                , {field: 'description', title: '配方描述', align: "center"}
+                , {field: 'create_time', title: '上传时间', sort: true, align: "center"}
+                , {field: 'status', title: '审核状态', toolbar: '#status', align: "center"}
+                , {fixed: 'right', title: '操作', toolbar: '#operation', align: "center"}
             ]]
-            ,id:"formulaList"
-            ,limit:10
-            ,where:{tradeName:"",tradeType:""}
+            , id: "formula-upload-table"
+            , limit: 10
         });
 
 
         //头工具栏事件
-        table.on('toolbar(formulaList)', function (obj) {
+        table.on('toolbar(formula-upload-table)', function (obj) {
             switch (obj.event) {
-                case 'find':
-                    var formulaName = $("#formulaName").val();
-                    table.reload('formulaList', {
-                        url:'/formula/list'
-                        ,where: {
-                            formulaName: formulaName
+                case 'search':
+                    table.reload('formula-upload-table', {
+                        where: {
+                            formula_upload_name: $("#formula_upload_name").val(),
+                            user_phone: $("#user_phone").val()
                         },
                         page: {
                             curr: 1
                         }
                     });
                     break;
-                case 'addFormula':
-                    layer.open({
-                        area: ['80%','80%'],
-                        title: "添加配方",
-                        shadeClose: true,
-                        shade: 0.8,
-                        type: 2,
-                        content: ['/page/formulaTrading-info.html'],
-                        success: function(res){
-                            if(res.status == 200){
-                                layer.msg("添加成功！");
-                                table.reload('formulaList', {
-                                    page: {
-                                        curr: 1
-                                        //重新从第 1 页开始
-                                    }
-                                });
-                            }
-                        }
-                    });
-                    break;
                 case 'reload':
-                    $("#formulaName").val(null);
-                    table.reload('formulaList', {
-                        url:'/formula/list'
-                        ,where: {
-                            formulaName: null
-                        },
+                    $("#formula_upload_name").val("");
+                    $("#user_phone").val("");
+                    table.reload('formula-upload-table', {
                         page: {
                             curr: 1
                         }
@@ -113,56 +90,55 @@
         });
 
         //监听行工具事件
-        table.on('tool(formulaList)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-            var data = obj.data; //获得当前行数据
+        table.on('tool(formula-upload-table)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            let data = obj.data; //获得当前行数据
 
-            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-            if(layEvent === 'del'){ //删除
-                layer.confirm('真的删除行么', function(index){
-                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                    layer.close(index);
-                    //向服务端发送删除指令
-                    deleteListObject(data.id);
-                });
-            } else if(layEvent === 'edit') { //编辑
-                layer.open({
-                    type: 2,
-                    title: '修改配方',
-                    shadeClose: true,
-                    shade: 0.8,
-                    area: ['80%', '80%'],
-                    offset: 'auto',
-                    content: '/page/formulaTrading-info.html', //iframe的url，no代表不显示滚动条
-                    success: function (layero, index) {
-                        var body = layer.getChildFrame('body', index);
-                        body.contents().find("#id").val(obj.data.id);
-                        body.contents().find("#formulaName").val(obj.data.formulaName);
-                        body.contents().find("#formulaPrice").val(obj.data.formulaPrice);
-                        body.contents().find("#formulaDescription").val(obj.data.formulaDescription);
-                        body.contents().find("#samplePrice").val(obj.data.samplePrice);
-                        body.contents().find("#flyPrice").val(obj.data.flyPrice);
-                        body.contents().find("#factoryAddress").val(obj.data.factoryAddress);
-                        body.contents().find("#modules").attr('name',obj.data.baseStoreId);
-                        body.contents().find("#updateBigImage").css("display","block");
-                        body.contents().find("#updateload").attr("src",obj.data.bigPicture);
-                    }
-                });
+            switch (obj.event) {
+                case 'review':
+                    layer.open({
+                        type: 2,
+                        title: '配方详情',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['60%', '90%'],
+                        offset: 'auto',
+                        content: '/page/formulaUploadManager-info.html', //iframe的url，no代表不显示滚动条
+                        success: function (layero, index) {
+                            let body = layer.getChildFrame('body', index);
+                            body.contents().find("#id").text(data.id);
+                            body.contents().find("#formula_upload_name").text(data.formula_upload_name);
+                            body.contents().find("#user_phone").text(data.user_phone);
+                            body.contents().find("#create_time").text(data.create_time);
+                            body.contents().find("#description > p").text(data.description);
+                            $.each(data.rawMaterialDOList,function (index,item) {
+                                body.contents().find("#raw_material > tbody").append(" <tr>\n" +
+                                    "                    <td>"+item.raw_material_name+"</td>\n" +
+                                    "                    <td>"+item.variety+"</td>\n" +
+                                    "                    <td>"+item.weight+"</td>\n" +
+                                    "                    <td>"+item.processing_method+"</td>\n" +
+                                    "                </tr>");
+                            });
+                            body.contents().find("#flour_process > p").text(data.flour_process);
+                            body.contents().find("#cooking_pot_method > p").text(data.cooking_pot_method);
+                        }
+                    });
+                    break;
             }
         });
 
         //删除所选行数据
-        function deleteListObject(id){
+        function deleteListObject(id) {
             if (id === null) {
                 layer.msg("请选择删除内容!");
             }
             $.ajax({
-                data:{"id":id},
-                url:"/formula/delete",
-                success:function (res) {
+                data: {"id": id},
+                url: "/formula/delete",
+                success: function (res) {
                     console.log(res.status);
-                    if(res.status == 200){
+                    if (res.status == 200) {
                         layer.msg("删除成功！");
-                        table.reload('formulaList', {
+                        table.reload('formula-upload-table', {
                             page: {
                                 curr: 1
                                 //重新从第 1 页开始

@@ -1,21 +1,18 @@
 package com.dongni.dongnimall.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dongni.dongnimall.base.storage.FileUploadManager;
 import com.dongni.dongnimall.base.storage.Response;
-import com.dongni.dongnimall.manager.BaseImageService;
-import com.dongni.dongnimall.manager.FormulaService;
-import com.dongni.dongnimall.manager.FormulaTransactionRecordService;
-import com.dongni.dongnimall.manager.UserFormulaService;
-import com.dongni.dongnimall.pojo.BaseImageDO;
-import com.dongni.dongnimall.pojo.FormulaDO;
-import com.dongni.dongnimall.pojo.FormulaTransactionRecordDO;
-import com.dongni.dongnimall.pojo.UserFormulaDO;
+import com.dongni.dongnimall.dao.FormulaUploadMapper;
+import com.dongni.dongnimall.dao.RawMaterialMapper;
+import com.dongni.dongnimall.manager.*;
+import com.dongni.dongnimall.pojo.*;
 import com.dongni.dongnimall.vo.FormulaVO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 配方交易管理
@@ -46,6 +45,12 @@ public class FormulaController {
 
     @Autowired
     private FileUploadManager fileUploadManager;
+
+    @Autowired
+    private FormulaUploadService formulaUploadService;
+
+    @Autowired
+    private RawMaterialService rawMaterialService;
 
     @Autowired
     private Sid sid;
@@ -227,5 +232,64 @@ public class FormulaController {
             return JsonResult.errorMsg("查询出错");
         }
         return JsonResult.ok(userFormulaService.queryUserFormulaByUserAndFormula(user_phone, formula_id));
+    }
+
+    //添加配方上传信息
+    @PostMapping("/addFormulaUpload")
+    public JsonResult addFormulaUpload(@RequestBody JSONObject jsonObject) {
+        System.out.println(jsonObject);
+        String formula_upload_name = jsonObject.getString("formula_upload_name");
+        String user_phone = jsonObject.getString("user_phone");
+        String flour_process = jsonObject.getString("flour_process");
+        String cooking_pot_method = jsonObject.getString("cooking_pot_method");
+        String description = jsonObject.getString("description");
+        JSONArray raw_materials = jsonObject.getJSONArray("raw_materials");
+
+        if (StringUtils.isBlank(formula_upload_name) || StringUtils.isBlank(user_phone) || StringUtils.isBlank(flour_process) || StringUtils.isBlank(cooking_pot_method) || raw_materials.size() == 0) {
+            return JsonResult.errorMsg("上传出错");
+        }
+        FormulaUploadDO formulaUploadDO = new FormulaUploadDO();
+        String id = sid.nextShort();
+        formulaUploadDO.setId(id);
+        formulaUploadDO.setFormula_upload_name(formula_upload_name);
+        formulaUploadDO.setUser_phone(user_phone);
+        formulaUploadDO.setFlour_process(flour_process);
+        formulaUploadDO.setCooking_pot_method(cooking_pot_method);
+        formulaUploadDO.setDescription(description);
+        formulaUploadDO.setCreate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm;ss").format(new Date()));
+        formulaUploadDO.setStatus(0);
+        List<RawMaterialDO> list = new ArrayList<>();
+        for (int i = 0; i < raw_materials.size(); i++) {
+            RawMaterialDO rawMaterialDO = new RawMaterialDO();
+            rawMaterialDO.setId(sid.nextShort());
+            rawMaterialDO.setFormula_upload_id(id);
+            rawMaterialDO.setProcessing_method(raw_materials.getJSONObject(i).getString("processing_method"));
+            rawMaterialDO.setRaw_material_name(raw_materials.getJSONObject(i).getString("raw_material_name"));
+            rawMaterialDO.setVariety(raw_materials.getJSONObject(i).getString("variety"));
+            rawMaterialDO.setWeight(raw_materials.getJSONObject(i).getString("weight"));
+            list.add(rawMaterialDO);
+        }
+        formulaUploadService.addFormulaUpload(formulaUploadDO);
+        rawMaterialService.addRawMaterials(list);
+
+        return JsonResult.ok();
+    }
+
+    //查询配方上传记录
+    @GetMapping("/queryFormulaUpload")
+    public PageData queryFormulaUpload(Integer page, Integer limit, String user_phone, String formula_upload_name) {
+        return formulaUploadService.queryFormulaUploadList(page, limit, user_phone, formula_upload_name);
+    }
+
+    @PostMapping("/modifyFormulaUpload")
+    public JsonResult modifyFormulaUpload(String id, Integer status) {
+        if (StringUtils.isBlank(id) || status == null) {
+            return JsonResult.errorMsg("出错");
+        }
+        FormulaUploadDO formulaUploadDO = new FormulaUploadDO();
+        formulaUploadDO.setId(id);
+        formulaUploadDO.setStatus(status);
+        formulaUploadService.modifyFormulaUpload(formulaUploadDO);
+        return JsonResult.ok();
     }
 }

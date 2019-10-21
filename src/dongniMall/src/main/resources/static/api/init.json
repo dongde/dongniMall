@@ -78,7 +78,7 @@
                   "target": "_self"
                 },
                 {
-                  "title": "配方上传管理",
+                  "title": "上传管理",
                   "href": "page/formulaUploadManager.html",
                   "icon": "fa fa-gears",
                   "target": "_self"

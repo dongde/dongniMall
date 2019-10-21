@@ -62,8 +62,7 @@
                 case 'find':
                     var formulaName = $("#formulaName").val();
                     table.reload('formulaList', {
-                        url: '/formula/list'
-                        , where: {
+                        where: {
                             formulaName: formulaName
                         },
                         page: {
@@ -95,10 +94,6 @@
                 case 'reload':
                     $("#formulaName").val(null);
                     table.reload('formulaList', {
-                        url: '/formula/list'
-                        , where: {
-                            formulaName: null
-                        },
                         page: {
                             curr: 1
                         }

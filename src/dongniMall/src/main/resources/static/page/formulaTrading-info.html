@@ -34,6 +34,16 @@
             height: 20px;
         }
 
+        .layui-tab-close {
+            font-size: 14px;
+            color: #c2c2c2;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            margin-top: -5px;
+            cursor: pointer;
+        }
+
         .delete {
             margin-top: 2px;
             line-height: 20px;
@@ -115,8 +125,9 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">不可预约时间：</label>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input" id="noAppointment" placeholder="yyyy-MM-dd">
+        <div class="layui-input-inline" style="width: 120px">
+            <input type="text" class="layui-input" id="noAppointment" autocomplete="off" placeholder="yyyy-MM-dd"><i
+                class="layui-icon layui-tab-close">ဆ</i>
         </div>
     </div>
     <div class="layui-form-item">
@@ -168,7 +179,8 @@
             fileUrl = "",
             charge1 = /^([0-9]+(.[0-9]+)?)$/,
             charge2 = /^([0-9]+(.[0-9]{1,2})?)$/,
-            date = new Date();
+            date = new Date(),
+            chooseDate = [];
 
         //格子主题
         laydate.render({
@@ -176,6 +188,20 @@
             , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
             , calendar: true
             , theme: 'grid'
+            , done: function (value, date, endDate) {
+                var isExist = false;
+                $.each(chooseDate, function (index, item) {
+                    if (value == item) {
+                        isExist = true;
+                        value = '';
+                    }
+                });
+                if(isExist){
+                    layer.msg("该日期已选择");
+                }else{
+
+                }
+            }
         });
 
         //加载底料列表
@@ -273,8 +299,8 @@
             , accept: 'file' //普通文件
             , choose: function (obj) {
                 obj.preview(function (index, file, result) {
-                    if(!$(".upload-choose").text()){
-                        $(".upload-choose").attr("hidden",'hidden');
+                    if (!$(".upload-choose").text()) {
+                        $(".upload-choose").attr("hidden", 'hidden');
                     }
                     $(".upload-choose").text(file.name);
                 })

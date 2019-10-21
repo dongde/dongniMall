@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>配方交易管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js" charset="utf-8"></script>
+    <link rel="icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/layuimini.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+</head>
+<style>
+    .formula-upload-container {
+        padding: 20px 50px;
+    }
+
+    #flour_process {
+        border: 1px dashed gray;
+        border-radius: 5px;
+        padding: 15px 0px;
+    }
+
+    #cooking_pot_method {
+        border: 1px dashed gray;
+        border-radius: 5px;
+        padding: 15px 0px;
+    }
+
+    .my-div {
+        margin-top: 20px;
+    }
+
+    p {
+        padding-left: 20px;
+    }
+</style>
+<body>
+<div class="formula-upload-container">
+    <span id="id" hidden></span>
+    <div>
+        <h1 id="formula_upload_name" style="text-align: center"></h1>
+    </div>
+    <div class="my-div">
+        用户账号：<span id="user_phone"></span>
+    </div>
+    <div class="my-div">
+        上传时间：<span id="create_time"></span>
+    </div>
+    <div class="my-div" id="description">
+        配方描述：
+        <p></p>
+    </div>
+    <div class="my-div">
+        原料：
+        <div>
+            <table id="raw_material" class="layui-table">
+                <thead>
+                <tr>
+                    <td>原料名</td>
+                    <td>品种</td>
+                    <td>重量</td>
+                    <td>处理方式</td>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="my-div">
+        炒料过程：
+        <div id="flour_process">
+            <p></p>
+        </div>
+    </div>
+    <div class="my-div">
+        煮锅方法：
+        <div id="cooking_pot_method">
+            <p></p>
+        </div>
+    </div>
+    <div class="my-div" style="margin-top: 50px">
+        <button type="button" class="layui-btn" id="by">通过</button>
+        <button type="button" class="layui-btn layui-btn-primary" id="fail">不通过</button>
+    </div>
+</div>
+</body>
+<script src="../lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use('upload', function () {
+        let $ = layui.jquery;
+
+        $("#by").on('click', function () {
+            $.ajax({
+                method: 'POST',
+                url: '/formula/modifyFormulaUpload',
+                data: {
+                    id: $("#id").text(),
+                    status: 1
+                },
+                success: function (res) {
+                    if (res.status == 200) {
+                        parent.layui.table.reload('formula-upload-table', {page: {curr: 1}});
+                        let index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        parent.layer.msg("审核成功");
+                    } else {
+                        layer.msg("审核出错");
+                    }
+                },
+                error: function () {
+                    layer.msg("出错");
+                }
+            })
+        });
+
+        $("#fail").on('click', function () {
+            $.ajax({
+                method: 'POST',
+                url: '/formula/modifyFormulaUpload',
+                data: {
+                    id: $("#id").text(),
+                    status: 2
+                },
+                success: function (res) {
+                    if (res.status == 200) {
+                        parent.layui.table.reload('formula-upload-table', {page: {curr: 1}});
+                        let index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        parent.layer.msg("审核成功");
+                    } else {
+                        layer.msg("审核出错");
+                    }
+                },
+                error: function () {
+                    layer.msg("出错");
+                }
+            })
+        });
+    });
+
+</script>
+</html>
