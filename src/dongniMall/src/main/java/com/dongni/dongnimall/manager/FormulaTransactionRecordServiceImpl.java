@@ -55,19 +55,12 @@ public class FormulaTransactionRecordServiceImpl implements FormulaTransactionRe
         pageData.setMsg("");
         List<FormulaTransactionRecordVO> list = new ArrayList<>();
         for (FormulaTransactionRecordDO formulaTransactionRecordDO : formulaTransactionRecordDOS) {
-            FormulaDO formulaDO = formulaMapper.selectByID(formulaTransactionRecordDO.getFormula_id());
-            UserDO userDO = userMapper.selectUserByPhone(formulaTransactionRecordDO.getUser_phone());
-            if (formulaDO != null && userDO != null) {
-                FormulaTransactionRecordVO formulaTransactionRecordVO = new FormulaTransactionRecordVO();
-                BeanUtils.copyProperties(formulaTransactionRecordDO, formulaTransactionRecordVO);
-                formulaTransactionRecordVO.setFormula_name(formulaDO.getFormulaName());
-                if (StringUtils.isBlank(userDO.getName())) {
-                    formulaTransactionRecordVO.setUser_name("<无>");
-                } else {
-                    formulaTransactionRecordVO.setUser_name(userDO.getName());
-                }
-                list.add(formulaTransactionRecordVO);
-            }
+            FormulaTransactionRecordVO formulaTransactionRecordVO = new FormulaTransactionRecordVO();
+            BeanUtils.copyProperties(formulaTransactionRecordDO, formulaTransactionRecordVO);
+            String name = formulaTransactionRecordDO.getUserDO().getName();
+            formulaTransactionRecordVO.setUser_name(StringUtils.isBlank(name) ? "<无>" : name);
+            formulaTransactionRecordVO.setFormula_name(formulaTransactionRecordDO.getFormulaDO().getFormulaName());
+            list.add(formulaTransactionRecordVO);
         }
         pageData.setData(list);
         return pageData;

@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class FormulaController {
     //添加和修改配方
     @RequestMapping("add")
     public JsonResult insertFormula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAddress, String bigPicture,
-                                    @RequestParam(value = "allURL[]", required = false) String[] allURL, String baseStoreId, String formulaFile) {
+                                    @RequestParam(value = "allURL[]", required = false) String[] allURL, String baseStoreId, String formulaFile, @RequestParam(value = "chooseDate[]", required = false) String[] chooseDate) {
         if (StringUtils.isBlank(formulaName)) {
             return JsonResult.errorMsg("配方名称不能为空");
         }
@@ -111,6 +112,14 @@ public class FormulaController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         formulaDO.setUpdateTime(dateString);
+        StringBuilder noAppointment = new StringBuilder();
+        for (String date : chooseDate) {
+            if(noAppointment.length()>0){
+                noAppointment.append(",");
+            }
+            noAppointment.append(date);
+        }
+        formulaDO.setNoAppointment(noAppointment.toString());
         if (StringUtils.isBlank(id)) {
             if (allURL == null) {
                 return JsonResult.errorMsg("配方图片不能为空");

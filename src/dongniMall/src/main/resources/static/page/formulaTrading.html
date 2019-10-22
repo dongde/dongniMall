@@ -28,10 +28,11 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script>
-    layui.use(['table', 'form'], function () {
+    layui.use(['table', 'form', 'laydate'], function () {
         var table = layui.table;
         var form = layui.form,
             layer = layui.layer,
+            laydate = layui.laydate,
             $ = layui.jquery;
 
         table.render({
@@ -125,17 +126,73 @@
                     content: '/page/formulaTrading-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
-                        body.contents().find("#id").val(obj.data.id);
-                        body.contents().find("#formulaName").val(obj.data.formulaName);
-                        body.contents().find("#formulaPrice").val(obj.data.formulaPrice);
-                        body.contents().find("#formulaDescription").val(obj.data.formulaDescription);
-                        body.contents().find("#samplePrice").val(obj.data.samplePrice);
-                        body.contents().find("#flyPrice").val(obj.data.flyPrice);
-                        body.contents().find("#factoryAddress").val(obj.data.factoryAddress);
-                        body.contents().find("#modules").attr('name', obj.data.baseStoreId);
+                        body.contents().find("#id").val(data.id);
+                        body.contents().find("#formulaName").val(data.formulaName);
+                        body.contents().find("#formulaPrice").val(data.formulaPrice);
+                        body.contents().find("#formulaDescription").val(data.formulaDescription);
+                        body.contents().find("#samplePrice").val(data.samplePrice);
+                        body.contents().find("#flyPrice").val(data.flyPrice);
+                        body.contents().find("#factoryAddress").val(data.factoryAddress);
+                        body.contents().find("#modules").attr('name', data.baseStoreId);
                         body.contents().find("#updateBigImage").css("display", "block");
-                        body.contents().find(".upload-choose").text(obj.data.formulaFile);
-                        body.contents().find("#updateload").attr("src", obj.data.bigPicture);
+                        body.contents().find(".upload-choose").text(data.formulaFile);
+                        body.contents().find("#updateload").attr("src", data.bigPicture);
+                        let chooseDate = data.noAppointment.split(",");
+                        let date = new Date();
+                        body.contents().find("#noAppointments").html("");
+                        $.each(chooseDate, function (index, item) {
+                            body.contents().find("#noAppointments").append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
+                                "                <input type=\"text\" class=\"layui-input noAppointment\" id=\"noAppointment-" + index + "\" autocomplete=\"off\"\n" +
+                                "                       placeholder=\"yyyy-MM-dd\" value=\"" + item + "\"><i\n" +
+                                "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
+                                "            </div>");
+                            //格子主题
+                            laydate.render({
+                                elem: '#noAppointment-' + index
+                                , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+                                , calendar: true
+                                , theme: 'grid'
+                                , trigger: 'mousedown'
+                                , ready: function (date) {
+                                    initDate = $(this)[0].elem[0].value;
+                                }
+                                , done: function (value, date, endDate) {
+                                    let isExist = false;
+                                    let index = -1;
+                                    let input = $(this)[0].elem;
+                                    //循环遍历查看选择日期是否已存在
+                                    $.each(chooseDate, function (index0, item) {
+                                        if (value == item && value != initDate) {
+                                            isExist = true;
+                                        }
+                                        //获取输入框初始值的数组索引，用于删除
+                                        if (value == initDate) {
+                                            index = index0;
+                                        }
+                                    });
+                                    //如果已存在则不改变输入框的值
+                                    if (isExist) {
+                                        layer.msg("该日期已选择");
+                                        input.val(initDate);
+                                    } else {
+                                        //不存在，且是第一次选择日期，则添加日期到数组
+                                        if (initDate == '') {
+                                            chooseDate.push(value);
+                                            //不存在，且输入框已存在日期，则清除数组中保存的日期，并添加新日期
+                                        } else {
+                                            chooseDate.splice(index, 1);
+                                            chooseDate.push(value);
+                                        }
+
+                                    }
+                                }
+                            });
+                        });
+                        body.contents().find("#noAppointments").append(" <div style=\"display: inline-block \">\n" +
+                            "                <button class=\"layui-btn layui-btn-small\" type=\"button\" id=\"addNoAppointment\"><i\n" +
+                            "                        class=\"layui-icon\"></i>\n" +
+                            "                </button>\n" +
+                            "            </div>");
                     }
                 });
             }

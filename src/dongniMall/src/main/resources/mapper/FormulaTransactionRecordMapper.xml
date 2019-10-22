@@ -4,6 +4,13 @@
     <sql id="formula_transaction_record_col">
         id,formula_id,user_phone,payment_amount,payment_status,payment_method,appointment,create_time
     </sql>
+    <resultMap id="formulaTransactionRecordResultMap" type="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">
+        <id column="id" property="id"/>
+        <result column="formula_id" property="formula_id"/>
+        <result column="user_phone" property="user_phone"/>
+        <association property="userDO" column="user_phone" select="com.dongni.dongnimall.dao.UserMapper.selectUserByPhone" ></association>
+        <association property="formulaDO" column="formula_id" select="com.dongni.dongnimall.dao.FormulaMapper.selectByID"></association>
+    </resultMap>
     <insert id="insertFormulaTransactionRecord" parameterType="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">
         insert into formula_transaction_record(<include refid="formula_transaction_record_col"></include>)
         values
@@ -15,7 +22,7 @@
         where id=#{id}
     </delete>
 
-    <select id="selectFormulaTransactionRecord" resultType="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">
+    <select id="selectFormulaTransactionRecord" resultMap="formulaTransactionRecordResultMap">
         select
         <include refid="formula_transaction_record_col"></include>
         from formula_transaction_record

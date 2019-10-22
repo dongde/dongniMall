@@ -125,10 +125,19 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">不可预约时间：</label>
-        <div class="layui-input-inline" style="width: 120px">
-            <input type="text" class="layui-input" id="noAppointment" autocomplete="off" placeholder="yyyy-MM-dd"><i
-                class="layui-icon layui-tab-close">ဆ</i>
+        <div id="noAppointments" style="display: inline-block">
+            <div class="layui-input-inline" style="width: 120px">
+                <input type="text" class="layui-input noAppointment" id="noAppointment" autocomplete="off"
+                       placeholder="yyyy-MM-dd"><i
+                    class="layui-icon layui-tab-close">ဆ</i>
+            </div>
+            <div style="display: inline-block">
+                <button class="layui-btn layui-btn-small" type="button" id="addNoAppointment"><i
+                        class="layui-icon"></i>
+                </button>
+            </div>
         </div>
+
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">试经营：</label>
@@ -180,30 +189,13 @@
             charge1 = /^([0-9]+(.[0-9]+)?)$/,
             charge2 = /^([0-9]+(.[0-9]{1,2})?)$/,
             date = new Date(),
+            dateNumber = 0,
+            initDate = "",
             chooseDate = [];
-
-        //格子主题
-        laydate.render({
-            elem: '#noAppointment'
-            , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
-            , calendar: true
-            , theme: 'grid'
-            , done: function (value, date, endDate) {
-                var isExist = false;
-                $.each(chooseDate, function (index, item) {
-                    if (value == item) {
-                        isExist = true;
-                        value = '';
-                    }
-                });
-                if(isExist){
-                    layer.msg("该日期已选择");
-                }else{
-
-                }
-            }
+        $.each($(".noAppointment"), function (index, item) {
+            console.log(item)
+            chooseDate.push(item.value);
         });
-
         //加载底料列表
         $.ajax({
             url: '/baseTrade/list?page=0&limit=0',
@@ -222,7 +214,6 @@
 
             }
         });
-
 
         //绑定提交
         $("#formSubmit").on('click', function () {
@@ -259,7 +250,8 @@
                                     bigPicture: bigImage,
                                     allURL: imgURL,
                                     baseStoreId: $("#modules").val(),
-                                    formulaFile: fileUrl
+                                    formulaFile: fileUrl,
+                                    chooseDate: chooseDate
                                 },
                                 success: function (res) {
                                     layer.closeAll('loading');
@@ -422,6 +414,110 @@
             $(this).parent().remove();
             imageID.push($(this).attr('value'));
         });
+
+
+        //格子主题
+        laydate.render({
+            elem: '#noAppointment'
+            , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+            , calendar: true
+            , theme: 'grid'
+            , showBottom: false
+            , trigger: 'mousedown'
+            , ready: function (date) {
+                initDate = $(this)[0].elem[0].value;
+            }
+            , done: function (value, date, endDate) {
+                let isExist = false;
+                let index = -1;
+                let input = $(this)[0].elem;
+                //循环遍历查看选择日期是否已存在
+                $.each(chooseDate, function (index0, item) {
+                    if (value == item && value != initDate) {
+                        isExist = true;
+                    }
+                    //获取输入框初始值的数组索引，用于删除
+                    if (value == initDate) {
+                        index = index0;
+                    }
+                });
+                //如果已存在则不改变输入框的值
+                if (isExist) {
+                    layer.msg("该日期已选择");
+                    input.val(initDate);
+                } else {
+                    //不存在，且是第一次选择日期，则添加日期到数组
+                    if (initDate == '') {
+                        chooseDate.push(value);
+                        //不存在，且输入框已存在日期，则清除数组中保存的日期，并添加新日期
+                    } else {
+                        chooseDate.splice(index, 1);
+                        chooseDate.push(value);
+                    }
+                }
+            }
+        });
+
+        $("#addNoAppointment").on('click', function () {
+            $("#noAppointments").append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
+                "                <input type=\"text\" class=\"layui-input noAppointment\" id=\"noAppointment" + dateNumber + "\" autocomplete=\"off\"\n" +
+                "                       placeholder=\"yyyy-MM-dd\"><i\n" +
+                "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
+                "            </div>");
+            //格子主题
+            laydate.render({
+                elem: '#noAppointment' + dateNumber
+                , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+                , calendar: true
+                , theme: 'grid'
+                , trigger: 'mousedown'
+                , ready: function (date) {
+                    initDate = $(this)[0].elem[0].value;
+                }
+                , done: function (value, date, endDate) {
+                    let isExist = false;
+                    let index = -1;
+                    let input = $(this)[0].elem;
+                    //循环遍历查看选择日期是否已存在
+                    $.each(chooseDate, function (index0, item) {
+                        if (value == item && value != initDate) {
+                            isExist = true;
+                        }
+                        //获取输入框初始值的数组索引，用于删除
+                        if (value == initDate) {
+                            index = index0;
+                        }
+                    });
+                    //如果已存在则不改变输入框的值
+                    if (isExist) {
+                        layer.msg("该日期已选择");
+                        input.val(initDate);
+                    } else {
+                        //不存在，且是第一次选择日期，则添加日期到数组
+                        if (initDate == '') {
+                            chooseDate.push(value);
+                            //不存在，且输入框已存在日期，则清除数组中保存的日期，并添加新日期
+                        } else {
+                            chooseDate.splice(index, 1);
+                            chooseDate.push(value);
+                        }
+
+                    }
+                }
+            });
+            dateNumber += 1;
+        });
+
+        //添加时间输入框
+        $("#noAppointments").on('click', '.layui-tab-close', function () {
+            let dateTemp = $(this).siblings("input").val();
+            $.each(chooseDate, function (index, item) {
+                if (item == dateTemp) {
+                    chooseDate.splice(index, 1);
+                }
+            });
+            $(this).parent('div').remove();
+        })
 
     });
 

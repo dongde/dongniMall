@@ -74,6 +74,7 @@ public class FormulaServiceImpl implements FormulaService {
                 lists.add(baseImageDO.getImageURL());
             }
             formulaVO.setImages(lists);
+            formulaVO.setNoAppointment(formulaDO.getNoAppointment().split(","));
         }
         return formulaVO;
     }

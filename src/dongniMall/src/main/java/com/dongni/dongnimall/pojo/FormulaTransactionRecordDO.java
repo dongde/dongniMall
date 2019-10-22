@@ -28,4 +28,8 @@ public class FormulaTransactionRecordDO {
     private String appointment;
     //记录创建时间
     private String create_time;
+    //用户对象
+    private UserDO userDO;
+    //配方对象
+    private FormulaDO formulaDO;
 }
