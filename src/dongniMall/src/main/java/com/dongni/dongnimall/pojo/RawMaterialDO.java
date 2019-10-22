@@ -19,7 +19,7 @@ public class RawMaterialDO {
     //品种
     private String variety;
     //重量
-    private String weight;
+    private Float weight;
     //处理方式
     private String processing_method;
 }

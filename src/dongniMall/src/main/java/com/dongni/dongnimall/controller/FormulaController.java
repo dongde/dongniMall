@@ -266,7 +266,7 @@ public class FormulaController {
             rawMaterialDO.setProcessing_method(raw_materials.getJSONObject(i).getString("processing_method"));
             rawMaterialDO.setRaw_material_name(raw_materials.getJSONObject(i).getString("raw_material_name"));
             rawMaterialDO.setVariety(raw_materials.getJSONObject(i).getString("variety"));
-            rawMaterialDO.setWeight(raw_materials.getJSONObject(i).getString("weight"));
+            rawMaterialDO.setWeight(raw_materials.getJSONObject(i).getFloat("weight"));
             list.add(rawMaterialDO);
         }
         formulaUploadService.addFormulaUpload(formulaUploadDO);

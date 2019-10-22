@@ -18,6 +18,10 @@
     <link rel="stylesheet" href="../css/public.css" media="all">
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <style>
+        .baseManager-container {
+            padding: 50px;
+        }
+
         .imageSize {
             height: 150px;
             width: 150px;
@@ -41,7 +45,7 @@
 </head>
 <body>
 
-<form class="layui-form" id="form1" method="post" multiple="multiple" style="padding-top: 20px">
+<form class="layui-form baseManager-container" id="form1" method="post" multiple="multiple" style="padding-top: 20px">
 
     <div class="layui-form-item" hidden>
         <label class="layui-form-label">ID：</label>
@@ -70,7 +74,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">底料价格:</label>
         <div class="layui-input-inline">
-            <input name="price" id="price"  placeholder="单价" autocomplete="off" class="layui-input">
+            <input name="price" id="price" placeholder="单价" autocomplete="off" class="layui-input">
         </div>
         <div class="layui-form-mid layui-word-aux">单位：元</div>
     </div>

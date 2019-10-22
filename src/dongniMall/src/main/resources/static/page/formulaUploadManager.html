@@ -49,14 +49,14 @@
             , page: true
             , height: "full-110"
             , cols: [[
-                {field: 'formula_upload_name', title: '配方名称', align: "center"}
-                , {field: 'user_phone', title: '用户账号', align: "center"}
-                , {field: 'flour_process', title: '炒料过程', align: "center"}
-                , {field: 'cooking_pot_method', title: '煮锅过程', align: "center"}
-                , {field: 'description', title: '配方描述', align: "center"}
-                , {field: 'create_time', title: '上传时间', sort: true, align: "center"}
-                , {field: 'status', title: '审核状态', toolbar: '#status', align: "center"}
-                , {fixed: 'right', title: '操作', toolbar: '#operation', align: "center"}
+                {field: 'formula_upload_name', title: '配方名称', unresize: true, align: "center"}
+                , {field: 'user_phone', title: '用户账号', unresize: true, align: "center"}
+                , {field: 'flour_process', title: '炒料过程', unresize: true, align: "center"}
+                , {field: 'cooking_pot_method', title: '煮锅过程', unresize: true, align: "center"}
+                , {field: 'description', title: '配方描述', unresize: true, align: "center"}
+                , {field: 'create_time', title: '上传时间', sort: true, unresize: true, align: "center"}
+                , {field: 'status', title: '审核状态', toolbar: '#status', unresize: true, align: "center"}
+                , {fixed: 'right', title: '操作', toolbar: '#operation', unresize: true, align: "center"}
             ]]
             , id: "formula-upload-table"
             , limit: 10
@@ -110,12 +110,12 @@
                             body.contents().find("#user_phone").text(data.user_phone);
                             body.contents().find("#create_time").text(data.create_time);
                             body.contents().find("#description > p").text(data.description);
-                            $.each(data.rawMaterialDOList,function (index,item) {
+                            $.each(data.rawMaterialDOList, function (index, item) {
                                 body.contents().find("#raw_material > tbody").append(" <tr>\n" +
-                                    "                    <td>"+item.raw_material_name+"</td>\n" +
-                                    "                    <td>"+item.variety+"</td>\n" +
-                                    "                    <td>"+item.weight+"</td>\n" +
-                                    "                    <td>"+item.processing_method+"</td>\n" +
+                                    "                    <td>" + item.raw_material_name + "</td>\n" +
+                                    "                    <td>" + item.variety + "</td>\n" +
+                                    "                    <td>" + item.weight + "</td>\n" +
+                                    "                    <td>" + item.processing_method + "</td>\n" +
                                     "                </tr>");
                             });
                             body.contents().find("#flour_process > p").text(data.flour_process);
