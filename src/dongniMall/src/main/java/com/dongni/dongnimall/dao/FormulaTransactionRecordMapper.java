@@ -16,6 +16,8 @@ public interface FormulaTransactionRecordMapper {
 
     void deleteFormulaTransactionRecord(String id);
 
+    void deleteFormulaTransactionRecordByUserAndFormula(@Param("user_phone")String user_phone,@Param("formula_id") String formula_id);
+
     List<FormulaTransactionRecordDO> selectFormulaTransactionRecord();
 
     void updateFormulaTransactionRecord(@Param("formulaTransactionRecordDO") FormulaTransactionRecordDO formulaTransactionRecordDO);

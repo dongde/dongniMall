@@ -38,4 +38,9 @@
         </set>
         where id=#{formula_id}
     </update>
+
+    <delete id="deleteUserForm">
+        delete from user_formula
+        where user_phone=#{user_phone} and formula_id=#{formula_id}
+    </delete>
 </mapper>

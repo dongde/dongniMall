@@ -8,8 +8,10 @@
         <id column="id" property="id"/>
         <result column="formula_id" property="formula_id"/>
         <result column="user_phone" property="user_phone"/>
-        <association property="userDO" column="user_phone" select="com.dongni.dongnimall.dao.UserMapper.selectUserByPhone" ></association>
-        <association property="formulaDO" column="formula_id" select="com.dongni.dongnimall.dao.FormulaMapper.selectByID"></association>
+        <association property="userDO" column="user_phone"
+                     select="com.dongni.dongnimall.dao.UserMapper.selectUserByPhone"></association>
+        <association property="formulaDO" column="formula_id"
+                     select="com.dongni.dongnimall.dao.FormulaMapper.selectByID"></association>
     </resultMap>
     <insert id="insertFormulaTransactionRecord" parameterType="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">
         insert into formula_transaction_record(<include refid="formula_transaction_record_col"></include>)
@@ -20,6 +22,11 @@
     <delete id="deleteFormulaTransactionRecord" parameterType="String">
         delete from formula_transaction_record
         where id=#{id}
+    </delete>
+
+    <delete id="deleteFormulaTransactionRecordByUserAndFormula">
+        delete from formula_transaction_record
+        where user_phone=#{user_phone} and formula_id=#{formula_id}
     </delete>
 
     <select id="selectFormulaTransactionRecord" resultMap="formulaTransactionRecordResultMap">

@@ -244,10 +244,22 @@ public class FormulaController {
         return JsonResult.ok();
     }
 
-    //查询用户购买的配方的记录
+    //查询用户购买的配方记录
     @GetMapping("/queryUserFormula")
     public JsonResult queryUserFormula(String user_phone) {
         return JsonResult.ok(userFormulaService.queryUserFormla(user_phone));
+    }
+
+    //删除用户购买的配方记录
+    @PostMapping("/removeUserFormula")
+    public JsonResult removeUserFormula(@RequestBody JSONObject jsonObject) {
+        String user_phone = jsonObject.getString("user_phone");
+        String formula_id = jsonObject.getString("formula_id");
+        if (StringUtils.isBlank(user_phone) || StringUtils.isBlank(formula_id)) {
+            return JsonResult.errorMsg("删除出错");
+        }
+        userFormulaService.deleteUserFormula(user_phone, formula_id);
+        return JsonResult.ok();
     }
 
     //查询用户是否有配方的购买记录

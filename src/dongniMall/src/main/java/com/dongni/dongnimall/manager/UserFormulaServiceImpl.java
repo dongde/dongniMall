@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.manager;
 
 import com.dongni.dongnimall.dao.FormulaMapper;
+import com.dongni.dongnimall.dao.FormulaTransactionRecordMapper;
 import com.dongni.dongnimall.dao.UserFormulaMapper;
 import com.dongni.dongnimall.pojo.FormulaDO;
 import com.dongni.dongnimall.pojo.UserFormulaDO;
@@ -22,6 +23,8 @@ public class UserFormulaServiceImpl implements UserFormulaService {
     private UserFormulaMapper userFormulaMapper;
     @Autowired
     private FormulaMapper formulaMapper;
+    @Autowired
+    private FormulaTransactionRecordMapper formulaTransactionRecordMapper;
 
     @Override
     public void addUserFormula(UserFormulaDO userFormulaDO) {
@@ -48,12 +51,18 @@ public class UserFormulaServiceImpl implements UserFormulaService {
     }
 
     @Override
-    public void addAppointment(Integer appointment_type, String date,String formula_id) {
-        userFormulaMapper.updateUserForm(appointment_type,date,formula_id);
+    public void addAppointment(Integer appointment_type, String date, String formula_id) {
+        userFormulaMapper.updateUserForm(appointment_type, date, formula_id);
     }
 
     @Override
     public boolean queryUserFormulaByUserAndFormula(String user_phone, String formula_id) {
         return userFormulaMapper.selectUserFormulaByUserAndFormula(user_phone, formula_id).size() != 0 ? true : false;
+    }
+
+    @Override
+    public void deleteUserFormula(String user_phone, String formula_id) {
+        userFormulaMapper.deleteUserForm(user_phone, formula_id);
+        formulaTransactionRecordMapper.deleteFormulaTransactionRecordByUserAndFormula(user_phone, formula_id);
     }
 }
