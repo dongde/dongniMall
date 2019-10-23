@@ -26,6 +26,7 @@
         select
         <include refid="formula_transaction_record_col"></include>
         from formula_transaction_record
+        order by create_time desc
     </select>
 
     <update id="updateFormulaTransactionRecord" parameterType="com.dongni.dongnimall.pojo.FormulaTransactionRecordDO">

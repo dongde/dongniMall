@@ -8,6 +8,7 @@ import com.dongni.dongnimall.vo.FormulaVO;
 import com.dongni.dongnimall.vo.PageData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,13 @@ public class FormulaServiceImpl implements FormulaService {
     private BaseImageMapper baseImageMapper;
     @Autowired
     private FormulaMapper formulaMapper;
+
     @Override
     public PageData selectAllFormula(Integer page, Integer limit, String formulaName) {
-        if(page==null){
+        if (page == null) {
             page = 1;
         }
-        if(limit==null){
+        if (limit == null) {
             limit = 10;
         }
         PageHelper.startPage(page, limit);
@@ -68,13 +70,16 @@ public class FormulaServiceImpl implements FormulaService {
         FormulaDO formulaDO = formulaMapper.selectByID(id);
         List<BaseImageDO> baseImages = baseImageMapper.findByID(id);
         List<String> lists = new ArrayList<>();
-        if(formulaDO!=null){
-            BeanUtils.copyProperties(formulaDO,formulaVO,"images");
+        if (formulaDO != null) {
+            BeanUtils.copyProperties(formulaDO, formulaVO, "images");
             for (BaseImageDO baseImageDO : baseImages) {
                 lists.add(baseImageDO.getImageURL());
             }
             formulaVO.setImages(lists);
-            formulaVO.setNoAppointment(formulaDO.getNoAppointment().split(","));
+            String noAppointment = formulaDO.getNoAppointment();
+            if (StringUtils.isNotBlank(noAppointment)) {
+                formulaVO.setNoAppointment(noAppointment.split(","));
+            }
         }
         return formulaVO;
     }

@@ -1,12 +1,9 @@
 package com.dongni.dongnimall.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dongni.dongnimall.base.storage.FileUploadManager;
 import com.dongni.dongnimall.base.storage.Response;
-import com.dongni.dongnimall.dao.FormulaUploadMapper;
-import com.dongni.dongnimall.dao.RawMaterialMapper;
 import com.dongni.dongnimall.manager.*;
 import com.dongni.dongnimall.pojo.*;
 import com.dongni.dongnimall.vo.FormulaVO;
@@ -21,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +48,9 @@ public class FormulaController {
 
     @Autowired
     private RawMaterialService rawMaterialService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private Sid sid;
@@ -96,9 +95,7 @@ public class FormulaController {
         if (StringUtils.isBlank(baseStoreId)) {
             return JsonResult.errorMsg("请选择试经营底料");
         }
-        if (StringUtils.isBlank(formulaFile)) {
-            return JsonResult.errorMsg("请上传配方文件");
-        }
+
         FormulaDO formulaDO = new FormulaDO();
         formulaDO.setFormulaName(formulaName);
         formulaDO.setFormulaPrice(formulaPrice);
@@ -114,7 +111,7 @@ public class FormulaController {
         formulaDO.setUpdateTime(dateString);
         StringBuilder noAppointment = new StringBuilder();
         for (String date : chooseDate) {
-            if(noAppointment.length()>0){
+            if (noAppointment.length() > 0) {
                 noAppointment.append(",");
             }
             noAppointment.append(date);
@@ -123,6 +120,9 @@ public class FormulaController {
         if (StringUtils.isBlank(id)) {
             if (allURL == null) {
                 return JsonResult.errorMsg("配方图片不能为空");
+            }
+            if (StringUtils.isBlank(formulaFile)) {
+                return JsonResult.errorMsg("请上传配方文件");
             }
             String ids = sid.nextShort();
             formulaDO.setId(ids);
@@ -176,6 +176,9 @@ public class FormulaController {
         if (StringUtils.isBlank(formulaTransactionRecordDO.getUser_phone()) || StringUtils.isBlank(formulaTransactionRecordDO.getFormula_id()) || formulaTransactionRecordDO.getPayment_amount() == null || formulaTransactionRecordDO.getPayment_method() == null) {
             return JsonResult.errorMsg("错误添加");
         }
+        if (userService.queryUserByPhone(formulaTransactionRecordDO.getUser_phone()) == null) {
+            return JsonResult.errorMsg("用户不存在");
+        }
         formulaTransactionRecordDO.setId(sid.nextShort());
         formulaTransactionRecordDO.setPayment_status(0);
         formulaTransactionRecordDO.setCreate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
@@ -201,7 +204,7 @@ public class FormulaController {
 
     //修改交易信息
     @PostMapping("/modifyFormulaTransactionRecord")
-    public JsonResult modifyFormulaTransactionRecord(FormulaTransactionRecordDO formulaTransactionRecordDO) {
+    public JsonResult modifyFormulaTransactionRecord(@RequestBody FormulaTransactionRecordDO formulaTransactionRecordDO) {
         if (StringUtils.isBlank(formulaTransactionRecordDO.getId())) {
             return JsonResult.errorMsg("修改出错");
         }

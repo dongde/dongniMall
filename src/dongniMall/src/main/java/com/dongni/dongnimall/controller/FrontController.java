@@ -61,7 +61,9 @@ public class FrontController {
     }
 
     @PostMapping("/login")
-    public JsonResult login(String phone, String password) {
+    public JsonResult login(@RequestBody JSONObject jsonObject) {
+        String phone = jsonObject.getString("phone");
+        String password = jsonObject.getString("password");
         if (StringUtils.isBlank(phone)) {
             return JsonResult.errorMsg("手机号不能为空");
         }
