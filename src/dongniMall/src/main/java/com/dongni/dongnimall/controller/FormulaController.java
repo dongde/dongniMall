@@ -233,14 +233,14 @@ public class FormulaController {
 
     //添加预约时间
     @PostMapping("/addAppointment")
-    public JsonResult addAppointment(@RequestBody JSONObject jsonObject){
+    public JsonResult addAppointment(@RequestBody JSONObject jsonObject) {
         Integer appointment_type = jsonObject.getInteger("appointment_type");
         String date = jsonObject.getString("date");
         String formula_id = jsonObject.getString("formula_id");
-        if(appointment_type==null||StringUtils.isBlank(date)||StringUtils.isBlank(formula_id)){
+        if (appointment_type == null || StringUtils.isBlank(date) || StringUtils.isBlank(formula_id)) {
             return JsonResult.errorMsg("添加出错");
         }
-        userFormulaService.addAppointment(appointment_type,date,formula_id);
+        userFormulaService.addAppointment(appointment_type, date, formula_id);
         return JsonResult.ok();
     }
 
@@ -297,6 +297,16 @@ public class FormulaController {
         formulaUploadService.addFormulaUpload(formulaUploadDO);
         rawMaterialService.addRawMaterials(list);
 
+        return JsonResult.ok();
+    }
+
+    @PostMapping("/removeFormulaUpload")
+    public JsonResult removeFormulaUpload(@RequestBody JSONObject jsonObject) {
+        String formula_upload_id = jsonObject.getString("formula_upload_id");
+        if (StringUtils.isBlank(formula_upload_id)) {
+            return JsonResult.errorMsg("删除出错");
+        }
+        formulaUploadService.removeFormulaUpload(formula_upload_id);
         return JsonResult.ok();
     }
 

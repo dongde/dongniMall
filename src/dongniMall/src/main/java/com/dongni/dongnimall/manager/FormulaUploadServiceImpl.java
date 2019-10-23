@@ -43,4 +43,9 @@ public class FormulaUploadServiceImpl implements FormulaUploadService {
     public void modifyFormulaUpload(FormulaUploadDO formulaUploadDO) {
         formulaUploadMapper.updateFormlaUpload(formulaUploadDO);
     }
+
+    @Override
+    public void removeFormulaUpload(String formula_upload_id) {
+        formulaUploadMapper.deleteFormulaUpload(formula_upload_id);
+    }
 }

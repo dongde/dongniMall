@@ -29,4 +29,10 @@ public interface FormulaUploadService {
      * @param formulaUploadDO
      */
     void modifyFormulaUpload(FormulaUploadDO formulaUploadDO);
+
+    /**
+     * 删除用户上传配方记录
+     * @param formula_upload_id
+     */
+    void removeFormulaUpload(String formula_upload_id);
 }

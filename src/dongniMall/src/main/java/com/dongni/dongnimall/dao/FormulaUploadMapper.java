@@ -17,4 +17,6 @@ public interface FormulaUploadMapper {
     List<FormulaUploadDO> selectFormulaUploadList(@Param("user_phone") String user_phone,@Param("formula_upload_name") String formula_upload_name);
 
     void updateFormlaUpload(@Param("formulaUploadDO") FormulaUploadDO formulaUploadDO);
+
+    void deleteFormulaUpload(String formula_upload_id);
 }
