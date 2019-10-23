@@ -24,8 +24,6 @@ public class FormulaTransactionRecordVO {
     private Integer payment_method;
     //支付状态
     private Integer payment_status;
-    //预约时间
-    private String appointment;
     //记录创建时间
     private String create_time;
     //用户昵称

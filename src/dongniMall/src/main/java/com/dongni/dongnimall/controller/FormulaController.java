@@ -231,6 +231,19 @@ public class FormulaController {
         return JsonResult.ok();
     }
 
+    //添加预约时间
+    @PostMapping("/addAppointment")
+    public JsonResult addAppointment(@RequestBody JSONObject jsonObject){
+        Integer appointment_type = jsonObject.getInteger("appointment_type");
+        String date = jsonObject.getString("date");
+        String formula_id = jsonObject.getString("formula_id");
+        if(appointment_type==null||StringUtils.isBlank(date)||StringUtils.isBlank(formula_id)){
+            return JsonResult.errorMsg("添加出错");
+        }
+        userFormulaService.addAppointment(appointment_type,date,formula_id);
+        return JsonResult.ok();
+    }
+
     //查询用户购买的配方的记录
     @GetMapping("/queryUserFormula")
     public JsonResult queryUserFormula(String user_phone) {

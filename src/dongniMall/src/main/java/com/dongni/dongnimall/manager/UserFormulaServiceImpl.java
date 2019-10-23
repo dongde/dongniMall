@@ -36,7 +36,7 @@ public class UserFormulaServiceImpl implements UserFormulaService {
             FormulaDO formulaDO = formulaMapper.selectByID(userFormulaDO.getFormula_id());
             if (formulaDO != null) {
                 UserFormulaVO userFormulaVO = new UserFormulaVO();
-                BeanUtils.copyProperties(userFormulaDO,userFormulaVO);
+                BeanUtils.copyProperties(userFormulaDO, userFormulaVO);
                 userFormulaVO.setFormula_file(formulaDO.getFormulaFile());
                 userFormulaVO.setFormula_img(formulaDO.getBigPicture());
                 userFormulaVO.setFormula_name(formulaDO.getFormulaName());
@@ -45,6 +45,11 @@ public class UserFormulaServiceImpl implements UserFormulaService {
             }
         }
         return list;
+    }
+
+    @Override
+    public void addAppointment(Integer appointment_type, String date,String formula_id) {
+        userFormulaMapper.updateUserForm(appointment_type,date,formula_id);
     }
 
     @Override

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dongni.dongnimall.dao.UserFormulaMapper">
     <sql id="user_formula_col">
-        id,user_phone,formula_id,create_time
+        id,user_phone,formula_id,create_time,practical_operation_appointment,learn_again_appointment,assist_appointment
     </sql>
     <select id="selectUserFormula" resultType="com.dongni.dongnimall.pojo.UserFormulaDO">
         select
@@ -20,7 +20,22 @@
 
     <insert id="insertUserFormula" parameterType="com.dongni.dongnimall.pojo.UserFormulaDO">
         insert into user_formula(<include refid="user_formula_col"></include>)
-        values(#{userFormulaDO.id},#{userFormulaDO.user_phone},#{userFormulaDO.formula_id},#{userFormulaDO.create_time})
+        values(#{userFormulaDO.id},#{userFormulaDO.user_phone},#{userFormulaDO.formula_id},#{userFormulaDO.create_time},#{userFormulaDO.practical_operation_appointment},#{userFormulaDO.learn_again_appointment},#{userFormulaDO.assist_appointment})
     </insert>
 
+    <update id="updateUserForm" >
+        update user_formula
+        <set>
+            <if test="appointment_type==1">
+                practical_operation_appointment=#{date}
+            </if>
+            <if test="appointment_type==2">
+                learn_again_appointment=#{date}
+            </if>
+            <if test="appointment_type==3">
+                assist_appointment=#{date}
+            </if>
+        </set>
+        where id=#{formula_id}
+    </update>
 </mapper>

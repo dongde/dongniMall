@@ -17,4 +17,6 @@ public interface UserFormulaMapper {
     List<UserFormulaDO> selectUserFormula(String user_phone);
 
     List<UserFormulaDO> selectUserFormulaByUserAndFormula(@Param("user_phone") String user_phone,@Param("formula_id") String formula_id);
+
+    void updateUserForm(@Param("appointment_type") Integer appointment_type,@Param("date") String date,@Param("formula_id")String formula_id);
 }
