@@ -120,8 +120,9 @@ public class OrderController {
         return JsonResult.ok();
     }
 
-    @RequestMapping("/removeOrder")
-    public JsonResult removeOrder(String order_number) {
+    @PostMapping("/removeOrder")
+    public JsonResult removeOrder(@RequestBody JSONObject jsonObject) {
+        String order_number = jsonObject.getString("order_number");
         if (StringUtils.isBlank(order_number)) {
             return JsonResult.errorMsg("删除订单出错");
         }

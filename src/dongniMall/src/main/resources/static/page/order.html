@@ -192,7 +192,7 @@
                                                                     body.contents().find(".tb3").html("  <tr>\n" +
                                                                         "                <td>" + user_name + "</td>\n" +
                                                                         "                <td>" + user_phone + "</td>\n" +
-                                                                        "                <td>" + postal_code + "</td>\n" +
+                                                                        // "                <td>" + postal_code + "</td>\n" +
                                                                         "                <td>" + address + "</td>\n" +
                                                                         "            </tr>");
 
@@ -260,7 +260,7 @@
                                             body.contents().find("#order_number").val(data.order_number);
                                             body.contents().find("#userName").val(user.name);
                                             body.contents().find('#userPhone').val(user.phone);
-                                            body.contents().find("#userPostalCode").val(user.postal_code);
+                                            // body.contents().find("#userPostalCode").val(user.postal_code);
                                             body.contents().find("#userAddress").val(user.address);
                                         }
                                     })
@@ -284,9 +284,10 @@
                 $.ajax({
                     method: 'POST',
                     url: '/order/removeOrder',
-                    data: {
+                    data: JSON.stringify({
                         'order_number': order_number
-                    },
+                    }),
+                    contentType: 'application/json',
                     success: function (res) {
                         if (res.status === 200) {
                             layer.msg("删除成功");
