@@ -56,8 +56,8 @@ public class UserFormulaServiceImpl implements UserFormulaService {
     }
 
     @Override
-    public boolean queryUserFormulaByUserAndFormula(String user_phone, String formula_id) {
-        return userFormulaMapper.selectUserFormulaByUserAndFormula(user_phone, formula_id).size() != 0 ? true : false;
+    public UserFormulaDO queryUserFormulaByUserAndFormula(String user_phone, String formula_id) {
+        return userFormulaMapper.selectUserFormulaByUserAndFormula(user_phone, formula_id);
     }
 
     @Override

@@ -41,7 +41,7 @@ public interface UserFormulaService {
      * @param formula_id
      * @return
      */
-    boolean queryUserFormulaByUserAndFormula(String user_phone, String formula_id);
+    UserFormulaDO queryUserFormulaByUserAndFormula(String user_phone, String formula_id);
 
     /**
      * 根据用户账号和配方ID删除用户配方购买记录
