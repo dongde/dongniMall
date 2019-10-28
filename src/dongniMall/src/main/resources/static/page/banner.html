@@ -114,7 +114,7 @@
                             title: '上传轮播图',
                             shadeClose: true,
                             shade: 0.8,
-                            area: ['60%', '60%'],
+                            area: ['60%', '70%'],
                             offset: 'auto',
                             content: '/page/banner-info.html' //iframe的url，no代表不显示滚动条
                         });
@@ -203,7 +203,7 @@
                             title: '修改轮播图',
                             shadeClose: true,
                             shade: 0.8,
-                            area: ['60%', '60%'],
+                            area: ['60%', '70%'],
                             offset: 'auto',
                             content: '/page/banner-info.html', //iframe的url，no代表不显示滚动条
                             success: function (layero, index) {
@@ -212,6 +212,7 @@
                                 body.contents().find("#url").val(obj.data.url);
                                 body.contents().find(".imageBorderForUpdate").removeAttr("hidden");
                                 body.contents().find("#imageForUpdate").attr("src", obj.data.banner_img);
+                                body.contents().find(".readyimg img").attr("src", obj.data.banner_img);
                             }
                         });
                         break;
