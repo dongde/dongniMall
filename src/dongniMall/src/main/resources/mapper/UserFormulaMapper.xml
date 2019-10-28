@@ -36,7 +36,7 @@
                 assist_appointment=#{date}
             </if>
         </set>
-        where id=#{formula_id}
+        where id=#{id}
     </update>
 
     <delete id="deleteUserForm">

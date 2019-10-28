@@ -236,11 +236,11 @@ public class FormulaController {
     public JsonResult addAppointment(@RequestBody JSONObject jsonObject) {
         Integer appointment_type = jsonObject.getInteger("appointment_type");
         String date = jsonObject.getString("date");
-        String formula_id = jsonObject.getString("formula_id");
-        if (appointment_type == null || StringUtils.isBlank(date) || StringUtils.isBlank(formula_id)) {
+        String id = jsonObject.getString("id");
+        if (appointment_type == null || StringUtils.isBlank(date) || StringUtils.isBlank(id)) {
             return JsonResult.errorMsg("添加出错");
         }
-        userFormulaService.addAppointment(appointment_type, date, formula_id);
+        userFormulaService.addAppointment(appointment_type, date, id);
         return JsonResult.ok();
     }
 
@@ -274,7 +274,6 @@ public class FormulaController {
     //添加配方上传信息
     @PostMapping("/addFormulaUpload")
     public JsonResult addFormulaUpload(@RequestBody JSONObject jsonObject) {
-        System.out.println(jsonObject);
         String formula_upload_name = jsonObject.getString("formula_upload_name");
         String user_phone = jsonObject.getString("user_phone");
         String flour_process = jsonObject.getString("flour_process");

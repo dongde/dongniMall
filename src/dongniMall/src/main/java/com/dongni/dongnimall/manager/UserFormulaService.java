@@ -30,9 +30,9 @@ public interface UserFormulaService {
      *
      * @param appointment_type
      * @param date
-     * @param formula_id
+     * @param id
      */
-    void addAppointment(Integer appointment_type, String date, String formula_id);
+    void addAppointment(Integer appointment_type, String date, String id);
 
     /**
      * 查询用户是否够购买配方

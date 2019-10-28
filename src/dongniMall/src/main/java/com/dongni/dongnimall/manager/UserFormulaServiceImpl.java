@@ -51,8 +51,8 @@ public class UserFormulaServiceImpl implements UserFormulaService {
     }
 
     @Override
-    public void addAppointment(Integer appointment_type, String date, String formula_id) {
-        userFormulaMapper.updateUserForm(appointment_type, date, formula_id);
+    public void addAppointment(Integer appointment_type, String date, String id) {
+        userFormulaMapper.updateUserForm(appointment_type, date, id);
     }
 
     @Override
