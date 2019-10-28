@@ -18,5 +18,7 @@ public class FormulaVO implements Serializable {
     private String bigPicture;
     private String baseStoreId;
     private List<String> images;
-    private String[] noAppointment;
+    private String[] practical_operation_noAppointment;
+    private String[] learn_again_noAppointment;
+    private String[] assist_noAppointment;
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dongni.dongnimall.dao.FormulaMapper">
     <sql id="formula_col">
-        id,formulaPrice,formulaDescription,samplePrice,flyPrice,factoryAddress,updateTime,formulaName,bigPicture,baseStoreId,noAppointment,formulaFile
+        id,formulaPrice,formulaDescription,samplePrice,flyPrice,factoryAddress,updateTime,formulaName,bigPicture,baseStoreId,practical_operation_noAppointment,learn_again_noAppointment,assist_noAppointment,formulaFile
     </sql>
 
     <select id="selectAllFormula" resultType="com.dongni.dongnimall.pojo.FormulaDO">
@@ -17,7 +17,7 @@
 
     <insert id="insertFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
         insert into formula (<include refid="formula_col"></include>) values
-        (#{formulaDO.id},#{formulaDO.formulaPrice},#{formulaDO.formulaDescription},#{formulaDO.samplePrice},#{formulaDO.flyPrice},#{formulaDO.factoryAddress},#{formulaDO.updateTime},#{formulaDO.formulaName},#{formulaDO.bigPicture},#{formulaDO.baseStoreId},#{formulaDO.noAppointment},#{formulaDO.formulaFile})
+        (#{formulaDO.id},#{formulaDO.formulaPrice},#{formulaDO.formulaDescription},#{formulaDO.samplePrice},#{formulaDO.flyPrice},#{formulaDO.factoryAddress},#{formulaDO.updateTime},#{formulaDO.formulaName},#{formulaDO.bigPicture},#{formulaDO.baseStoreId},#{formulaDO.practical_operation_noAppointment},#{formulaDO.learn_again_noAppointment},#{formulaDO.assist_noAppointment},#{formulaDO.formulaFile})
     </insert>
 
     <delete id="deleteFormula" parameterType="java.lang.String">
@@ -26,7 +26,7 @@
     <update id="updateFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
         update formula set formulaName=#{formulaDO.formulaName},formulaPrice=#{formulaDO.formulaPrice},formulaDescription=#{formulaDO.formulaDescription}
         ,samplePrice=#{formulaDO.samplePrice},flyPrice=#{formulaDO.flyPrice},factoryAddress=#{formulaDO.factoryAddress},updateTime=#{formulaDO.updateTime}
-       ,bigPicture=#{formulaDO.bigPicture},baseStoreId=#{formulaDO.baseStoreId},noAppointment=#{formulaDO.noAppointment},formulaFile=#{formulaDO.formulaFile}
+       ,bigPicture=#{formulaDO.bigPicture},baseStoreId=#{formulaDO.baseStoreId},practical_operation_noAppointment=#{formulaDO.practical_operation_noAppointment},learn_again_noAppointment=#{formulaDO.learn_again_noAppointment},assist_noAppointment=#{formulaDO.assist_noAppointment},formulaFile=#{formulaDO.formulaFile}
         where id = #{formulaDO.id}
     </update>
 </mapper>

@@ -70,7 +70,8 @@ public class FormulaController {
     //添加和修改配方
     @RequestMapping("add")
     public JsonResult insertFormula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAddress, String bigPicture,
-                                    @RequestParam(value = "allURL[]", required = false) String[] allURL, String baseStoreId, String formulaFile, @RequestParam(value = "chooseDate[]", required = false) String[] chooseDate) {
+                                    @RequestParam(value = "allURL[]", required = false) String[] allURL, String baseStoreId, String formulaFile
+            , @RequestParam(value = "choosePracticalOperationDate[]", required = false) String[] choosePracticalOperationDate, @RequestParam(value = "chooseLearnAgainDate[]", required = false) String[] chooseLearnAgainDate, @RequestParam(value = "chooseAssistDate[]", required = false) String[] chooseAssistDate) {
         if (StringUtils.isBlank(formulaName)) {
             return JsonResult.errorMsg("配方名称不能为空");
         }
@@ -110,13 +111,29 @@ public class FormulaController {
         String dateString = formatter.format(new Date());
         formulaDO.setUpdateTime(dateString);
         StringBuilder noAppointment = new StringBuilder();
-        for (String date : chooseDate) {
+        for (String date : choosePracticalOperationDate) {
             if (noAppointment.length() > 0) {
                 noAppointment.append(",");
             }
             noAppointment.append(date);
         }
-        formulaDO.setNoAppointment(noAppointment.toString());
+        formulaDO.setPractical_operation_noAppointment(noAppointment.toString());
+        StringBuilder learn_again_noAppointment = new StringBuilder();
+        for (String date : chooseLearnAgainDate) {
+            if (learn_again_noAppointment.length() > 0) {
+                learn_again_noAppointment.append(",");
+            }
+            learn_again_noAppointment.append(date);
+        }
+        formulaDO.setLearn_again_noAppointment(learn_again_noAppointment.toString());
+        StringBuilder assist_noAppointment = new StringBuilder();
+        for (String date : chooseAssistDate) {
+            if (assist_noAppointment.length() > 0) {
+                assist_noAppointment.append(",");
+            }
+            assist_noAppointment.append(date);
+        }
+        formulaDO.setAssist_noAppointment(assist_noAppointment.toString());
         if (StringUtils.isBlank(id)) {
             if (allURL == null) {
                 return JsonResult.errorMsg("配方图片不能为空");

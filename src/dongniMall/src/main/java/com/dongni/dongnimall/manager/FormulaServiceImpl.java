@@ -76,9 +76,17 @@ public class FormulaServiceImpl implements FormulaService {
                 lists.add(baseImageDO.getImageURL());
             }
             formulaVO.setImages(lists);
-            String noAppointment = formulaDO.getNoAppointment();
-            if (StringUtils.isNotBlank(noAppointment)) {
-                formulaVO.setNoAppointment(noAppointment.split(","));
+            String practical_operation_noAppointment = formulaDO.getPractical_operation_noAppointment();
+            if (StringUtils.isNotBlank(practical_operation_noAppointment)) {
+                formulaVO.setPractical_operation_noAppointment(practical_operation_noAppointment.split(","));
+            }
+            String learn_again_noAppointment = formulaDO.getLearn_again_noAppointment();
+            if (StringUtils.isNotBlank(learn_again_noAppointment)) {
+                formulaVO.setLearn_again_noAppointment(learn_again_noAppointment.split(","));
+            }
+            String assist_noAppointment = formulaDO.getAssist_noAppointment();
+            if (StringUtils.isNotBlank(assist_noAppointment)) {
+                formulaVO.setAssist_noAppointment(assist_noAppointment.split(","));
             }
         }
         return formulaVO;
