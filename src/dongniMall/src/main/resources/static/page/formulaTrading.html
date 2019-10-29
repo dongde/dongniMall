@@ -45,8 +45,6 @@
             , cols: [[
                 {field: 'formulaName', title: '配方名称', align: "center"}
                 , {field: 'formulaPrice', title: '配方价格', align: "center"}
-                , {field: 'samplePrice', title: '样品价格', align: "center"}
-                , {field: 'flyPrice', title: '炒制价格', align: "center"}
                 , {field: 'factoryAddress', title: '料场地址', align: "center"}
                 , {field: 'updateTime', title: '更新时间', align: "center"}
                 , {fixed: 'right', title: '操作', toolbar: '#operation', align: "center"}
@@ -73,7 +71,7 @@
                     break;
                 case 'addFormula':
                     layer.open({
-                        area: ['80%', '80%'],
+                        area: ['80%', '90%'],
                         title: "添加配方",
                         shadeClose: true,
                         shade: 0.8,
@@ -121,7 +119,7 @@
                     title: '修改配方',
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['80%', '80%'],
+                    area: ['80%', '90%'],
                     offset: 'auto',
                     content: '/page/formulaTrading-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
@@ -137,57 +135,59 @@
                         body.contents().find("#updateBigImage").css("display", "block");
                         body.contents().find(".upload-choose").text(data.formulaFile);
                         body.contents().find("#updateload").attr("src", data.bigPicture);
-
-                        let chooseDate = data.practical_operation_noAppointment.split(",");
-                        body.contents().find("#noAppointments").html("");
-                        $.each(chooseDate, function (index, item) {
-                            body.contents().find("#noAppointments").append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
-                                "                <input type=\"text\" class=\"layui-input noAppointment\" id=\"noAppointment-" + index + "\" autocomplete=\"off\"\n" +
-                                "                       placeholder=\"yyyy-MM-dd\" value=\"" + item + "\"><i\n" +
-                                "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
+                        if (data.practical_operation_noAppointment != null) {
+                            let chooseDate = data.practical_operation_noAppointment.split(",");
+                            body.contents().find("#noAppointments").html("");
+                            $.each(chooseDate, function (index, item) {
+                                body.contents().find("#noAppointments").append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
+                                    "                <input type=\"text\" class=\"layui-input noAppointment\" id=\"noAppointment-" + index + "\" autocomplete=\"off\"\n" +
+                                    "                       placeholder=\"yyyy-MM-dd\" value=\"" + item + "\"><i\n" +
+                                    "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
+                                    "            </div>");
+                            });
+                            body.contents().find("#noAppointments").append(" <div style=\"display: inline-block \">\n" +
+                                "                <button class=\"layui-btn layui-btn-small\" type=\"button\" id=\"addNoAppointment\"><i\n" +
+                                "                        class=\"layui-icon\"></i>\n" +
+                                "                </button>\n" +
                                 "            </div>");
-                        });
-                        body.contents().find("#noAppointments").append(" <div style=\"display: inline-block \">\n" +
-                            "                <button class=\"layui-btn layui-btn-small\" type=\"button\" id=\"addNoAppointment\"><i\n" +
-                            "                        class=\"layui-icon\"></i>\n" +
-                            "                </button>\n" +
-                            "            </div>");
-
-                        let chooseLearnAgainDate = data.learn_again_noAppointment.split(",");
-                        body.contents().find("#learnAgainNoAppointments").html("");
-                        $.each(chooseLearnAgainDate, function (index, item) {
-                            body.contents().find("#learnAgainNoAppointments").append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
-                                "                <input type=\"text\" class=\"layui-input learnAgainNoAppointment\" id=\"learnAgainNoAppointment-" + index + "\" autocomplete=\"off\"\n" +
-                                "                       placeholder=\"yyyy-MM-dd\" value=\"" + item + "\"><i\n" +
-                                "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
+                        }
+                        if (data.learn_again_noAppointment != null) {
+                            let chooseLearnAgainDate = data.learn_again_noAppointment.split(",");
+                            body.contents().find("#learnAgainNoAppointments").html("");
+                            $.each(chooseLearnAgainDate, function (index, item) {
+                                body.contents().find("#learnAgainNoAppointments").append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
+                                    "                <input type=\"text\" class=\"layui-input learnAgainNoAppointment\" id=\"learnAgainNoAppointment-" + index + "\" autocomplete=\"off\"\n" +
+                                    "                       placeholder=\"yyyy-MM-dd\" value=\"" + item + "\"><i\n" +
+                                    "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
+                                    "            </div>");
+                            });
+                            body.contents().find("#learnAgainNoAppointments").append(" <div style=\"display: inline-block \">\n" +
+                                "                <button class=\"layui-btn layui-btn-small\" type=\"button\" id=\"addLearnAgainNoAppointment\"><i\n" +
+                                "                        class=\"layui-icon\"></i>\n" +
+                                "                </button>\n" +
                                 "            </div>");
-                        });
-                        body.contents().find("#learnAgainNoAppointments").append(" <div style=\"display: inline-block \">\n" +
-                            "                <button class=\"layui-btn layui-btn-small\" type=\"button\" id=\"addLearnAgainNoAppointment\"><i\n" +
-                            "                        class=\"layui-icon\"></i>\n" +
-                            "                </button>\n" +
-                            "            </div>");
-
-                        let chooseAssistDate = data.assist_noAppointment.split(",");
-                        body.contents().find("#assistNoAppointments").html("");
-                        $.each(chooseAssistDate, function (index, item) {
-                            body.contents().find("#assistNoAppointments").append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
-                                "                <input type=\"text\" class=\"layui-input assistNoAppointment\" id=\"assistNoAppointment-" + index + "\" autocomplete=\"off\"\n" +
-                                "                       placeholder=\"yyyy-MM-dd\" value=\"" + item + "\"><i\n" +
-                                "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
+                        }
+                        if (data.assist_noAppointment != null) {
+                            let chooseAssistDate = data.assist_noAppointment.split(",");
+                            body.contents().find("#assistNoAppointments").html("");
+                            $.each(chooseAssistDate, function (index, item) {
+                                body.contents().find("#assistNoAppointments").append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
+                                    "                <input type=\"text\" class=\"layui-input assistNoAppointment\" id=\"assistNoAppointment-" + index + "\" autocomplete=\"off\"\n" +
+                                    "                       placeholder=\"yyyy-MM-dd\" value=\"" + item + "\"><i\n" +
+                                    "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
+                                    "            </div>");
+                            });
+                            body.contents().find("#assistNoAppointments").append(" <div style=\"display: inline-block \">\n" +
+                                "                <button class=\"layui-btn layui-btn-small\" type=\"button\" id=\"addLearnAgainNoAppointment\"><i\n" +
+                                "                        class=\"layui-icon\"></i>\n" +
+                                "                </button>\n" +
                                 "            </div>");
-                        });
-                        body.contents().find("#assistNoAppointments").append(" <div style=\"display: inline-block \">\n" +
-                            "                <button class=\"layui-btn layui-btn-small\" type=\"button\" id=\"addLearnAgainNoAppointment\"><i\n" +
-                            "                        class=\"layui-icon\"></i>\n" +
-                            "                </button>\n" +
-                            "            </div>");
-
-                        $.each(data.formulaRawMaterialDOList,function (index,item) {
+                        }
+                        $.each(data.formulaRawMaterialDOList, function (index, item) {
                             body.contents().find("#rawMaterials").append(" <div>\n" +
-                                "                    <input type=\"text\" class=\"layui-input name\" autocomplete=\"off\" value=\'"+item.raw_material_name+"\' placeholder=\"原料名\">\n" +
-                                "                    <input type=\"text\" class=\"layui-input variety\" autocomplete=\"off\" value=\'"+item.variety+"\' placeholder=\"品种\"/>\n" +
-                                "                    <input type=\"text\" class=\"layui-input unitPrice\" autocomplete=\"off\" value=\'"+item.unit_price+"\' placeholder=\"单价（元/斤）\">\n" +
+                                "                    <input type=\"text\" class=\"layui-input name\" autocomplete=\"off\" value=\'" + item.raw_material_name + "\' placeholder=\"原料名\">\n" +
+                                "                    <input type=\"text\" class=\"layui-input variety\" autocomplete=\"off\" value=\'" + item.variety + "\' placeholder=\"品种\"/>\n" +
+                                "                    <input type=\"text\" class=\"layui-input unitPrice\" autocomplete=\"off\" value=\'" + item.unit_price + "\' placeholder=\"单价（元/斤）\">\n" +
                                 "                    <button type=\"button\" class=\"layui-btn layui-btn-danger delRawMaterial\" style=\"margin: 0 10px;\"><i\n" +
                                 "                            class=\"layui-icon\"></i></button>\n" +
                                 "                </div>")
