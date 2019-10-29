@@ -182,6 +182,16 @@
                             "                        class=\"layui-icon\"></i>\n" +
                             "                </button>\n" +
                             "            </div>");
+
+                        $.each(data.formulaRawMaterialDOList,function (index,item) {
+                            body.contents().find("#rawMaterials").append(" <div>\n" +
+                                "                    <input type=\"text\" class=\"layui-input name\" autocomplete=\"off\" value=\'"+item.raw_material_name+"\' placeholder=\"原料名\">\n" +
+                                "                    <input type=\"text\" class=\"layui-input variety\" autocomplete=\"off\" value=\'"+item.variety+"\' placeholder=\"品种\"/>\n" +
+                                "                    <input type=\"text\" class=\"layui-input unitPrice\" autocomplete=\"off\" value=\'"+item.unit_price+"\' placeholder=\"单价（元/斤）\">\n" +
+                                "                    <button type=\"button\" class=\"layui-btn layui-btn-danger delRawMaterial\" style=\"margin: 0 10px;\"><i\n" +
+                                "                            class=\"layui-icon\"></i></button>\n" +
+                                "                </div>")
+                        })
                     }
                 });
             }

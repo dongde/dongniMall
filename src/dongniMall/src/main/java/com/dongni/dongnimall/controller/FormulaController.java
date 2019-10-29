@@ -71,7 +71,8 @@ public class FormulaController {
     @RequestMapping("add")
     public JsonResult insertFormula(String id, String formulaName, Float formulaPrice, String formulaDescription, Float samplePrice, Float flyPrice, String factoryAddress, String bigPicture,
                                     @RequestParam(value = "allURL[]", required = false) String[] allURL, String baseStoreId, String formulaFile
-            , @RequestParam(value = "choosePracticalOperationDate[]", required = false) String[] choosePracticalOperationDate, @RequestParam(value = "chooseLearnAgainDate[]", required = false) String[] chooseLearnAgainDate, @RequestParam(value = "chooseAssistDate[]", required = false) String[] chooseAssistDate) {
+            , @RequestParam(value = "choosePracticalOperationDate[]", required = false) String[] choosePracticalOperationDate, @RequestParam(value = "chooseLearnAgainDate[]", required = false) String[] chooseLearnAgainDate, @RequestParam(value = "chooseAssistDate[]", required = false) String[] chooseAssistDate
+            , @RequestParam(value = "raw_materials[]") String[] raw_materials) {
         if (StringUtils.isBlank(formulaName)) {
             return JsonResult.errorMsg("配方名称不能为空");
         }
@@ -95,6 +96,9 @@ public class FormulaController {
         }
         if (StringUtils.isBlank(baseStoreId)) {
             return JsonResult.errorMsg("请选择试经营底料");
+        }
+        if (raw_materials.length == 0) {
+            return JsonResult.errorMsg("请填写原料信息");
         }
 
         FormulaDO formulaDO = new FormulaDO();
@@ -134,6 +138,8 @@ public class FormulaController {
             assist_noAppointment.append(date);
         }
         formulaDO.setAssist_noAppointment(assist_noAppointment.toString());
+
+        List<FormulaRawMaterialDO> list = new ArrayList<>();
         if (StringUtils.isBlank(id)) {
             if (allURL == null) {
                 return JsonResult.errorMsg("配方图片不能为空");
@@ -151,7 +157,16 @@ public class FormulaController {
                 baseImageDO.setBaseStoreId(ids);
                 baseImageService.insertImageURL(baseImageDO);
             }
-            formulaService.insertFormula(formulaDO);
+            for (String raw_material : raw_materials) {
+                JSONObject jsonObject = JSONObject.parseObject(raw_material);
+                FormulaRawMaterialDO formulaRawMaterialDO = new FormulaRawMaterialDO();
+                formulaRawMaterialDO.setFormula_id(formulaDO.getId());
+                formulaRawMaterialDO.setRaw_material_name(jsonObject.getString("raw_material_name"));
+                formulaRawMaterialDO.setVariety(jsonObject.getString("variety"));
+                formulaRawMaterialDO.setUnit_price(jsonObject.getBigDecimal("unit_price"));
+                list.add(formulaRawMaterialDO);
+            }
+            formulaService.insertFormula(formulaDO, list);
             return JsonResult.ok();
         } else {
             formulaDO.setId(id);
@@ -165,7 +180,16 @@ public class FormulaController {
                     baseImageService.insertImageURL(baseImageDO);
                 }
             }
-            formulaService.updateFormula(formulaDO);
+            for (String raw_material : raw_materials) {
+                JSONObject jsonObject = JSONObject.parseObject(raw_material);
+                FormulaRawMaterialDO formulaRawMaterialDO = new FormulaRawMaterialDO();
+                formulaRawMaterialDO.setFormula_id(formulaDO.getId());
+                formulaRawMaterialDO.setRaw_material_name(jsonObject.getString("raw_material_name"));
+                formulaRawMaterialDO.setVariety(jsonObject.getString("variety"));
+                formulaRawMaterialDO.setUnit_price(jsonObject.getBigDecimal("unit_price"));
+                list.add(formulaRawMaterialDO);
+            }
+            formulaService.updateFormula(formulaDO, list);
             return JsonResult.ok();
         }
 

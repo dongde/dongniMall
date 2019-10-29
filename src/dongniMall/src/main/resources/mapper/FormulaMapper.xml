@@ -5,14 +5,18 @@
         id,formulaPrice,formulaDescription,samplePrice,flyPrice,factoryAddress,updateTime,formulaName,bigPicture,baseStoreId,practical_operation_noAppointment,learn_again_noAppointment,assist_noAppointment,formulaFile
     </sql>
 
-    <select id="selectAllFormula" resultType="com.dongni.dongnimall.pojo.FormulaDO">
+    <resultMap id="FormulaResultMap" type="com.dongni.dongnimall.pojo.FormulaDO">
+        <id column="id" property="id"/>
+        <collection property="formulaRawMaterialDOList" column="id" select="com.dongni.dongnimall.dao.FormulaRawMaterialMapper.selectFormulaRawMaterial"/>
+    </resultMap>
+
+    <select id="selectAllFormula" resultMap="FormulaResultMap">
         select * from formula
         WHERE 1=1
         <if test="formulaName!=null and formulaName!=''">
             and formulaName like concat(concat('%',#{formulaName}),'%')
         </if>
         order by updateTime desc
-
     </select>
 
     <insert id="insertFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">

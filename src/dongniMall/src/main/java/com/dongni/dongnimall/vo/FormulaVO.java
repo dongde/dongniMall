@@ -1,5 +1,6 @@
 package com.dongni.dongnimall.vo;
 
+import com.dongni.dongnimall.pojo.FormulaRawMaterialDO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,4 +22,5 @@ public class FormulaVO implements Serializable {
     private String[] practical_operation_noAppointment;
     private String[] learn_again_noAppointment;
     private String[] assist_noAppointment;
+    private List<FormulaRawMaterialDO> formulaRawMaterialDOList;
 }
