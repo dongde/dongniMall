@@ -2,8 +2,10 @@ package com.dongni.dongnimall.manager;
 
 import com.dongni.dongnimall.dao.BaseImageMapper;
 import com.dongni.dongnimall.dao.FormulaMapper;
+import com.dongni.dongnimall.dao.FormulaRawMaterialMapper;
 import com.dongni.dongnimall.pojo.BaseImageDO;
 import com.dongni.dongnimall.pojo.FormulaDO;
+import com.dongni.dongnimall.pojo.FormulaRawMaterialDO;
 import com.dongni.dongnimall.vo.FormulaVO;
 import com.dongni.dongnimall.vo.PageData;
 import com.github.pagehelper.PageHelper;
@@ -23,6 +25,8 @@ public class FormulaServiceImpl implements FormulaService {
     private BaseImageMapper baseImageMapper;
     @Autowired
     private FormulaMapper formulaMapper;
+    @Autowired
+    private FormulaRawMaterialMapper formulaRawMaterialMapper;
 
     @Override
     public PageData selectAllFormula(Integer page, Integer limit, String formulaName) {
@@ -45,18 +49,22 @@ public class FormulaServiceImpl implements FormulaService {
     }
 
     @Override
-    public void insertFormula(FormulaDO formulaDO) {
+    public void insertFormula(FormulaDO formulaDO, List<FormulaRawMaterialDO> list) {
         formulaMapper.insertFormula(formulaDO);
+        formulaRawMaterialMapper.insertFormulaRawMaterial(list);
     }
 
     @Override
-    public void updateFormula(FormulaDO formulaDO) {
+    public void updateFormula(FormulaDO formulaDO, List<FormulaRawMaterialDO> list) {
         formulaMapper.updateFormula(formulaDO);
+        formulaRawMaterialMapper.deleteFormulaRawMaterial(formulaDO.getId());
+        formulaRawMaterialMapper.insertFormulaRawMaterial(list);
     }
 
     @Override
     public void deleteByID(String id) {
         formulaMapper.deleteFormula(id);
+        formulaRawMaterialMapper.deleteFormulaRawMaterial(id);
     }
 
     @Override

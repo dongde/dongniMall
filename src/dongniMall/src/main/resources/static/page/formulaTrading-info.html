@@ -59,6 +59,14 @@
             height: 20px;
         }
 
+        #rawMaterials > div > input {
+            display: inline-block;
+            width: 180px;
+        }
+        .layui-form-select .layui-edge{
+            right: 20px;
+        }
+
     </style>
 
 </head>
@@ -100,10 +108,10 @@
         <div class="layui-input-block">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="bigImage">上传图片</button>
             <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
-            <div class="layui-upload-list" id="showBigImage" style="display: none">
+            <div id="showBigImage" style="display: none">
                 <img class="imageSize" id="upload">
             </div>
-            <div class="layui-upload-list" id="updateBigImage" style="display: none">
+            <div id="updateBigImage" style="display: none">
                 <img class="imageSize" id="updateload">
             </div>
         </div>
@@ -132,8 +140,26 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">原材料：</label>
+        <div style="display: inline-block;">
+            <div id="rawMaterials" style="display: inline-block;">
+                <div>
+                    <input type="text" class="layui-input name" autocomplete="off" placeholder="原料名">
+                    <input type="text" class="layui-input variety" autocomplete="off" placeholder="品种"/>
+                    <input type="text" class="layui-input unitPrice" autocomplete="off" placeholder="单价（元/斤）">
+                    <button type="button" class="layui-btn layui-btn-danger delRawMaterial" style="margin: 0 10px;"><i
+                            class="layui-icon"></i></button>
+                </div>
+            </div>
+
+            <button class="layui-btn layui-btn-small" style="float: right;" type="button" id="addRawMaterial"><i
+                    class="layui-icon"></i>
+            </button>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">不可预约时间：(料场实操)</label>
-        <div id="noAppointments" style="display: inline-block;width: 855px;">
+        <div id="noAppointments" style="display: inline-block;">
             <div class="layui-input-inline" style="width: 120px">
                 <input type="text" class="layui-input noAppointment" id="noAppointment-0" autocomplete="off"
                        placeholder="yyyy-MM-dd"><i
@@ -150,7 +176,8 @@
         <label class="layui-form-label">不可预约时间：(再次学习)</label>
         <div id="learnAgainNoAppointments" style="display: inline-block;width: 855px;">
             <div class="layui-input-inline" style="width: 120px">
-                <input type="text" class="layui-input learnAgainNoAppointment" id="learnAgainNoAppointment-0" autocomplete="off"
+                <input type="text" class="layui-input learnAgainNoAppointment" id="learnAgainNoAppointment-0"
+                       autocomplete="off"
                        placeholder="yyyy-MM-dd"><i
                     class="layui-icon layui-tab-close">ဆ</i>
             </div>
@@ -162,7 +189,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">不可预约时间：(再次学习)</label>
+        <label class="layui-form-label">不可预约时间：(协助开店)</label>
         <div id="assistNoAppointments" style="display: inline-block;width: 855px;">
             <div class="layui-input-inline" style="width: 120px">
                 <input type="text" class="layui-input assistNoAppointment" id="assistNoAppointment-0" autocomplete="off"
@@ -183,20 +210,6 @@
                 <option value="">请选择</option>
             </select>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">样品价格：</label>
-        <div class="layui-input-inline">
-            <input name="samplePrice" id="samplePrice" placeholder="单价" autocomplete="off" class="layui-input">
-        </div>
-        <div class="layui-form-mid layui-word-aux">单位：元</div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">代炒价格：</label>
-        <div class="layui-input-inline">
-            <input name="flyPrice" id="flyPrice" autocomplete="off" class="layui-input">
-        </div>
-        <div class="layui-form-mid layui-word-aux">单位：元</div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">料场地址：</label>
@@ -223,15 +236,15 @@
             imgURL = [],
             bigImage = null,
             fileUrl = "",
-            charge1 = /^([0-9]+(.[0-9]+)?)$/,
-            charge2 = /^([0-9]+(.[0-9]{1,2})?)$/,
+            charge1 = /^([0-9]+(.[0-9]+)?)?$/,
+            charge2 = /^([0-9]+(.[0-9]{1,2})?)?$/,
             date = new Date(),
             dateNumber = $(".noAppointment").length,
             initDate = "",
-            chooseDate = [],
             choosePracticalOperationDate = [],
             chooseLearnAgainDate = [],
-            chooseAssistDate = [];
+            chooseAssistDate = [],
+            raw_materials = [];
         //加载底料列表
         $.ajax({
             url: '/baseTrade/list?page=0&limit=0',
@@ -253,9 +266,9 @@
 
         //绑定提交
         $("#formSubmit").on('click', function () {
-            if (!charge1.test($("#formulaPrice").val()) || !charge1.test($("#samplePrice").val()) || !charge1.test($("#flyPrice").val())) {
+            if (!charge1.test($("#formulaPrice").val()) || !charge1.test($(".unitPrice").val())) {
                 layer.msg("价格格式错误");
-            } else if (!charge2.test($("#formulaPrice").val()) || !charge2.test($("#samplePrice").val()) || !charge2.test($("#flyPrice").val())) {
+            } else if (!charge2.test($("#formulaPrice").val()) || !charge2.test($(".unitPrice").val())) {
                 layer.msg("价格小数不能超过两位");
             } else {
 
@@ -272,6 +285,20 @@
                     },
                     success: function (res) {
                         if (res.status === 200) {
+                            raw_materials = [];
+                            $.each($("#rawMaterials > div"), function (index, item) {
+                                let raw_material_name = $(item).find(".name").val();
+                                let variety = $(item).find(".variety").val();
+                                let unit_price = $(item).find(".unitPrice").val();
+                                if (raw_material_name.trim() != '' && variety.trim() != '' && unit_price.trim() != '') {
+                                    let rawMaterial = {
+                                        raw_material_name: raw_material_name,
+                                        variety: variety,
+                                        unit_price: unit_price
+                                    };
+                                    raw_materials.push(JSON.stringify(rawMaterial));
+                                }
+                            });
                             $.ajax({
                                 method: "post",
                                 url: '/formula/add',
@@ -280,16 +307,15 @@
                                     formulaName: $("#formulaName").val().trim(),
                                     formulaPrice: $("#formulaPrice").val().trim(),
                                     formulaDescription: $("#formulaDescription").val().trim(),
-                                    samplePrice: $("#samplePrice").val().trim(),
-                                    flyPrice: $("#flyPrice").val().trim(),
                                     factoryAddress: $("#factoryAddress").val().trim(),
                                     bigPicture: bigImage,
                                     allURL: imgURL,
                                     baseStoreId: $("#modules").val(),
                                     formulaFile: fileUrl,
-                                    choosePracticalOperationDate:choosePracticalOperationDate,
-                                    chooseLearnAgainDate:chooseLearnAgainDate,
-                                    chooseAssistDate:chooseAssistDate
+                                    choosePracticalOperationDate: choosePracticalOperationDate,
+                                    chooseLearnAgainDate: chooseLearnAgainDate,
+                                    chooseAssistDate: chooseAssistDate,
+                                    raw_materials: JSON.stringify(raw_materials)
                                 },
                                 success: function (res) {
                                     layer.closeAll('loading');
@@ -452,123 +478,15 @@
             $(this).parent().remove();
             imageID.push($(this).attr('value'));
         });
-        //
-        // //修改信息时动态绑定日期选择事件
-        // for(let i = 0;i<$(".noAppointment").length;i++){
-        //     //格子主题
-        //     laydate.render({
-        //         elem: '#noAppointment-'+i
-        //         , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
-        //         , calendar: true
-        //         , theme: 'grid'
-        //         , showBottom: false
-        //         , trigger: 'mousedown'
-        //         , ready: function (date) {
-        //             initDate = $(this)[0].elem[0].value;
-        //         }
-        //         , done: function (value, date, endDate) {
-        //             let isExist = false;
-        //             let index = -1;
-        //             let input = $(this)[0].elem;
-        //             //循环遍历查看选择日期是否已存在
-        //             $.each(chooseDate, function (index0, item) {
-        //                 if (value == item && value != initDate) {
-        //                     isExist = true;
-        //                 }
-        //                 //获取输入框初始值的数组索引，用于删除
-        //                 if (value == initDate) {
-        //                     index = index0;
-        //                 }
-        //             });
-        //             //如果已存在则不改变输入框的值
-        //             if (isExist) {
-        //                 layer.msg("该日期已选择");
-        //                 input.val(initDate);
-        //             } else {
-        //                 //不存在，且是第一次选择日期，则添加日期到数组
-        //                 if (initDate == '') {
-        //                     chooseDate.push(value);
-        //                     //不存在，且输入框已存在日期，则清除数组中保存的日期，并添加新日期
-        //                 } else {
-        //                     chooseDate.splice(index, 1);
-        //                     chooseDate.push(value);
-        //                 }
-        //             }
-        //         }
-        //     });
-        // }
-        //
-        // $("#addNoAppointment").on('click', function () {
-        //     $("#noAppointments").append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
-        //         "                <input type=\"text\" class=\"layui-input noAppointment\" id=\"noAppointment" + dateNumber + "\" autocomplete=\"off\"\n" +
-        //         "                       placeholder=\"yyyy-MM-dd\"><i\n" +
-        //         "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
-        //         "            </div>");
-        //     //格子主题
-        //     laydate.render({
-        //         elem: '#noAppointment' + dateNumber
-        //         , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
-        //         , calendar: true
-        //         , theme: 'grid'
-        //         , trigger: 'mousedown'
-        //         , ready: function (date) {
-        //             initDate = $(this)[0].elem[0].value;
-        //         }
-        //         , done: function (value, date, endDate) {
-        //             let isExist = false;
-        //             let index = -1;
-        //             let input = $(this)[0].elem;
-        //             //循环遍历查看选择日期是否已存在
-        //             $.each(chooseDate, function (index0, item) {
-        //                 if (value == item && value != initDate) {
-        //                     isExist = true;
-        //                 }
-        //                 //获取输入框初始值的数组索引，用于删除
-        //                 if (value == initDate) {
-        //                     index = index0;
-        //                 }
-        //             });
-        //             //如果已存在则不改变输入框的值
-        //             if (isExist) {
-        //                 layer.msg("该日期已选择");
-        //                 input.val(initDate);
-        //             } else {
-        //                 //不存在，且是第一次选择日期，则添加日期到数组
-        //                 if (initDate == '') {
-        //                     chooseDate.push(value);
-        //                     //不存在，且输入框已存在日期，则清除数组中保存的日期，并添加新日期
-        //                 } else {
-        //                     chooseDate.splice(index, 1);
-        //                     chooseDate.push(value);
-        //                 }
-        //
-        //             }
-        //         }
-        //     });
-        //     dateNumber += 1;
-        // });
-        //
-        // //添加时间输入框
-        // $("#noAppointments").on('click', '.layui-tab-close', function () {
-        //     let dateTemp = $(this).siblings("input").val();
-        //     $.each(chooseDate, function (index, item) {
-        //         if (item == dateTemp) {
-        //             chooseDate.splice(index, 1);
-        //         }
-        //     });
-        //     $(this).parent('div').remove();
-        // });
-        //
-
-        let dateRender = function (dateInputType,dateBox,btn,choose) {
-            $.each($("."+dateInputType), function (index, item) {
+        let dateRender = function (dateInputType, dateBox, btn, choose) {
+            $.each($("." + dateInputType), function (index, item) {
                 choose.push(item.value);
             });
             //修改信息时动态绑定日期选择事件
-            for(let i = 0;i<$("."+dateInputType).length;i++){
+            for (let i = 0; i < $("." + dateInputType).length; i++) {
                 //格子主题
                 laydate.render({
-                    elem: '#'+dateInputType+'-'+i
+                    elem: '#' + dateInputType + '-' + i
                     , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
                     , calendar: true
                     , theme: 'grid'
@@ -609,15 +527,15 @@
                 });
             }
 
-            $("#"+btn).on('click', function () {
-                $("#"+dateBox).append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
-                    "                <input type=\"text\" class=\"layui-input "+dateInputType+"\" id=\""+dateInputType + dateNumber + "\" autocomplete=\"off\"\n" +
+            $("#" + btn).on('click', function () {
+                $("#" + dateBox).append("<div class=\"layui-input-inline\"  style=\"width: 120px\">\n" +
+                    "                <input type=\"text\" class=\"layui-input " + dateInputType + "\" id=\"" + dateInputType + dateNumber + "\" autocomplete=\"off\"\n" +
                     "                       placeholder=\"yyyy-MM-dd\"><i\n" +
                     "                    class=\"layui-icon layui-tab-close\">ဆ</i>\n" +
                     "            </div>");
                 //格子主题
                 laydate.render({
-                    elem: '#'+dateInputType + dateNumber
+                    elem: '#' + dateInputType + dateNumber
                     , min: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
                     , calendar: true
                     , theme: 'grid'
@@ -660,7 +578,7 @@
             });
 
             //添加时间输入框
-            $("#"+dateBox).on('click', '.layui-tab-close', function () {
+            $("#" + dateBox).on('click', '.layui-tab-close', function () {
                 let dateTemp = $(this).siblings("input").val();
                 $.each(choose, function (index, item) {
                     if (item == dateTemp) {
@@ -671,9 +589,22 @@
             })
 
         };
-        dateRender("noAppointment","noAppointments","addNoAppointment",choosePracticalOperationDate);
-        dateRender("learnAgainNoAppointment","learnAgainNoAppointments","addLearnAgainNoAppointment",chooseLearnAgainDate);
-        dateRender("assistNoAppointment","assistNoAppointments","addAssistNoAppointment",chooseAssistDate);
+        dateRender("noAppointment", "noAppointments", "addNoAppointment", choosePracticalOperationDate);
+        dateRender("learnAgainNoAppointment", "learnAgainNoAppointments", "addLearnAgainNoAppointment", chooseLearnAgainDate);
+        dateRender("assistNoAppointment", "assistNoAppointments", "addAssistNoAppointment", chooseAssistDate);
+
+        $("#addRawMaterial").on('click', function () {
+            $("#rawMaterials").append("<div>\n" +
+                "                    <input type=\"text\" class=\"layui-input name\" autocomplete=\"off\" placeholder=\"原料名\">\n" +
+                "                    <input type=\"text\" class=\"layui-input variety\" autocomplete=\"off\" placeholder=\"品种\"/>\n" +
+                "                    <input type=\"text\" class=\"layui-input unitPrice\" autocomplete=\"off\" placeholder=\"单价（元/斤）\">\n" +
+                "                    <button type=\"button\" class=\"layui-btn layui-btn-danger delRawMaterial\" style=\"margin: 0 10px;\"><i class=\"layui-icon\"></i></button>\n" +
+                "                </div>");
+        });
+
+        $("#rawMaterials").on('click', '.delRawMaterial', function () {
+            $(this).parent("div").remove();
+        })
     });
 
 </script>
