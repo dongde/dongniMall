@@ -16,12 +16,13 @@
     <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
     <link rel="stylesheet" href="../css/layuimini.css" media="all">
     <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../cropper/cropper.css" media="all">
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
 
     <style>
         .imageSize {
-            height: 150px;
-            width: 150px;
+            height: 260px;
+            width: 310px;
         }
 
         #topSet {
@@ -69,10 +70,10 @@
         <label class="layui-form-label">模板图片</label>
         <div class="layui-input-inline uploadHeadImage">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="uploadImage">上传图片</button>
-            <div class="layui-upload-list" id="hide" style="display:none;">
+            <div class="layui-upload-list" id="hide" hidden>
                 <img class="imageSize" id="upload">
             </div>
-            <div class="layui-upload-list" id="updateImage" style="display: none">
+            <div class="layui-upload-list" id="updateImage" hidden>
                 <img class="imageSize" id="updateload">
             </div>
         </div>
@@ -93,117 +94,133 @@
 </form>
 
 <script>
-    layui.use(['form', 'upload', "layer", "element"], function () {
-        var form = layui.form,
-            ayer = layui.layer,
-            $ = layui.jquery;
-        element = layui.element;
-        upload = layui.upload;
+    layui.use(['form', 'upload', 'croppers'], function () {
+        var $ = layui.jquery,
+            croppers = layui.croppers;
 
+        var tmpBlob = null;
+        //普通图片上传
+        croppers.render({
+            elem: '#uploadImage'
+            , saveW: 310     //保存宽度
+            , saveH: 260
+            , mark: 310 / 260    //选取比例
+            , area: ['90%', '90%']  //弹窗宽度
+            , done: function (imgCanvas) {
+                $('#updateImage').remove();
+                $('#hide').removeAttr("hidden");
+                $('#upload').attr('src', imgCanvas.toDataURL('image/png'));
+                imgCanvas.toBlob(function (blob) {
+                    tmpBlob = blob;
+                })
+            }
+        });
         $("#formSubmit").on('click', function () {
-
             if (!/^([0-9]+(.[0-9]+)?)$/.test($("#price").val())) {
                 layer.msg("价格格式错误");
             } else if (!/^([0-9]+(.[0-9]{1,2})?)$/.test($("#price").val())) {
                 layer.msg("价格小数不能超过两位");
             } else {
                 layer.load();
-                $("#formSubmit").attr("disabled", "disabled");
-                if ($("#upload").attr("src") === undefined && $("#updateload").attr("src") === undefined) {
-                    layer.closeAll('loading');
-                    layer.msg("请选择图片");
-                    $("#formSubmit").removeAttr("disabled");
-                } else if ($("#upload").attr("src") === undefined && $("#updateload").attr("src") !== undefined) {
-                    $.ajax({
-                        method: "post",
-                        url: '/template/add',
-                        data: {
-                            id: $("#id").val().trim(),
-                            templateName: $("#templateName").val().trim(),
-                            templateType: $("input[type='radio']:checked").val().trim(),
-                            price: $("#price").val(),
-                            file: $("#updateload").file,
-                            description: $("#description").val().trim()
-                        },
-                        success: function (res) {
-                            layer.closeAll('loading');
-                            $("#formSubmit").removeAttr("disabled");
-                            if (res.status == 200) {
-                                //上传成功重写加载数据表格
-                                parent.layui.table.reload('templateList', {page: {curr: 1}});
-                                var index = parent.layer.getFrameIndex(window.name);
-                                parent.layer.close(index);
-                                parent.layer.msg("上传成功");
-                            } else {
-                                layer.msg(res.msg);
-                            }
-                        },
-                        error: function () {
-                            layer.closeAll('loading');
-                            $("#formSubmit").removeAttr("disabled");
-                            layer.msg("遇到未知错误！");
+                // $("#formSubmit").attr("disabled", "disabled");
+                // if ($("#upload").attr("src") === undefined && $("#updateload").attr("src") === undefined) {
+                //     layer.closeAll('loading');
+                //     layer.msg("请选择图片");
+                //     $("#formSubmit").removeAttr("disabled");
+                // } else if ($("#upload").attr("src") === undefined && $("#updateload").attr("src") !== undefined) {
+                let formData = new FormData();
+                if (tmpBlob) {
+                    formData.append('file', tmpBlob, 'head.jpg');
+                }
+                formData.append('id', $("#id").val().trim());
+                formData.append('templateName', $("#templateName").val().trim());
+                formData.append('templateType', $("input[type='radio']:checked").val().trim());
+                formData.append('price', $("#price").val());
+                formData.append('description', $("#description").val().trim());
+                $.ajax({
+                    method: "post",
+                    url: '/template/add',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        layer.closeAll('loading');
+                        $("#formSubmit").removeAttr("disabled");
+                        if (res.status == 200) {
+                            //上传成功重写加载数据表格
+                            parent.layui.table.reload('templateList', {page: {curr: 1}});
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            parent.layer.msg("上传成功");
+                        } else {
+                            layer.msg(res.msg);
                         }
-                    })
-                }
+                    },
+                    error: function () {
+                        layer.closeAll('loading');
+                        $("#formSubmit").removeAttr("disabled");
+                        layer.msg("遇到未知错误！");
+                    }
+                })
             }
         });
-
-        var uploadInst = upload.render({
-            elem: "#uploadImage",
-            url: "/template/add",
-            auto: false,
-            bindAction: "#formSubmit",
-            accept: 'images',//只允许上传图片
-            acceptMime: 'image/*', //只筛选图片
-            data: {
-                id: function () {
-                    return $("#id").val()
-                },
-                templateName: function () {
-                    return $("#templateName").val();
-                },
-                templateType: function () {
-                    return $("input[type='radio']:checked").val();
-                },
-                price: function () {
-                    return $("#price").val();
-                },
-                description: function () {
-                    return $("#description").val();
-                }
-
-            },
-            choose: function (obj) {
-                // $("#showImage").css("display","block");
-                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
-                obj.preview(function (index, file, result) {
-
-                    $("#updateImage").css("display", "none");
-                    $("#hide").css("display", "block");
-                    $('#upload').attr('src', result); //图片链接（base64）
-                });
-
-            },
-            done: function (res) {
-                layer.closeAll('loading');
-                $("#formSubmit").removeAttr("disabled");
-                if (res.status === 200) {
-                    //上传成功重写加载数据表格
-                    parent.layui.table.reload('templateList', {page: {curr: 1}});
-                    var index = parent.layer.getFrameIndex(window.name);
-                    parent.layer.close(index);
-                    layer.msg("上传成功");
-                } else if (res.status === 500) {
-                    $("#formSubmit").removeAttr("disabled");
-                    layer.msg(res.msg)
-                }
-            },
-            error: function (index, upload) {
-                layer.closeAll('loading');
-                $("#formSubmit").removeAttr("disabled");
-                layer.msg("上传失败！");
-            }
-        });
+        //
+        // var uploadInst = upload.render({
+        //     elem: "#uploadImage",
+        //     url: "/template/add",
+        //     auto: false,
+        //     bindAction: "#formSubmit",
+        //     accept: 'images',//只允许上传图片
+        //     acceptMime: 'image/*', //只筛选图片
+        //     data: {
+        //         id: function () {
+        //             return $("#id").val()
+        //         },
+        //         templateName: function () {
+        //             return $("#templateName").val();
+        //         },
+        //         templateType: function () {
+        //             return $("input[type='radio']:checked").val();
+        //         },
+        //         price: function () {
+        //             return $("#price").val();
+        //         },
+        //         description: function () {
+        //             return $("#description").val();
+        //         }
+        //
+        //     },
+        //     choose: function (obj) {
+        //         // $("#showImage").css("display","block");
+        //         //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+        //         obj.preview(function (index, file, result) {
+        //
+        //             $("#updateImage").css("display", "none");
+        //             $("#hide").css("display", "block");
+        //             $('#upload').attr('src', result); //图片链接（base64）
+        //         });
+        //
+        //     },
+        //     done: function (res) {
+        //         layer.closeAll('loading');
+        //         $("#formSubmit").removeAttr("disabled");
+        //         if (res.status === 200) {
+        //             //上传成功重写加载数据表格
+        //             parent.layui.table.reload('templateList', {page: {curr: 1}});
+        //             var index = parent.layer.getFrameIndex(window.name);
+        //             parent.layer.close(index);
+        //             layer.msg("上传成功");
+        //         } else if (res.status === 500) {
+        //             $("#formSubmit").removeAttr("disabled");
+        //             layer.msg(res.msg)
+        //         }
+        //     },
+        //     error: function (index, upload) {
+        //         layer.closeAll('loading');
+        //         $("#formSubmit").removeAttr("disabled");
+        //         layer.msg("上传失败！");
+        //     }
+        // });
     });
 </script>
 </body>

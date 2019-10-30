@@ -32,7 +32,7 @@
     <button lay-event="find" class="layui-btn layui-btn-sm top-btn" data-type="find">查找</button>
     <button lay-event="reload" class="layui-btn layui-btn-sm top-btn" data-type="reload">重置</button>
 
-    <button lay-event="addTemplate" class="layui-btn layui-btn-sm top-btn" id="addTemplate">添加底料</button>
+    <button lay-event="addTemplate" class="layui-btn layui-btn-sm top-btn" id="addTemplate">添加模版</button>
 
 </script>
 <script type="text/html" id="operation">
@@ -88,7 +88,7 @@
                     break;
                 case 'addTemplate':
                     layer.open({
-                        area: ['80%', '80%'],
+                        area: ['80%', '85%'],
                         title: "添加模板",
                         type: 2,
                         shadeClose: true,
@@ -144,7 +144,7 @@
                     title: '修改底料',
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['80%', '80%'],
+                    area: ['80%', '85%'],
                     offset: 'auto',
                     content: '/page/templateManager-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
