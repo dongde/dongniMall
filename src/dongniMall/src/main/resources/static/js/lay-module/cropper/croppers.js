@@ -2,11 +2,11 @@
  * Cropper v3.0.0
  */
 
-layui.define(['jquery','layer','cropper'],function (exports) {
+layui.define(['jquery', 'layer', 'cropper'], function (exports) {
     var $ = layui.jquery
-        ,layer = layui.layer;
+        , layer = layui.layer;
     var html = "<link rel=\"stylesheet\" href=\"../cropper.css\">\n" +
-        "<div class=\"layui-fluid showImgEdit\" style=\"display: none\">\n" +
+        "<div class=\"layui-fluid showImgEdit\" style=\"display: none;padding:15px\">\n" +
         "    <div class=\"layui-form-item\">\n" +
         "        <div class=\"layui-input-inline layui-btn-container\" style=\"width: auto;\">\n" +
         "            <label for=\"cropper_avatarImgUpload\" class=\"layui-btn layui-btn-primary\">\n" +
@@ -49,7 +49,7 @@ layui.define(['jquery','layer','cropper'],function (exports) {
         "\n" +
         "</div>";
     var obj = {
-        render: function(e){
+        render: function (e) {
             $('body').append(html);
             var self = this,
                 elem = e.elem,
@@ -61,21 +61,24 @@ layui.define(['jquery','layer','cropper'],function (exports) {
                 done = e.done;
 
             var content = $('.showImgEdit')
-                ,image = $(".showImgEdit .readyimg img")
-                ,preview = '.showImgEdit .img-preview'
-                ,file = $(".showImgEdit input[name='file']")
-                ,uploadInfo = $("#upload-info")
-                , options = {aspectRatio: mark,preview: preview,viewMode:1, crop : function (e) {
+                , image = $(".showImgEdit .readyimg img")
+                , preview = '.showImgEdit .img-preview'
+                , file = $(".showImgEdit input[name='file']")
+                , uploadInfo = $("#upload-info")
+                , options = {
+                aspectRatio: mark, preview: preview, viewMode: 1, crop: function (e) {
                     uploadInfo.text("宽度=" + Math.round(e.width) + "px;高度=" + Math.round(e.height) + "px");
-                }};
+                }
+            };
 
             $("#upload-tip").text("推荐大小（" + saveW + "*" + saveH + "）");
 
-            $(elem).on('click',function () {
+            $(elem).on('click', function () {
                 layer.open({
                     type: 1
                     , content: content
                     , area: area
+                    , title: false
                     , success: function () {
                         image.cropper(options);
                     }
@@ -85,30 +88,30 @@ layui.define(['jquery','layer','cropper'],function (exports) {
                     }
                 });
             });
-            $(".layui-btn").on('click',function () {
+            $(".layui-btn").on('click', function () {
                 var event = $(this).attr("cropper-event");
                 //监听确认保存图像
-                if(event === 'confirmSave'){
+                if (event === 'confirmSave') {
                     layer.closeAll('page');
-                    return done(image.cropper("getCroppedCanvas",{width: saveW,height: saveH}));
+                    return done(image.cropper("getCroppedCanvas", {width: saveW, height: saveH}));
                     //监听旋转
-                }else if(event === 'rotate'){
+                } else if (event === 'rotate') {
                     var option = $(this).attr('data-option');
                     image.cropper('rotate', option);
                     //重设图片
-                }else if(event === 'reset'){
+                } else if (event === 'reset') {
                     image.cropper('reset');
-                }else if(event === 'enlarge'){
-                    image.cropper('zoom',0.1);
-                }else if(event === 'narrow'){
-                    image.cropper('zoom',-0.1);
+                } else if (event === 'enlarge') {
+                    image.cropper('zoom', 0.1);
+                } else if (event === 'narrow') {
+                    image.cropper('zoom', -0.1);
                 }
                 //文件选择
                 file.change(function () {
-                    var r= new FileReader();
-                    var f=this.files[0];
+                    var r = new FileReader();
+                    var f = this.files[0];
                     r.readAsDataURL(f);
-                    r.onload=function (e) {
+                    r.onload = function (e) {
                         image.cropper('destroy').attr('src', this.result).cropper(options);
                     };
                 });
