@@ -391,10 +391,10 @@ public class FormulaController {
         BigDecimal payment_amount = jsonObject.getBigDecimal("payment_amount");
         Integer payment_method = jsonObject.getInteger("payment_method");
         String order_number = sid.nextShort();
-        for (int i=0;i<rawMaterials.size();i++) {
+        for (int i = 0; i < rawMaterials.size(); i++) {
             JSONObject jsonObject1 = rawMaterials.getJSONObject(i);
             GoodsDO goodsDO = new GoodsDO();
-            goodsDO.setGoods_name(jsonObject1.getString("name")+"("+jsonObject1.getString("variety")+")");
+            goodsDO.setGoods_name(jsonObject1.getString("name") + "(" + jsonObject1.getString("variety") + ")");
             goodsDO.setGoods_count(jsonObject1.getInteger("count"));
             goodsDO.setSubtotal(jsonObject1.getBigDecimal("subtotal"));
             goodsDO.setGoods_price(jsonObject1.getBigDecimal("price"));
