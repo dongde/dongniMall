@@ -20,6 +20,12 @@
         order by updateTime desc
     </select>
 
+    <select id="selectByID" resultMap="FormulaResultMap">
+        select *
+        from formula
+        where id=#{id}
+    </select>
+
     <insert id="insertFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
         insert into formula (<include refid="formula_col"></include>) values
         (#{formulaDO.id},#{formulaDO.formulaPrice},#{formulaDO.formulaDescription},#{formulaDO.factoryAddress},#{formulaDO.updateTime},#{formulaDO.formulaName},#{formulaDO.bigPicture},#{formulaDO.baseStoreId},#{formulaDO.practical_operation_noAppointment},#{formulaDO.learn_again_noAppointment},#{formulaDO.assist_noAppointment},#{formulaDO.formulaFile})
@@ -29,10 +35,42 @@
         delete from formula where id = #{id}
     </delete>
     <update id="updateFormula" parameterType="com.dongni.dongnimall.pojo.FormulaDO">
-        update formula set formulaName=#{formulaDO.formulaName},formulaPrice=#{formulaDO.formulaPrice},formulaDescription=#{formulaDO.formulaDescription}
-        ,factoryAddress=#{formulaDO.factoryAddress},updateTime=#{formulaDO.updateTime},bigPicture=#{formulaDO.bigPicture},baseStoreId=#{formulaDO.baseStoreId}
-        ,practical_operation_noAppointment=#{formulaDO.practical_operation_noAppointment},learn_again_noAppointment=#{formulaDO.learn_again_noAppointment}
-        ,assist_noAppointment=#{formulaDO.assist_noAppointment},formulaFile=#{formulaDO.formulaFile}
+        update formula
+        <set>
+            <if test="formulaDO.formulaName!=null and formulaDO.formulaName!=''">
+                formulaName=#{formulaDO.formulaName},
+            </if>
+            <if test="formulaDO.formulaPrice!=null and formulaDO.formulaPrice!=''">
+                formulaPrice=#{formulaDO.formulaPrice},
+            </if>
+            <if test="formulaDO.formulaDescription!=null and formulaDO.formulaDescription!=''">
+                formulaDescription=#{formulaDO.formulaDescription},
+            </if>
+            <if test="formulaDO.factoryAddress!=null and formulaDO.factoryAddress!=''">
+                factoryAddress=#{formulaDO.factoryAddress},
+            </if>
+            <if test="formulaDO.updateTime!=null and formulaDO.updateTime!=''">
+                updateTime=#{formulaDO.updateTime},
+            </if>
+            <if test="formulaDO.bigPicture!=null and formulaDO.bigPicture!=''">
+                bigPicture=#{formulaDO.bigPicture},
+            </if>
+            <if test="formulaDO.baseStoreId!=null and formulaDO.baseStoreId!=''">
+                baseStoreId=#{formulaDO.baseStoreId},
+            </if>
+            <if test="formulaDO.practical_operation_noAppointment!=null and formulaDO.practical_operation_noAppointment!=''">
+                practical_operation_noAppointment=#{formulaDO.practical_operation_noAppointment},
+            </if>
+            <if test="formulaDO.learn_again_noAppointment!=null and formulaDO.learn_again_noAppointment!=''">
+                learn_again_noAppointment=#{formulaDO.learn_again_noAppointment},
+            </if>
+            <if test="formulaDO.assist_noAppointment!=null and formulaDO.assist_noAppointment!=''">
+                assist_noAppointment=#{formulaDO.assist_noAppointment},
+            </if>
+            <if test="formulaDO.formulaFile!=null and formulaDO.formulaFile!=''">
+                formulaFile=#{formulaDO.formulaFile},
+            </if>
+        </set>
         where id = #{formulaDO.id}
     </update>
 </mapper>

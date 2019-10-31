@@ -128,8 +128,6 @@
                         body.contents().find("#formulaName").val(data.formulaName);
                         body.contents().find("#formulaPrice").val(data.formulaPrice);
                         body.contents().find("#formulaDescription").val(data.formulaDescription);
-                        body.contents().find("#samplePrice").val(data.samplePrice);
-                        body.contents().find("#flyPrice").val(data.flyPrice);
                         body.contents().find("#factoryAddress").val(data.factoryAddress);
                         body.contents().find("#modules").attr('name', data.baseStoreId);
                         body.contents().find("#updateBigImage").css("display", "block");
@@ -178,7 +176,7 @@
                                     "            </div>");
                             });
                             body.contents().find("#assistNoAppointments").append(" <div style=\"display: inline-block \">\n" +
-                                "                <button class=\"layui-btn layui-btn-small\" type=\"button\" id=\"addLearnAgainNoAppointment\"><i\n" +
+                                "                <button class=\"layui-btn layui-btn-small\" type=\"button\" id=\"addAssistNoAppointment\"><i\n" +
                                 "                        class=\"layui-icon\"></i>\n" +
                                 "                </button>\n" +
                                 "            </div>");

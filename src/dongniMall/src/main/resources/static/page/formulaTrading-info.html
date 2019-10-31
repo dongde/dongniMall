@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
     <link rel="stylesheet" href="../css/layuimini.css" media="all">
     <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../cropper/cropper.css" media="all">
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <style>
         .formula-trade-container {
@@ -23,8 +24,8 @@
         }
 
         .imageSize {
-            height: 150px;
-            width: 150px;
+            height: 300px;
+            width: 300px;
         }
 
         .deleteImage {
@@ -63,7 +64,8 @@
             display: inline-block;
             width: 180px;
         }
-        .layui-form-select .layui-edge{
+
+        .layui-form-select .layui-edge {
             right: 20px;
         }
 
@@ -108,10 +110,10 @@
         <div class="layui-input-block">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="bigImage">上传图片</button>
             <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
-            <div id="showBigImage" style="display: none">
+            <div id="showBigImage" hidden>
                 <img class="imageSize" style="margin-top: 10px" id="upload">
             </div>
-            <div id="updateBigImage" style="display: none">
+            <div id="updateBigImage" hidden>
                 <img class="imageSize" style="margin-top: 10px" id="updateload">
             </div>
         </div>
@@ -215,7 +217,7 @@
         <label class="layui-form-label">料场地址：</label>
         <div class="layui-input-block">
             <input type="text" id="factoryAddress" name="factoryAddress" lay-verify="factoryAddress"
-                   autocomplete="off"
+                   autocomplete="off" placeholder="请输入料场地址"
                    class="layui-input">
         </div>
     </div>
@@ -226,15 +228,15 @@
     </div>
 </form>
 <script>
-    layui.use(['form', 'upload', "layer", "laydate"], function () {
+    layui.use(['form', 'upload', "layer", "laydate", "croppers"], function () {
         let form = layui.form,
             layer = layui.layer,
             $ = layui.jquery,
             laydate = layui.laydate,
             upload = layui.upload,
-            imageID = [],
+            croppers = layui.croppers,
+            delImgID = [],
             imgURL = [],
-            bigImage = null,
             fileUrl = "",
             charge1 = /^([0-9]+(.[0-9]+)?)?$/,
             charge2 = /^([0-9]+(.[0-9]{1,2})?)?$/,
@@ -245,6 +247,25 @@
             chooseLearnAgainDate = [],
             chooseAssistDate = [],
             raw_materials = [];
+
+        var bigImageTmpBlob = null;
+        //普通图片上传
+        croppers.render({
+            elem: '#bigImage'
+            , saveW: 300    //保存宽度
+            , saveH: 300
+            , mark: 300 / 300    //选取比例
+            , area: ['90%', '90%']  //弹窗宽度
+            , done: function (imgCanvas) {
+                $('#updateBigImage').remove();
+                $('#showBigImage').removeAttr("hidden");
+                $('#upload').attr('src', imgCanvas.toDataURL('image/png'));
+                imgCanvas.toBlob(function (blob) {
+                    bigImageTmpBlob = blob;
+                })
+            }
+        });
+
         //加载底料列表
         $.ajax({
             url: '/baseTrade/list?page=0&limit=0',
@@ -271,81 +292,67 @@
             } else if (!charge2.test($("#formulaPrice").val()) || !charge2.test($(".unitPrice").val())) {
                 layer.msg("价格小数不能超过两位");
             } else {
-
-                $("#formSubmit").attr('disabled', 'disabled');
-                if (bigImage == null) {
-                    bigImage = $("#updateload").attr("src");
-                }
                 layer.load();
+                $("#formSubmit").attr('disabled', 'disabled');
+                let formData = new FormData();
+                if (bigImageTmpBlob) {
+                    formData.append('bigPicture', bigImageTmpBlob, 'head.jpg');
+                }
+                formData.append('id', $("#id").val().trim());
+                formData.append('formulaName', $("#formulaName").val().trim());
+                formData.append('formulaPrice', $("#formulaPrice").val().trim());
+                formData.append('formulaDescription', $("#formulaDescription").val().trim());
+                formData.append('factoryAddress', $("#factoryAddress").val().trim());
+                formData.append('allURL', imgURL);
+                formData.append('delImgID', delImgID);
+                formData.append('baseStoreId', $("#modules").val());
+                formData.append('formulaFile', fileUrl);
+                formData.append('choosePracticalOperationDate', choosePracticalOperationDate);
+                formData.append('chooseLearnAgainDate', chooseLearnAgainDate);
+                formData.append('chooseAssistDate', chooseAssistDate);
+                raw_materials = [];
+                $.each($("#rawMaterials > div"), function (index, item) {
+                    let raw_material_name = $(item).find(".name").val();
+                    let variety = $(item).find(".variety").val();
+                    let unit_price = $(item).find(".unitPrice").val();
+                    if (raw_material_name.trim() != '' && variety.trim() != '' && unit_price.trim() != '') {
+                        let rawMaterial = {
+                            raw_material_name: raw_material_name,
+                            variety: variety,
+                            unit_price: unit_price
+                        };
+                        raw_materials.push(JSON.stringify(rawMaterial));
+                    }
+                });
+                formData.append('raw_materials', JSON.stringify(raw_materials));
+
                 $.ajax({
                     method: "post",
-                    url: '/baseTrade/deleteImage',
-                    data: {
-                        imageID: imageID
-                    },
+                    url: '/formula/add',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (res) {
-                        if (res.status === 200) {
-                            raw_materials = [];
-                            $.each($("#rawMaterials > div"), function (index, item) {
-                                let raw_material_name = $(item).find(".name").val();
-                                let variety = $(item).find(".variety").val();
-                                let unit_price = $(item).find(".unitPrice").val();
-                                if (raw_material_name.trim() != '' && variety.trim() != '' && unit_price.trim() != '') {
-                                    let rawMaterial = {
-                                        raw_material_name: raw_material_name,
-                                        variety: variety,
-                                        unit_price: unit_price
-                                    };
-                                    raw_materials.push(JSON.stringify(rawMaterial));
-                                }
-                            });
-                            $.ajax({
-                                method: "post",
-                                url: '/formula/add',
-                                data: {
-                                    id: $("#id").val().trim(),
-                                    formulaName: $("#formulaName").val().trim(),
-                                    formulaPrice: $("#formulaPrice").val().trim(),
-                                    formulaDescription: $("#formulaDescription").val().trim(),
-                                    factoryAddress: $("#factoryAddress").val().trim(),
-                                    bigPicture: bigImage,
-                                    allURL: imgURL,
-                                    baseStoreId: $("#modules").val(),
-                                    formulaFile: fileUrl,
-                                    choosePracticalOperationDate: choosePracticalOperationDate,
-                                    chooseLearnAgainDate: chooseLearnAgainDate,
-                                    chooseAssistDate: chooseAssistDate,
-                                    raw_materials: JSON.stringify(raw_materials)
-                                },
-                                success: function (res) {
-                                    layer.closeAll('loading');
-                                    $("#formSubmit").removeAttr("disabled");
-                                    if (res.status == 200) {
-                                        //上传成功重写加载数据表格
-                                        parent.layui.table.reload('formulaList', {page: {curr: 1}});
-                                        var index = parent.layer.getFrameIndex(window.name);
-                                        parent.layer.close(index);
-                                        parent.layer.msg("上传成功");
-
-                                    } else {
-                                        layer.msg(res.msg);
-                                    }
-                                },
-                                error: function (res) {
-                                    layer.closeAll('loading');
-                                    $("#formSubmit").removeAttr("disabled");
-                                    layer.msg("上传失败！");
-                                }
-                            });
-                        }
-                    }, error: function () {
                         layer.closeAll('loading');
-                        $("#formSubmit").removeAttr('disabled');
-                        layer.msg("遇到未知错误");
+                        $("#formSubmit").removeAttr("disabled");
+                        if (res.status == 200) {
+                            //上传成功重写加载数据表格
+                            parent.layui.table.reload('formulaList', {page: {curr: 1}});
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            parent.layer.msg("上传成功");
+
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error: function (res) {
+                        layer.closeAll('loading');
+                        $("#formSubmit").removeAttr("disabled");
+                        layer.msg("上传失败！");
                     }
                 });
             }
-
         });
 
         //上传配方文件
@@ -379,30 +386,6 @@
             }
         });
 
-        //封面图片上传
-        var uploadbigImage = upload.render({
-            elem: "#bigImage",
-            url: "/baseTrade/uploadImages",
-            accept: 'images',//只允许上传图片
-            acceptMime: 'image/*', //只筛选图片
-            before: function () {
-                layer.load();
-            }
-            , done: function (res) {
-                $("#updateBigImage").css("display", "none");
-                $("#showBigImage").css("display", "block");
-                $('#upload').attr('src', res.data); //图片链接（base64）
-                layer.closeAll("loading");
-                bigImage = res.data;
-            },
-            error: function () {
-                layer.closeAll("loading");
-                layer.msg("上传失败！");
-            }
-        });
-
-        var fileCount = 0;
-
         //小图显示
         var uploadInst = upload.render({
             elem: "#uploadImage",
@@ -411,11 +394,11 @@
             multiple: true,
             acceptMime: 'image/*', //只筛选图片
             before: function (obj) {
-                if (obj.getLength() + fileCount > 3) {
+                if (obj.getLength() + imgURL.length > 3) {
                     layer.msg("图片数量不能超过3");
                     return false;
                 }
-                fileCount += obj.getLength();
+                // fileCount += obj.getLength();
                 //显示加载
                 layer.load();
             },
@@ -441,7 +424,6 @@
         });
 
         $("#showImage").on('click', '.delete', function () {
-            fileCount -= 1;
             var va = $(this).attr('value');
             $(this).parent().remove();
             imgURL.splice($.inArray(va, imgURL), 1);
@@ -457,10 +439,13 @@
                     id: $("#id").val()
                 },
                 success: function (res) {
-                    fileCount = 3;
+                    imgURL = [];
+                    delImgID = [];
                     if (res.status === 200) {
                         $("#updateImage").css("display", "inline-block");
                         $.each(res.data, function (index, item) {
+                            imgURL.push(item.imageURL);
+                            delImgID.push(item.id);
                             $("#updateImage").append(' <div id="' + item.id + '" style="display: inline-block">\n' +
                                 '                    <img src="' + item.imageURL + '" style="width: 150px;height: 150px;display: block">\n' +
                                 '                    <button type="button" value=' + item.id + ' class="deleteImage layui-btn layui-btn-danger">删除</button>\n' +
@@ -474,9 +459,10 @@
 
 
         $("#updateImage").on('click', '.deleteImage', function () {
-            fileCount -= 1;
+            // fileCount -= 1;
+            var va = $(this).attr('value');
             $(this).parent().remove();
-            imageID.push($(this).attr('value'));
+            imgURL.splice($.inArray(va, imgURL), 1);
         });
         let dateRender = function (dateInputType, dateBox, btn, choose) {
             $.each($("." + dateInputType), function (index, item) {
@@ -604,9 +590,8 @@
 
         $("#rawMaterials").on('click', '.delRawMaterial', function () {
             $(this).parent("div").remove();
-        })
+        });
     });
-
 </script>
 </body>
 </html>

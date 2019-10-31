@@ -39,6 +39,5 @@ public interface FormulaMapper {
      * 通过id查询
      * @param id
      */
-    @Select("select * from formula where id=#{id}")
     FormulaDO selectByID(@Param("id") String id);
 }

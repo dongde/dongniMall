@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,6 +54,12 @@ public class FormulaController {
     private UserService userService;
 
     @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private GoodsService goodsService;
+
+    @Autowired
     private Sid sid;
 
     //配方总览
@@ -69,9 +76,10 @@ public class FormulaController {
 
     //添加和修改配方
     @RequestMapping("add")
-    public JsonResult insertFormula(String id, String formulaName, Float formulaPrice, String formulaDescription, String factoryAddress, String bigPicture, @RequestParam(value = "allURL[]", required = false) String[] allURL, String baseStoreId
-            , String formulaFile, @RequestParam(value = "choosePracticalOperationDate[]", required = false) String[] choosePracticalOperationDate, @RequestParam(value = "chooseLearnAgainDate[]", required = false) String[] chooseLearnAgainDate
-            , @RequestParam(value = "chooseAssistDate[]", required = false) String[] chooseAssistDate, @RequestParam(value = "raw_materials") String raw_materials) {
+    public JsonResult insertFormula(String id, String formulaName, Float formulaPrice, String formulaDescription, String factoryAddress, String baseStoreId, String formulaFile, String delImgID
+            , @RequestParam(value = "bigPicture", required = false) MultipartFile bigPicture, @RequestParam(value = "allURL", required = false) String allURL
+            , @RequestParam(value = "choosePracticalOperationDate", required = false) String choosePracticalOperationDate, @RequestParam(value = "chooseLearnAgainDate", required = false) String chooseLearnAgainDate, @RequestParam(value = "chooseAssistDate", required = false) String chooseAssistDate
+            , @RequestParam(value = "raw_materials") String raw_materials) throws IOException {
         if (StringUtils.isBlank(formulaName)) {
             return JsonResult.errorMsg("配方名称不能为空");
         }
@@ -81,107 +89,108 @@ public class FormulaController {
         if (formulaPrice == null) {
             return JsonResult.errorMsg("配方价格不能为空");
         }
-        if (StringUtils.isBlank(factoryAddress)) {
-            return JsonResult.errorMsg("料场地址不能为空");
+        if (bigPicture == null && StringUtils.isBlank(id)) {
+            return JsonResult.errorMsg("请选择封面大图");
         }
-        if (StringUtils.isBlank(formulaName)) {
-            return JsonResult.errorMsg("封面大图不能为空");
+        if (StringUtils.isBlank(allURL)) {
+            return JsonResult.errorMsg("请选择配方小图");
+        } else if (allURL.split(",").length < 3) {
+            return JsonResult.errorMsg("配方小图必须为3张");
+        } else if (allURL.split(",").length > 3) {
+            return JsonResult.errorMsg("配方小图不能超过3张");
+        }
+        if (StringUtils.isBlank(formulaFile) && StringUtils.isBlank(id)) {
+            return JsonResult.errorMsg("请上传配方文件");
         }
         if (StringUtils.isBlank(baseStoreId)) {
             return JsonResult.errorMsg("请选择试经营底料");
+        }
+        if (StringUtils.isBlank(factoryAddress)) {
+            return JsonResult.errorMsg("料场地址不能为空");
         }
         JSONArray jsonArray = JSONArray.parseArray(raw_materials);
         if (jsonArray.size() == 0) {
             return JsonResult.errorMsg("请填写原料信息");
         }
-
+        String formula_id = id;
+        if (StringUtils.isBlank(formula_id)) {
+            formula_id = sid.nextShort();
+        }
         FormulaDO formulaDO = new FormulaDO();
+        formulaDO.setId(formula_id);
         formulaDO.setFormulaName(formulaName);
         formulaDO.setFormulaPrice(formulaPrice);
         formulaDO.setFormulaDescription(formulaDescription);
         formulaDO.setFactoryAddress(factoryAddress);
-        formulaDO.setBigPicture(bigPicture);
         formulaDO.setBaseStoreId(baseStoreId);
-        formulaDO.setFormulaFile(formulaFile);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
         formulaDO.setUpdateTime(dateString);
-        StringBuilder noAppointment = new StringBuilder();
-        for (String date : choosePracticalOperationDate) {
-            if (noAppointment.length() > 0) {
-                noAppointment.append(",");
-            }
-            noAppointment.append(date);
-        }
-        formulaDO.setPractical_operation_noAppointment(noAppointment.toString());
-        StringBuilder learn_again_noAppointment = new StringBuilder();
-        for (String date : chooseLearnAgainDate) {
-            if (learn_again_noAppointment.length() > 0) {
-                learn_again_noAppointment.append(",");
-            }
-            learn_again_noAppointment.append(date);
-        }
-        formulaDO.setLearn_again_noAppointment(learn_again_noAppointment.toString());
-        StringBuilder assist_noAppointment = new StringBuilder();
-        for (String date : chooseAssistDate) {
-            if (assist_noAppointment.length() > 0) {
-                assist_noAppointment.append(",");
-            }
-            assist_noAppointment.append(date);
-        }
-        formulaDO.setAssist_noAppointment(assist_noAppointment.toString());
-
-        List<FormulaRawMaterialDO> list = new ArrayList<>();
-        if (StringUtils.isBlank(id)) {
-            if (allURL == null) {
-                return JsonResult.errorMsg("配方图片不能为空");
-            }
-            if (StringUtils.isBlank(formulaFile)) {
-                return JsonResult.errorMsg("请上传配方文件");
-            }
-            String ids = sid.nextShort();
-            formulaDO.setId(ids);
-            for (String imageURL : allURL) {
+        baseImageService.deleteByID(delImgID.split(","));
+        for (String imageURL : allURL.split(",")) {
+            if (StringUtils.isNotBlank(imageURL)) {
                 String id1 = sid.nextShort();   //将小图url数组存入数据库中，联合表id
                 BaseImageDO baseImageDO = new BaseImageDO();
                 baseImageDO.setId(id1);
                 baseImageDO.setImageURL(imageURL);
-                baseImageDO.setBaseStoreId(ids);
+                baseImageDO.setBaseStoreId(formula_id);
                 baseImageService.insertImageURL(baseImageDO);
             }
-            for (Object raw_material : jsonArray) {
-                System.out.println(raw_material);
-                JSONObject jsonObject = JSONObject.parseObject((String) raw_material);
-                FormulaRawMaterialDO formulaRawMaterialDO = new FormulaRawMaterialDO();
-                formulaRawMaterialDO.setFormula_id(formulaDO.getId());
-                formulaRawMaterialDO.setRaw_material_name(jsonObject.getString("raw_material_name"));
-                formulaRawMaterialDO.setVariety(jsonObject.getString("variety"));
-                formulaRawMaterialDO.setUnit_price(jsonObject.getBigDecimal("unit_price"));
-                list.add(formulaRawMaterialDO);
+        }
+        List<FormulaRawMaterialDO> list = new ArrayList<>();
+
+        for (Object raw_material : jsonArray) {
+            JSONObject jsonObject = JSONObject.parseObject((String) raw_material);
+            FormulaRawMaterialDO formulaRawMaterialDO = new FormulaRawMaterialDO();
+            formulaRawMaterialDO.setFormula_id(formulaDO.getId());
+            formulaRawMaterialDO.setRaw_material_name(jsonObject.getString("raw_material_name"));
+            formulaRawMaterialDO.setVariety(jsonObject.getString("variety"));
+            formulaRawMaterialDO.setUnit_price(jsonObject.getBigDecimal("unit_price"));
+            list.add(formulaRawMaterialDO);
+        }
+        StringBuilder noAppointment = new StringBuilder();
+        for (String date : choosePracticalOperationDate.split(",")) {
+            if (StringUtils.isNotBlank(date)) {
+                if (noAppointment.length() > 0) {
+                    noAppointment.append(",");
+                }
+                noAppointment.append(date);
             }
+        }
+        formulaDO.setPractical_operation_noAppointment(noAppointment.toString());
+        StringBuilder learn_again_noAppointment = new StringBuilder();
+        for (String date : chooseLearnAgainDate.split(",")) {
+            if (StringUtils.isNotBlank(date)) {
+                if (learn_again_noAppointment.length() > 0) {
+                    learn_again_noAppointment.append(",");
+                }
+                learn_again_noAppointment.append(date);
+            }
+        }
+        formulaDO.setLearn_again_noAppointment(learn_again_noAppointment.toString());
+        StringBuilder assist_noAppointment = new StringBuilder();
+        for (String date : chooseAssistDate.split(",")) {
+            if (StringUtils.isNotBlank(date)) {
+                if (assist_noAppointment.length() > 0) {
+                    assist_noAppointment.append(",");
+                }
+                assist_noAppointment.append(date);
+            }
+        }
+        formulaDO.setAssist_noAppointment(assist_noAppointment.toString());
+
+        //新增操作
+        if (StringUtils.isBlank(id)) {
+            formulaDO.setFormulaFile(formulaFile);
+            formulaDO.setBigPicture(fileUploadManager.upload(bigPicture.getInputStream()).getUrl());
             formulaService.insertFormula(formulaDO, list);
             return JsonResult.ok();
-        } else {
-            formulaDO.setId(id);
-            if (allURL != null) {
-                for (String imageURL : allURL) {
-                    String id1 = sid.nextShort();   //将小图url数组存入数据库中，联合表id
-                    BaseImageDO baseImageDO = new BaseImageDO();
-                    baseImageDO.setId(id1);
-                    baseImageDO.setImageURL(imageURL);
-                    baseImageDO.setBaseStoreId(id);
-                    baseImageService.insertImageURL(baseImageDO);
-                }
+        } else {    //更新操作
+            if (StringUtils.isNotBlank(formulaFile)) {
+                formulaDO.setFormulaFile(formulaFile);
             }
-            for (Object raw_material : jsonArray) {
-                System.out.println(raw_material);
-                JSONObject jsonObject = JSONObject.parseObject((String) raw_material);
-                FormulaRawMaterialDO formulaRawMaterialDO = new FormulaRawMaterialDO();
-                formulaRawMaterialDO.setFormula_id(formulaDO.getId());
-                formulaRawMaterialDO.setRaw_material_name(jsonObject.getString("raw_material_name"));
-                formulaRawMaterialDO.setVariety(jsonObject.getString("variety"));
-                formulaRawMaterialDO.setUnit_price(jsonObject.getBigDecimal("unit_price"));
-                list.add(formulaRawMaterialDO);
+            if (bigPicture != null) {
+                formulaDO.setBigPicture(fileUploadManager.upload(bigPicture.getInputStream()).getUrl());
             }
             formulaService.updateFormula(formulaDO, list);
             return JsonResult.ok();
@@ -371,6 +380,38 @@ public class FormulaController {
         formulaUploadDO.setId(id);
         formulaUploadDO.setStatus(status);
         formulaUploadService.modifyFormulaUpload(formulaUploadDO);
+        return JsonResult.ok();
+    }
+
+    //代炒购买
+    @PostMapping("/addStirFry")
+    public JsonResult addStirFry(@RequestBody JSONObject jsonObject) {
+        JSONArray rawMaterials = jsonObject.getJSONArray("rawMaterials");
+        String user_phone = jsonObject.getString("user_phone");
+        BigDecimal payment_amount = jsonObject.getBigDecimal("payment_amount");
+        Integer payment_method = jsonObject.getInteger("payment_method");
+        String order_number = sid.nextShort();
+        for (int i=0;i<rawMaterials.size();i++) {
+            JSONObject jsonObject1 = rawMaterials.getJSONObject(i);
+            GoodsDO goodsDO = new GoodsDO();
+            goodsDO.setGoods_name(jsonObject1.getString("name")+"("+jsonObject1.getString("variety")+")");
+            goodsDO.setGoods_count(jsonObject1.getInteger("count"));
+            goodsDO.setSubtotal(jsonObject1.getBigDecimal("subtotal"));
+            goodsDO.setGoods_price(jsonObject1.getBigDecimal("price"));
+            goodsDO.setGoods_img(jsonObject1.getString("img"));
+            goodsDO.setOrder_number(order_number);
+            goodsDO.setId(sid.nextShort());
+            goodsDO.setUser_phone(user_phone);
+            goodsService.addGoods(goodsDO);
+        }
+        OrderDO orderDO = new OrderDO();
+        orderDO.setOrder_number(order_number);
+        orderDO.setOrder_status(1);
+        orderDO.setPayment_method(payment_method);
+        orderDO.setPayment_amount(payment_amount);
+        orderDO.setUser_phone(user_phone);
+        orderDO.setCreate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        orderService.addOrder(orderDO);
         return JsonResult.ok();
     }
 }
