@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 配方交易管理
@@ -386,11 +387,12 @@ public class FormulaController {
     //代炒购买
     @PostMapping("/addStirFry")
     public JsonResult addStirFry(@RequestBody JSONObject jsonObject) {
+        System.out.println(jsonObject);
         JSONArray rawMaterials = jsonObject.getJSONArray("rawMaterials");
         String user_phone = jsonObject.getString("user_phone");
         BigDecimal payment_amount = jsonObject.getBigDecimal("payment_amount");
         Integer payment_method = jsonObject.getInteger("payment_method");
-        String order_number = sid.nextShort();
+        String order_number = UUID.randomUUID().toString();
         for (int i = 0; i < rawMaterials.size(); i++) {
             JSONObject jsonObject1 = rawMaterials.getJSONObject(i);
             GoodsDO goodsDO = new GoodsDO();

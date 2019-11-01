@@ -72,7 +72,7 @@ public class OrderController {
     }
 
     @GetMapping("/queryOrderList")
-    public PageData queryOrderList(Integer page, Integer limit,@RequestParam(value = "user_phone",required = false) String user_phone) {
+    public PageData queryOrderList(Integer page, Integer limit, @RequestParam(value = "user_phone", required = false) String user_phone) {
         return orderService.queryOrderList(page, limit, user_phone);
     }
 
@@ -132,6 +132,18 @@ public class OrderController {
         return JsonResult.ok();
     }
 
+    @PostMapping("/removeOrders")
+    public JsonResult removeOrder(@RequestParam(value = "order_numbers[]") String[] order_numbers) {
+        if (order_numbers.length == 0) {
+            return JsonResult.errorMsg("删除订单出错");
+        }
+        for (String order_number : order_numbers) {
+            orderService.removeOrder(order_number);
+            logisticsService.removeLogistics(order_number);
+            goodsService.removeGoodsByOrderNumber(order_number);
+        }
+        return JsonResult.ok();
+    }
 
     @RequestMapping("/queryLogistics")
     public JsonResult queryLogistics(String order_number) {
