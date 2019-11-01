@@ -9,6 +9,7 @@ import com.dongni.dongnimall.pojo.BaseStoreDO;
 import com.dongni.dongnimall.vo.BaseStoreVO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
+import com.qiniu.storage.UploadManager;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,92 +46,89 @@ public class BaseTradeController {
 
     //底料商品总览
     @RequestMapping("list")
-    public PageData tradeList(Integer page, Integer limit, String tradeName, String tradeType){
-        return baseTradeService.selectAllTrade(page,limit,tradeName,tradeType);
+    public PageData tradeList(Integer page, Integer limit, String tradeName, String tradeType) {
+        return baseTradeService.selectAllTrade(page, limit, tradeName, tradeType);
     }
 
     //小图商品总览
     @RequestMapping("smallimage")
-    public JsonResult smallimage(String id){
+    public JsonResult smallimage(String id) {
         return baseImageService.findAllbyID(id);
     }
 
 
     //单条详情总览
     @RequestMapping("details")
-    public BaseStoreVO trademessage(String id){
+    public BaseStoreVO trademessage(String id) {
         return baseTradeService.selectDetails(id);
     }
 
     //添加和修改底料
     @RequestMapping("add")
-    public JsonResult insertTrade(String id, String tradeName, @RequestParam(value = "tradeType", required = false)String tradeType, Float price, String tradeURL, String content,
-                                  @RequestParam(value = "allURL[]", required = false) String[] allURL, String bigImage, String alipay, String weChat) {
+    public JsonResult insertTrade(String id, String tradeName, @RequestParam(value = "tradeType") String tradeType, Float price, String tradeURL, String content
+            , @RequestParam(value = "delImgID") String delImgID, @RequestParam(value = "allURL") String allURL, @RequestParam(value = "bigPicture", required = false) MultipartFile bigPicture) throws IOException {
 
-        if(StringUtils.isBlank(tradeName)){
+        if (StringUtils.isBlank(tradeName)) {
             return JsonResult.errorMsg("底料名称不能为空");
         }
-        if(StringUtils.isBlank(bigImage)){
-            return JsonResult.errorMsg("封面大图不能为空");
-        }
-        if(StringUtils.isBlank(tradeType)){
+        if (tradeType.equals("undefine")) {
             return JsonResult.errorMsg("类型不能为空");
         }
-        if(StringUtils.isBlank(tradeURL)){
-            return JsonResult.errorMsg("链接不能为空");
-        }
-        if(StringUtils.isBlank(content)){
-            return JsonResult.errorMsg("内容不能为空");
-        }
-        if(price == null){
+        if (price == null) {
             return JsonResult.errorMsg("价格不能为空");
         }
-        else {
-            if (!tradeURL.matches(REGEX)) {
-                return JsonResult.errorMsg("请输入正确的链接地址");
-            }
+        if (StringUtils.isBlank(tradeURL)) {
+            return JsonResult.errorMsg("链接不能为空");
+        } else if (!tradeURL.matches(REGEX)) {
+            return JsonResult.errorMsg("请输入正确的链接地址");
+        }
+        if (bigPicture == null && StringUtils.isBlank(id)) {
+            return JsonResult.errorMsg("请选择封面大图");
+        }
+        if (StringUtils.isBlank(allURL)) {
+            return JsonResult.errorMsg("请选择底料图片");
+        } else if (allURL.split(",").length < 3) {
+            return JsonResult.errorMsg("底料图片必须为3张");
+        } else if (allURL.split(",").length > 3) {
+            return JsonResult.errorMsg("底料图片不能超过3张");
+        }
+        if (StringUtils.isBlank(content)) {
+            return JsonResult.errorMsg("内容不能为空");
+        }
+
+        String baseStore_id = id;
+        if (StringUtils.isBlank(baseStore_id)) {
+            baseStore_id = sid.nextShort();
         }
         BaseStoreDO baseStoreDO = new BaseStoreDO();
+        baseStoreDO.setId(baseStore_id);
         baseStoreDO.setPrice(price);
         baseStoreDO.setContent(content);
         baseStoreDO.setTradeName(tradeName);
         baseStoreDO.setTradeType(tradeType);
         baseStoreDO.setTradeURL(tradeURL);
         baseStoreDO.setViewCount(1);
-        baseStoreDO.setBigImage(bigImage);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateString = formatter.format(new Date());
-        baseStoreDO.setUpdateTime(dateString);
-
-        if(StringUtils.isBlank(id)){
-
-            if(allURL == null){
-                return JsonResult.errorMsg("小图不能为空");
-            }
-            String ids = sid.nextShort();
-            for (String imageURL : allURL) {
-                String id1 = sid.nextShort();
+        baseStoreDO.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        baseImageService.deleteByID(delImgID.split(","));
+        for (String imageURL : allURL.split(",")) {
+            if (StringUtils.isNotBlank(imageURL)) {
+                String id1 = sid.nextShort();   //将小图url数组存入数据库中，联合表id
                 BaseImageDO baseImageDO = new BaseImageDO();
                 baseImageDO.setId(id1);
                 baseImageDO.setImageURL(imageURL);
-                baseImageDO.setBaseStoreId(ids);
+                baseImageDO.setBaseStoreId(baseStore_id);
                 baseImageService.insertImageURL(baseImageDO);
             }
-            baseStoreDO.setId(ids);
+        }
+        if (StringUtils.isBlank(id)) {
+            String s = fileUploadManager.upload(bigPicture.getInputStream()).getUrl();
+            baseStoreDO.setBigImage(s);
             baseTradeService.insertTrade(baseStoreDO);
             return JsonResult.ok(baseStoreDO);
-        }else {
-            if(allURL != null) {
-                for (String imageURL : allURL) {
-                    String id1 = sid.nextShort();
-                    BaseImageDO baseImageDO = new BaseImageDO();
-                    baseImageDO.setId(id1);
-                    baseImageDO.setImageURL(imageURL);
-                    baseImageDO.setBaseStoreId(id);
-                    baseImageService.insertImageURL(baseImageDO);
-                }
+        } else {
+            if (bigPicture != null) {
+                baseStoreDO.setBigImage(fileUploadManager.upload(bigPicture.getInputStream()).getUrl());
             }
-            baseStoreDO.setId(id);
             baseTradeService.updateTrade(baseStoreDO);
             return JsonResult.ok(baseStoreDO);
         }
@@ -140,7 +138,7 @@ public class BaseTradeController {
     //添加小图
     @RequestMapping("uploadImage")
     public JsonResult uploadImage(MultipartFile file) throws IOException {
-        if(file==null){
+        if (file == null) {
             return JsonResult.errorMsg("数据不能为空");
         }
         Response response = fileUploadManager.upload(file.getInputStream());
@@ -148,10 +146,11 @@ public class BaseTradeController {
 
         return JsonResult.ok(url);
     }
+
     //删除小图
     @RequestMapping("deleteImage")
-    public JsonResult deleteImage(@RequestParam(value = "imageID[]", required = false)String[] imageID){
-        if(imageID == null){
+    public JsonResult deleteImage(@RequestParam(value = "imageID[]", required = false) String[] imageID) {
+        if (imageID == null) {
             return JsonResult.ok();
         }
         return baseImageService.deleteByID(imageID);
@@ -160,7 +159,7 @@ public class BaseTradeController {
     //图片上传返回的url
     @RequestMapping("uploadImages")
     public JsonResult uploadImages(MultipartFile file) throws IOException {
-        if(file==null){
+        if (file == null) {
             return JsonResult.errorMsg("数据不能为空");
         }
         Response response = fileUploadManager.upload(file.getInputStream());
@@ -170,7 +169,7 @@ public class BaseTradeController {
 
     //删除底料信息
     @RequestMapping("delete")
-    public JsonResult deleteBase(String id){
+    public JsonResult deleteBase(String id) {
         baseTradeService.deleteByID(id);
         return JsonResult.ok();
     }

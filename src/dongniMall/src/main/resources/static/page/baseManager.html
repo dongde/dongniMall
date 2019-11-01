@@ -56,13 +56,13 @@
             , page: true
             , height: "full-110"
             , cols: [[
-                {field: 'tradeName', title: '商品名称', align: "center"}
-                , {field: 'tradeType', title: '商品类型', align: "center"}
-                , {field: 'price', title: '价格', align: "center"}
-                , {field: 'tradeURL', title: '商品连接', align: "center"}
-                , {field: 'viewCount', title: '查看次数', align: "center"}
-                , {field: 'updateTime', title: '更新时间', align: "center"}
-                , {fixed: 'right', title: '操作', toolbar: '#operation', align: "center"}
+                {field: 'tradeName', title: '商品名称', align: "center", unresize: true}
+                , {field: 'tradeType', title: '商品类型', align: "center", unresize: true}
+                , {field: 'price', title: '价格', align: "center", unresize: true}
+                , {field: 'tradeURL', title: '商品连接', align: "center", unresize: true}
+                , {field: 'viewCount', title: '查看次数', align: "center", unresize: true}
+                , {field: 'updateTime', title: '更新时间', align: "center", unresize: true}
+                , {fixed: 'right', title: '操作', toolbar: '#operation', align: "center", unresize: true}
 
             ]]
             , id: "baselists"
@@ -91,7 +91,7 @@
                     break;
                 case 'addTrade':
                     layer.open({
-                        area: ['80%', '80%'],
+                        area: ['80%', '90%'],
                         title: "添加底料",
                         shadeClose: true,
                         shade: 0.8,
@@ -132,15 +132,12 @@
         });
 
         reloadType = function () {
-            console.log(oop.length)
-            console.log(oop);
-            console.log("***********");
             $.each(oop, function (index, item) {
                 $("#tradeType").html($("#tradeType").html() + "<option>" + item.type + "</option>");
 
             });
             form.render();
-        }
+        };
 
         $.ajax({
             url: "/baseTradeType/list",
@@ -150,8 +147,6 @@
                 limit: 10
             },
             success: function (res) {
-                console.log(res);
-                console.log("############");
                 if (res.code == 0) {
                     oop = res.data;
                     $.each(res.data, function (index, item) {
@@ -181,32 +176,23 @@
                     title: '修改底料',
                     shadeClose: true,
                     shade: 0.8,
-                    area: ['80%', '80%'],
+                    area: ['80%', '90%'],
                     offset: 'auto',
                     content: '/page/baseManager-info.html', //iframe的url，no代表不显示滚动条
                     success: function (layero, index) {
                         var body = layer.getChildFrame('body', index);
-
-
                         body.contents().find("#id").val(obj.data.id);
                         body.contents().find("#tradeName").val(obj.data.tradeName);
                         body.contents().find("#type").val(obj.data.tradeType);
                         body.contents().find("#price").val(obj.data.price);
                         body.contents().find("#tradeURL").val(obj.data.tradeURL);
                         body.contents().find("#contents").val(obj.data.content);
-                        body.contents().find("#updateAlipayImage").css("display", "block");
-                        body.contents().find("#updateloadAlipay").attr("src", obj.data.alipay);
-
-                        body.contents().find("#updateWechatImage").css("display", "block");
-                        body.contents().find("#updateloadWechat").attr("src", obj.data.wechat);
-
                         body.contents().find("#updateBigImage").css("display", "block");
+                        console.log(obj.data.bigImage)
                         body.contents().find("#updateload").attr("src", obj.data.bigImage);
-
                     }
                 });
             }
-
         });
 
         //删除所选行数据
@@ -218,7 +204,6 @@
                 data: {"id": id},
                 url: "/baseTrade/delete",
                 success: function (res) {
-                    console.log(res.status);
                     if (res.status == 200) {
                         layer.msg("删除成功！");
                         table.reload('baselist', {

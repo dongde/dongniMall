@@ -236,7 +236,6 @@
             upload = layui.upload,
             croppers = layui.croppers,
             delImgID = [],
-            imgURL = [],
             fileUrl = "",
             charge1 = /^([0-9]+(.[0-9]+)?)?$/,
             charge2 = /^([0-9]+(.[0-9]{1,2})?)?$/,
@@ -298,12 +297,16 @@
                 if (bigImageTmpBlob) {
                     formData.append('bigPicture', bigImageTmpBlob, 'head.jpg');
                 }
+                let allURL = [];
+                $.each($(".layui-upload-list > div > img"),function (index,item) {
+                    allURL.push($(item).attr("src"));
+                });
                 formData.append('id', $("#id").val().trim());
                 formData.append('formulaName', $("#formulaName").val().trim());
                 formData.append('formulaPrice', $("#formulaPrice").val().trim());
                 formData.append('formulaDescription', $("#formulaDescription").val().trim());
                 formData.append('factoryAddress', $("#factoryAddress").val().trim());
-                formData.append('allURL', imgURL);
+                formData.append('allURL', allURL);
                 formData.append('delImgID', delImgID);
                 formData.append('baseStoreId', $("#modules").val());
                 formData.append('formulaFile', fileUrl);
@@ -341,7 +344,6 @@
                             var index = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(index);
                             parent.layer.msg("上传成功");
-
                         } else {
                             layer.msg(res.msg);
                         }
@@ -394,11 +396,10 @@
             multiple: true,
             acceptMime: 'image/*', //只筛选图片
             before: function (obj) {
-                if (obj.getLength() + imgURL.length > 3) {
+                if (obj.getLength() + $(".layui-upload-list > div > img").length > 3) {
                     layer.msg("图片数量不能超过3");
                     return false;
                 }
-                // fileCount += obj.getLength();
                 //显示加载
                 layer.load();
             },
@@ -411,22 +412,19 @@
                         '                    <button type="button" value="' + res.data + '" class="delete layui-btn layui-btn-danger">删除</button>\n' +
                         '                </div>');
                     //上传完毕
-                    imgURL.push(res.data);
                 } else {
                     layer.msg(res.msg);
                 }
                 layer.closeAll("loading");
             },
             error: function (index, upload) {
-                // layer.msg("上传失败！");
+                layer.msg("上传失败！");
                 layer.closeAll("loading");
             }
         });
 
         $("#showImage").on('click', '.delete', function () {
-            var va = $(this).attr('value');
             $(this).parent().remove();
-            imgURL.splice($.inArray(va, imgURL), 1);
         });
 
 
@@ -439,12 +437,10 @@
                     id: $("#id").val()
                 },
                 success: function (res) {
-                    imgURL = [];
                     delImgID = [];
                     if (res.status === 200) {
                         $("#updateImage").css("display", "inline-block");
                         $.each(res.data, function (index, item) {
-                            imgURL.push(item.imageURL);
                             delImgID.push(item.id);
                             $("#updateImage").append(' <div id="' + item.id + '" style="display: inline-block">\n' +
                                 '                    <img src="' + item.imageURL + '" style="width: 150px;height: 150px;display: block">\n' +
@@ -459,10 +455,7 @@
 
 
         $("#updateImage").on('click', '.deleteImage', function () {
-            // fileCount -= 1;
-            var va = $(this).attr('value');
             $(this).parent().remove();
-            imgURL.splice($.inArray(va, imgURL), 1);
         });
         let dateRender = function (dateInputType, dateBox, btn, choose) {
             $.each($("." + dateInputType), function (index, item) {

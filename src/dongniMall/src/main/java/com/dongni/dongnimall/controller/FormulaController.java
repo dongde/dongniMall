@@ -76,8 +76,8 @@ public class FormulaController {
 
     //添加和修改配方
     @RequestMapping("add")
-    public JsonResult insertFormula(String id, String formulaName, Float formulaPrice, String formulaDescription, String factoryAddress, String baseStoreId, String formulaFile, String delImgID
-            , @RequestParam(value = "bigPicture", required = false) MultipartFile bigPicture, @RequestParam(value = "allURL", required = false) String allURL
+    public JsonResult insertFormula(String id, String formulaName, Float formulaPrice, String formulaDescription, String factoryAddress, String baseStoreId, String formulaFile
+            , @RequestParam(value = "bigPicture", required = false) MultipartFile bigPicture, @RequestParam(value = "allURL") String allURL, @RequestParam(value = "delImgID") String delImgID
             , @RequestParam(value = "choosePracticalOperationDate", required = false) String choosePracticalOperationDate, @RequestParam(value = "chooseLearnAgainDate", required = false) String chooseLearnAgainDate, @RequestParam(value = "chooseAssistDate", required = false) String chooseAssistDate
             , @RequestParam(value = "raw_materials") String raw_materials) throws IOException {
         if (StringUtils.isBlank(formulaName)) {

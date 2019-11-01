@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
     <link rel="stylesheet" href="../css/layuimini.css" media="all">
     <link rel="stylesheet" href="../css/public.css" media="all">
+    <link rel="stylesheet" href="../cropper/cropper.css" media="all">
     <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
     <style>
         .baseManager-container {
@@ -93,10 +94,10 @@
         <div class="layui-input-block">
             <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="bigImage">上传图片</button>
             <i style="font-size: 10px;color: gray;">建议尺寸300*300</i>
-            <div class="layui-upload-list" id="showBigImage" style="display: none">
+            <div class="layui-upload-list" id="showBigImage" hidden>
                 <img class="imageSize" id="upload">
             </div>
-            <div class="layui-upload-list" id="updateBigImage" style="display: none">
+            <div class="layui-upload-list" id="updateBigImage" hidden>
                 <img class="imageSize" id="updateload">
             </div>
         </div>
@@ -135,17 +136,32 @@
 
 
 <script>
-    layui.use(['form', 'upload', "layer", "element"], function () {
+    layui.use(['form', 'upload', "layer", "element", "croppers"], function () {
         var form = layui.form,
             layer = layui.layer,
-            $ = layui.jquery;
-        element = layui.element;
-        upload = layui.upload;
-        var imgURL = [];
+            croppers = layui.croppers,
+            $ = layui.jquery,
+            upload = layui.upload,
+            delImgID = [],
+            bigImageTmpBlob = null;
 
-        var bigImage = null;
-        var imageID = [];
 
+        //普通图片上传
+        croppers.render({
+            elem: '#bigImage'
+            , saveW: 300    //保存宽度
+            , saveH: 300
+            , mark: 300 / 300    //选取比例
+            , area: ['90%', '90%']  //弹窗宽度
+            , done: function (imgCanvas) {
+                $('#updateBigImage').remove();
+                $('#showBigImage').removeAttr("hidden");
+                $('#upload').attr('src', imgCanvas.toDataURL('image/png'));
+                imgCanvas.toBlob(function (blob) {
+                    bigImageTmpBlob = blob;
+                })
+            }
+        });
         $.ajax({
             url: "/baseTradeType/list",
             method: 'POST',
@@ -171,93 +187,59 @@
         });
 
         $("#formSubmit").on('click', function () {
-            if (!/^([0-9]+(.[0-9]+)?)$/.test($("#price").val())) {
+            if (!/^([0-9]+(.[0-9]+)?)?$/.test($("#price").val())) {
                 layer.msg("价格格式错误");
-            } else if (!/^([0-9]+(.[0-9]{1,2})?)$/.test($("#price").val())) {
+            } else if (!/^([0-9]+(.[0-9]{1,2})?)?$/.test($("#price").val())) {
                 layer.msg("价格小数不能超过两位");
+            } else if (!$("input[type='radio']:checked").val()) {
+                layer.msg("请选择底料类型");
             } else {
-                $("#formSubmit").attr('disabled', 'disabled');
-                if (bigImage == null) {
-                    bigImage = $("#updateload").attr("src");
-                }
                 layer.load();
+                $("#formSubmit").attr('disabled', 'disabled');
+                let formData = new FormData();
+                if (bigImageTmpBlob) {
+                    formData.append('bigPicture', bigImageTmpBlob, 'head.jpg');
+                }
+                let allURL = [];
+                $.each($(".layui-upload-list > div > img"),function (index,item) {
+                    allURL.push($(item).attr("src"));
+                });
+                formData.append('id', $("#id").val().trim());
+                formData.append('tradeName', $("#tradeName").val().trim());
+                formData.append('tradeType', $("input[type='radio']:checked").val());
+                formData.append('price', $("#price").val().trim());
+                formData.append('tradeURL', $("#tradeURL").val().trim());
+                formData.append('content', $("#contents").val());
+                formData.append('allURL', allURL);
+                formData.append('delImgID', delImgID);
                 $.ajax({
-                    method: "post",
-                    url: '/baseTrade/deleteImage',
-                    data: {
-                        imageID: imageID
-                    },
+                    method: "POST",
+                    url: '/baseTrade/add',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function (res) {
-                        if (res.status === 200) {
-                            $.ajax({
-                                method: "post",
-                                url: '/baseTrade/add',
-                                data: {
-                                    id: $("#id").val().trim(),
-                                    tradeName: $("#tradeName").val(),
-                                    tradeType: $("input[type='radio']:checked").val(),
-                                    price: $("#price").val(),
-                                    tradeURL: $("#tradeURL").val(),
-                                    content: $("#contents").val(),
-                                    bigImage: bigImage,
-                                    allURL: imgURL
-                                },
-                                success: function (res) {
-                                    $("#formSubmit").removeAttr('disabled');
-                                    layer.closeAll("loading");
-                                    if (res.status == 200) {
-                                        //上传成功重写加载数据表格
-                                        parent.layui.table.reload('baselist', {page: {curr: 1}});
-                                        var index = parent.layer.getFrameIndex(window.name);
-                                        parent.layer.close(index);
-                                        parent.layer.msg("上传成功");
-                                    } else {
-                                        layer.msg(res.msg);
-                                    }
-                                },
-                                error: function (res) {
-                                    layer.closeAll("loading");
-                                    $("#formSubmit").removeAttr('disabled');
-                                    layer.msg("遇到未知错误");
-                                }
-                            });
+                        $("#formSubmit").removeAttr('disabled');
+                        layer.closeAll("loading");
+                        if (res.status == 200) {
+                            //上传成功重写加载数据表格
+                            parent.layui.table.reload('baselists', {page: {curr: 1}});
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            parent.layer.msg("上传成功");
+                        } else {
+                            layer.msg(res.msg);
                         }
                     },
-                    error: function () {
+                    error: function (res) {
                         layer.closeAll("loading");
                         $("#formSubmit").removeAttr('disabled');
                         layer.msg("遇到未知错误");
                     }
                 });
             }
-
         });
 
-
-        //封面图片上传
-        var uploadbigImage = upload.render({
-            elem: "#bigImage",
-            url: "/baseTrade/uploadImages",
-            accept: 'images',//只允许上传图片
-            acceptMime: 'image/*', //只筛选图片
-            before: function (obj) {
-                //显示加载
-                layer.load();
-            }
-            , done: function (res) {
-                $("#updateBigImage").css("display", "none");
-                $("#showBigImage").css("display", "block");
-                $('#upload').attr('src', res.data); //图片链接（base64）
-                layer.closeAll("loading");
-                bigImage = res.data;
-            },
-            error: function () {
-                layer.closeAll("loading");
-                layer.msg("上传失败！");
-            }
-        });
-
-        var fileCount = 0;
         //小图显示
         var uploadInst = upload.render({
             elem: "#uploadImage",
@@ -267,11 +249,10 @@
             number: 3,
             acceptMime: 'image/*', //只筛选图片
             before: function (obj) {
-                if (obj.getLength() + fileCount > 3) {
+                if (obj.getLength() + $(".layui-upload-list > div > img").length > 3) {
                     layer.msg("图片数量不能超过3张");
                     return false;
                 }
-                fileCount += obj.getLength();
                 //显示加载
                 layer.load();
             },
@@ -284,23 +265,19 @@
                         '                    <button type="button" value="' + res.data + '" class="delete layui-btn layui-btn-danger">删除</button>\n' +
                         '                </div>');
                     //上传完毕
-                    imgURL.push(res.data);
                 } else {
                     layer.msg(res.msg);
                 }
                 layer.closeAll("loading");
             },
             error: function (index, upload) {
-                // layer.msg("上传失败！");
+                layer.msg("上传失败！");
                 layer.closeAll("loading");
             }
         });
 
         $("#showImage").on('click', '.delete', function () {
-            fileCount -= 1;
-            var va = $(this).attr('value');
             $(this).parent().remove();
-            imgURL.splice($.inArray(va, imgURL), 1);
         });
 
         //小图片回显
@@ -312,10 +289,11 @@
                     id: $("#id").val()
                 },
                 success: function (res) {
+                    delImgID = [];
                     if (res.status === 200) {
-                        fileCount = 3;
                         $("#updateImage").css("display", "inline-block");
                         $.each(res.data, function (index, item) {
+                            delImgID.push(item.id);
                             $("#updateImage").append(' <div id="' + item.id + '" style="display: inline-block">\n' +
                                 '                    <img src="' + item.imageURL + '" style="width: 150px;height: 150px;display: block">\n' +
                                 '                    <button type="button" value=' + item.id + ' class="deleteImage layui-btn layui-btn-danger">删除</button>\n' +
@@ -328,11 +306,8 @@
         }
 
         $("#updateImage").on('click', '.deleteImage', function () {
-            fileCount -= 1;
             $(this).parent().remove();
-            imageID.push($(this).attr('value'));
         });
-
     });
 
 </script>

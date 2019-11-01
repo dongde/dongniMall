@@ -29,8 +29,30 @@
         select * from basestore where id = #{id}
     </select>
     <update id="updateTrade" parameterType="com.dongni.dongnimall.pojo.BaseStoreDO">
-        update basestore set tradeName=#{baseStoreDO.tradeName},tradeType=#{baseStoreDO.tradeType},
-        price=#{baseStoreDO.price},tradeURL=#{baseStoreDO.tradeURL},bigimage = #{baseStoreDO.bigImage},updateTime=#{baseStoreDO.updateTime},content=#{baseStoreDO.content}
+        update basestore
+        <set>
+            <if test="baseStoreDO.tradeName!=null and baseStoreDO.tradeName!=''">
+                tradeName=#{baseStoreDO.tradeName},
+            </if>
+            <if test="baseStoreDO.tradeType!=null and baseStoreDO.tradeType!=''">
+                tradeType=#{baseStoreDO.tradeType},
+            </if>
+            <if test="baseStoreDO.price!=null and baseStoreDO.price!=''">
+                price=#{baseStoreDO.price},
+            </if>
+            <if test="baseStoreDO.tradeURL!=null and baseStoreDO.tradeURL!=''">
+                tradeURL=#{baseStoreDO.tradeURL},
+            </if>
+            <if test="baseStoreDO.bigImage!=null and baseStoreDO.bigImage!=''">
+                bigImage=#{baseStoreDO.bigImage},
+            </if>
+            <if test="baseStoreDO.updateTime!=null and baseStoreDO.updateTime!=''">
+                updateTime=#{baseStoreDO.updateTime},
+            </if>
+            <if test="baseStoreDO.content!=null and baseStoreDO.content!=''">
+                content=#{baseStoreDO.content},
+            </if>
+        </set>
         where id = #{baseStoreDO.id}
     </update>
 
