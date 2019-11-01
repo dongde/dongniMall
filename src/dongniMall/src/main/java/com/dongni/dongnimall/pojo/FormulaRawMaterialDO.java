@@ -16,5 +16,5 @@ public class FormulaRawMaterialDO {
     private String raw_material_name;
     private String variety;
     private BigDecimal unit_price;
-    private Integer count = 1;  //设置数量默认值
+    private Float weight;
 }

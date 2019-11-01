@@ -147,6 +147,7 @@ public class FormulaController {
             formulaRawMaterialDO.setRaw_material_name(jsonObject.getString("raw_material_name"));
             formulaRawMaterialDO.setVariety(jsonObject.getString("variety"));
             formulaRawMaterialDO.setUnit_price(jsonObject.getBigDecimal("unit_price"));
+            formulaRawMaterialDO.setWeight(jsonObject.getFloat("weight"));
             list.add(formulaRawMaterialDO);
         }
         StringBuilder noAppointment = new StringBuilder();

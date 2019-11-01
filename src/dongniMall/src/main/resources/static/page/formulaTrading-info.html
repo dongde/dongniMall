@@ -149,6 +149,7 @@
                     <input type="text" class="layui-input name" autocomplete="off" placeholder="原料名">
                     <input type="text" class="layui-input variety" autocomplete="off" placeholder="品种"/>
                     <input type="text" class="layui-input unitPrice" autocomplete="off" placeholder="单价（元/斤）">
+                    <input type="text" class="layui-input weight" autocomplete="off" placeholder="重量（斤）">
                     <button type="button" class="layui-btn layui-btn-danger delRawMaterial" style="margin: 0 10px;"><i
                             class="layui-icon"></i></button>
                 </div>
@@ -318,11 +319,13 @@
                     let raw_material_name = $(item).find(".name").val();
                     let variety = $(item).find(".variety").val();
                     let unit_price = $(item).find(".unitPrice").val();
+                    let weight = $(item).find(".weight").val();
                     if (raw_material_name.trim() != '' && variety.trim() != '' && unit_price.trim() != '') {
                         let rawMaterial = {
                             raw_material_name: raw_material_name,
                             variety: variety,
-                            unit_price: unit_price
+                            unit_price: unit_price,
+                            weight: weight
                         };
                         raw_materials.push(JSON.stringify(rawMaterial));
                     }
@@ -388,7 +391,7 @@
             }
         });
 
-        //小图显示
+        //上传小图
         var uploadInst = upload.render({
             elem: "#uploadImage",
             url: "/baseTrade/uploadImage",
@@ -577,7 +580,9 @@
                 "                    <input type=\"text\" class=\"layui-input name\" autocomplete=\"off\" placeholder=\"原料名\">\n" +
                 "                    <input type=\"text\" class=\"layui-input variety\" autocomplete=\"off\" placeholder=\"品种\"/>\n" +
                 "                    <input type=\"text\" class=\"layui-input unitPrice\" autocomplete=\"off\" placeholder=\"单价（元/斤）\">\n" +
-                "                    <button type=\"button\" class=\"layui-btn layui-btn-danger delRawMaterial\" style=\"margin: 0 10px;\"><i class=\"layui-icon\"></i></button>\n" +
+                "                    <input type=\"text\" class=\"layui-input weight\" autocomplete=\"off\" placeholder=\"重量（斤）\">\n" +
+                "                    <button type=\"button\" class=\"layui-btn layui-btn-danger delRawMaterial\" style=\"margin: 0 10px;\"><i\n" +
+                "                            class=\"layui-icon\"></i></button>\n" +
                 "                </div>");
         });
 
