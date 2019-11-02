@@ -39,6 +39,7 @@ public class FrontController {
     @PostMapping(value = "/register", produces = "application/json;charset=UTF-8")
     public JsonResult register(@RequestBody JSONObject jsonObject) {
         String phone = jsonObject.get("phone").toString();
+        String name = jsonObject.getString("name");
         String password = jsonObject.get("password").toString();
         String code = jsonObject.get("code").toString();
         if (StringUtils.isBlank(phone)) {
@@ -52,6 +53,7 @@ public class FrontController {
         }
         UserDO userDO = new UserDO();
         userDO.setPhone(phone);
+        userDO.setName(name);
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         userDO.setCreate_time(simpleDateFormat.format(date));

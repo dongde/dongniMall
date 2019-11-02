@@ -8,9 +8,9 @@
         phone,name,address,postal_code
     </sql>
     <insert id="insertUser" parameterType="com.dongni.dongnimall.pojo.UserDO">
-        insert into `user`(phone,password,create_time)
+        insert into `user`(phone,name,password,create_time)
         values
-        (#{userDO.phone},#{userDO.password},#{userDO.create_time})
+        (#{userDO.phone},#{userDO.name},#{userDO.password},#{userDO.create_time})
     </insert>
 
     <delete id="deleteUser">
