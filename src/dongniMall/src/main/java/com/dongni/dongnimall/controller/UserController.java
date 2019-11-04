@@ -1,10 +1,13 @@
 package com.dongni.dongnimall.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dongni.dongnimall.common.MD5Util;
 import com.dongni.dongnimall.common.ManagerPermissionEnum;
 import com.dongni.dongnimall.manager.ManagerService;
+import com.dongni.dongnimall.manager.RecInfoService;
 import com.dongni.dongnimall.manager.UserService;
 import com.dongni.dongnimall.pojo.ManagerDO;
+import com.dongni.dongnimall.pojo.RecInfoDO;
 import com.dongni.dongnimall.pojo.UserDO;
 import com.dongni.dongnimall.vo.JsonResult;
 import com.dongni.dongnimall.vo.PageData;
@@ -32,6 +35,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private ManagerService managerService;
+
+    @Autowired
+    private RecInfoService recInfoService;
 
     @RequestMapping("/getManagerList")
     public PageData getManagerList(Integer page, Integer limit) {
@@ -162,5 +168,68 @@ public class UserController extends BaseController {
             userService.modifyUser(userDO);
             return JsonResult.ok();
         }
+    }
+
+    //添加收货人信息
+    @PostMapping("/addRecInfo")
+    public JsonResult addRecInfo(@RequestBody RecInfoDO recInfoDO) {
+        if (StringUtils.isBlank(recInfoDO.getName())) {
+            return JsonResult.errorMsg("收货人昵称不能为空");
+        }
+        if (StringUtils.isBlank(recInfoDO.getRec_phone())) {
+            return JsonResult.errorMsg("收货人手机号不能为空");
+        }
+        if (StringUtils.isBlank(recInfoDO.getAddress())) {
+            return JsonResult.errorMsg("收货人地址不能为空");
+        }
+        if (StringUtils.isBlank(recInfoDO.getUser_phone())) {
+            return JsonResult.errorMsg("添加出错");
+        }
+        recInfoService.addRecInfo(recInfoDO);
+        return JsonResult.ok();
+    }
+
+    //删除收货人信息
+    @PostMapping("/removeRecInfo")
+    public JsonResult removeRecInfo(@RequestBody JSONObject jsonObject) {
+        String id = jsonObject.getString("id");
+        if (StringUtils.isBlank(id)) {
+            return JsonResult.errorMsg("删除出错");
+        }
+        recInfoService.removeRecInfoById(id);
+        return JsonResult.ok();
+    }
+
+    //修改收货人信息
+    @PostMapping("/modifyRecInfo")
+    public JsonResult modifyRecInfo(@RequestBody RecInfoDO recInfoDO) {
+        if (StringUtils.isBlank(recInfoDO.getId()) || StringUtils.isBlank(recInfoDO.getUser_phone())) {
+            return JsonResult.errorMsg("修改出错");
+        }
+        if (StringUtils.isBlank(recInfoDO.getName())) {
+            return JsonResult.errorMsg("收货人昵称不能为空");
+        }
+        if (StringUtils.isBlank(recInfoDO.getRec_phone())) {
+            return JsonResult.errorMsg("收货人手机号不能为空");
+        }
+        if (StringUtils.isBlank(recInfoDO.getAddress())) {
+            return JsonResult.errorMsg("收货人地址不能为空");
+        }
+        recInfoService.modifyRecInfoById(recInfoDO);
+        return JsonResult.ok();
+    }
+
+    //获取收货人信息列表
+    @GetMapping("/queryRecInfo")
+    public JsonResult queryRecInfo(String user_phone) {
+        if(StringUtils.isBlank(user_phone)){
+            return JsonResult.errorMsg("查询出错");
+        }
+        return JsonResult.ok(recInfoService.queryRecInfoListByUserPhone(user_phone));
+    }
+
+    @GetMapping("/queryRecInfoById")
+    public JsonResult queryRecInfoById(String rec_info_id){
+        return JsonResult.ok(recInfoService.queryRecInfoById(rec_info_id));
     }
 }

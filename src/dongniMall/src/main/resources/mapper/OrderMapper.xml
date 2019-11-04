@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dongni.dongnimall.dao.OrderMapper">
     <sql id="order_col">
-        order_number,user_phone,payment_amount,payment_method,order_status,create_time,complete_time
+        order_number,user_phone,payment_amount,payment_method,order_status,create_time,complete_time,rec_info_id
     </sql>
     <insert id="insertOrder" parameterType="com.dongni.dongnimall.pojo.OrderDO">
         insert into `order`(<include refid="order_col"></include>)
-        values(#{orderDO.order_number},#{orderDO.user_phone},#{orderDO.payment_amount},#{orderDO.payment_method},#{orderDO.order_status},#{orderDO.create_time},#{orderDO.complete_time})
+        values(#{orderDO.order_number},#{orderDO.user_phone},#{orderDO.payment_amount},#{orderDO.payment_method},#{orderDO.order_status},#{orderDO.create_time},#{orderDO.complete_time},#{orderDO.rec_info_id})
     </insert>
 
     <delete id="deleteOrder" parameterType="String">

@@ -16,8 +16,6 @@ public class UserDO implements Serializable {
     private String name;
     //用户性别
     private Integer gender;
-    //收货地址
-    private String address;
     //邮箱
     private String email;
     //邮政编码
@@ -49,14 +47,6 @@ public class UserDO implements Serializable {
 
     public void setGender(Integer gender) {
         this.gender = gender;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getEmail() {

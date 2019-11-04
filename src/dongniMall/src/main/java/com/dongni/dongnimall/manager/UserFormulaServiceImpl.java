@@ -28,7 +28,9 @@ public class UserFormulaServiceImpl implements UserFormulaService {
 
     @Override
     public void addUserFormula(UserFormulaDO userFormulaDO) {
-        userFormulaMapper.insertUserFormula(userFormulaDO);
+        if(userFormulaMapper.selectUserFormulaByUserAndFormula(userFormulaDO.getUser_phone(),userFormulaDO.getFormula_id())==null) {
+            userFormulaMapper.insertUserFormula(userFormulaDO);
+        }
     }
 
     @Override

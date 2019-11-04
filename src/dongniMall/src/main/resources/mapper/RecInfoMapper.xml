@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.RecInfoMapper">
+    <sql id="rec_info_col">
+        id,name,user_phone,rec_phone,address,status
+    </sql>
+    <insert id="insertRecInfo" parameterType="com.dongni.dongnimall.pojo.RecInfoDO">
+        insert into rec_info(<include refid="rec_info_col"></include>)
+        values (#{recInfoDO.id},#{recInfoDO.name},#{recInfoDO.user_phone},#{recInfoDO.rec_phone},#{recInfoDO.address})
+    </insert>
+
+    <select id="selectRecInfoListByUserPhone" parameterType="String" resultType="com.dongni.dongnimall.pojo.RecInfoDO">
+        select
+        <include refid="rec_info_col"></include>
+        from rec_info
+        where user_phone=#{user_phone}
+    </select>
+
+    <select id="selectRecInfoById" parameterType="String" resultType="com.dongni.dongnimall.pojo.RecInfoDO">
+        select
+        <include refid="rec_info_col"></include>
+        from rec_info
+        where id=#{id}
+    </select>
+
+    <delete id="deleteRecInfoById" parameterType="String">
+        delete from rec_info
+        where id=#{id}
+    </delete>
+
+    <update id="updateRecInfoById" parameterType="com.dongni.dongnimall.pojo.RecInfoDO">
+        update rec_info
+        <set>
+            <if test="recInfoDO.name!=null and recInfoDO.name!=''">
+                name=#{recInfoDO.name}
+            </if>
+            <if test="recInfoDO.rec_phone!=null and recInfoDO.rec_phone!=''">
+                rec_phone=#{recInfoDO.rec_phone}
+            </if>
+            <if test="recInfoDO.address!=null and recInfoDO.address!=''">
+                address=#{recInfoDO.address}
+            </if>
+            <if test="recInfoDO.status!=null and recInfoDO.status!=''">
+                status=#{recInfoDO.status}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateRecInfoToNoDefault">
+        update rec_info
+        set status=0
+    </update>
+</mapper>

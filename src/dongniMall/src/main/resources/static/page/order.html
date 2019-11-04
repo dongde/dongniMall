@@ -115,15 +115,14 @@
                 switch (obj.event) {
                     case 'view':
                         var logistics = null;
-                        var user = null;
+                        var rec_info = null;
                         var goods = null;
                         $.ajax({
                             method: 'GET',
-                            url: "/user/queryUserByPhone?phone=" + data.user_phone,
-                            success: function (userRes) {
-                                if (userRes.status === 200) {
-                                    user = userRes.data;
-
+                            url: "/user/queryRecInfoById?rec_info_id=" + data.rec_info_id,
+                            success: function (recRes) {
+                                if (recRes.status === 200) {
+                                    rec_info = recRes.data;
                                     $.ajax({
                                         method: 'GET',
                                         url: "/order/queryOrderGoods?order_number=" + data.order_number,
@@ -202,9 +201,9 @@
 
                                                                         logistics_create_time = logistics.create_time;
                                                                     }
-                                                                    var user_name = user.name;
-                                                                    var postal_code = user.postal_code;
-                                                                    var address = user.address;
+                                                                    var rec_info_name = rec_info.name;
+                                                                    var rec_phone = rec_info.rec_phone;
+                                                                    var address = rec_info.address;
 
                                                                     var body = layer.getChildFrame('body', index);
                                                                     body.contents().find(".tb1").html("  <tr>\n" +
@@ -221,9 +220,8 @@
                                                                         "            </tr>");
 
                                                                     body.contents().find(".tb3").html("  <tr>\n" +
-                                                                        "                <td>" + user_name + "</td>\n" +
-                                                                        "                <td>" + user_phone + "</td>\n" +
-                                                                        // "                <td>" + postal_code + "</td>\n" +
+                                                                        "                <td>" + rec_info_name + "</td>\n" +
+                                                                        "                <td>" + rec_phone + "</td>\n" +
                                                                         "                <td>" + address + "</td>\n" +
                                                                         "            </tr>");
 

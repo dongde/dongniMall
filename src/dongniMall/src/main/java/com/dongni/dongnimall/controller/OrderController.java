@@ -82,6 +82,7 @@ public class OrderController {
         String user_phone = jsonObject.getString("user_phone");
         BigDecimal payment_amount = jsonObject.getBigDecimal("payment_amount");
         Integer payment_method = jsonObject.getInteger("payment_method");
+        String rec_info_id = jsonObject.getString("rec_info_id");
         if (StringUtils.isBlank(user_phone) || payment_amount == null || payment_method == null) {
             return JsonResult.errorMsg("数据空异常");
         }
@@ -95,6 +96,7 @@ public class OrderController {
         orderDO.setPayment_amount(payment_amount);
         orderDO.setPayment_method(payment_method);
         orderDO.setOrder_status(1);
+        orderDO.setRec_info_id(rec_info_id);
         orderDO.setCreate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         orderService.addOrder(orderDO);
         goodsService.modifyGoodsOrderNumber(order_number, goodsIds);
