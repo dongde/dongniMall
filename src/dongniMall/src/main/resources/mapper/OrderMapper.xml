@@ -4,6 +4,12 @@
     <sql id="order_col">
         order_number,user_phone,payment_amount,payment_method,order_status,create_time,complete_time,rec_info_id
     </sql>
+    <resultMap id="orderResultMap" type="com.dongni.dongnimall.pojo.OrderDO">
+        <id column="order_number" property="order_number"/>
+        <result column="rec_info_id" property="rec_info_id"/>
+        <association property="recInfoDO" column="rec_info_id" select="com.dongni.dongnimall.dao.RecInfoMapper.selectRecInfoById"/>
+    </resultMap>
+
     <insert id="insertOrder" parameterType="com.dongni.dongnimall.pojo.OrderDO">
         insert into `order`(<include refid="order_col"></include>)
         values(#{orderDO.order_number},#{orderDO.user_phone},#{orderDO.payment_amount},#{orderDO.payment_method},#{orderDO.order_status},#{orderDO.create_time},#{orderDO.complete_time},#{orderDO.rec_info_id})
@@ -13,13 +19,15 @@
         delete from `order`
         where order_number=#{order_number}
     </delete>
-    <select id="selectOrderList" parameterType="String" resultType="com.dongni.dongnimall.pojo.OrderDO">
-        select <include refid="order_col"></include>
+    <select id="selectOrderList" parameterType="String" resultMap="orderResultMap">
+        select *
         from `order`
-        where 1=1
-        <if test="user_phone!=null and user_phone!=''">
-            and user_phone=#{user_phone}
-        </if>
+        where user_phone=#{user_phone}
+    </select>
+
+    <select id="selectOrderAllList" parameterType="String" resultMap="orderResultMap">
+        select *
+        from `order`
     </select>
 
     <update id="updateOrder" parameterType="com.dongni.dongnimall.pojo.OrderDO">

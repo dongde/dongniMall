@@ -20,5 +20,7 @@ public interface OrderMapper {
 
     List<OrderDO> selectOrderList(@Param("user_phone") String user_phone);
 
+    List<OrderDO> selectOrderAllList();
+
     void updateOrder(@Param("orderDO") OrderDO orderDO);
 }

@@ -5,8 +5,8 @@
         id,name,user_phone,rec_phone,address,status
     </sql>
     <insert id="insertRecInfo" parameterType="com.dongni.dongnimall.pojo.RecInfoDO">
-        insert into rec_info(id,name,user_phone,rec_phone,address)
-        values (#{recInfoDO.id},#{recInfoDO.name},#{recInfoDO.user_phone},#{recInfoDO.rec_phone},#{recInfoDO.address})
+        insert into rec_info(<include refid="rec_info_col"></include>)
+        values (#{recInfoDO.id},#{recInfoDO.name},#{recInfoDO.user_phone},#{recInfoDO.rec_phone},#{recInfoDO.address},#{recInfoDO.status})
     </insert>
 
     <select id="selectRecInfoListByUserPhone" parameterType="String" resultType="com.dongni.dongnimall.pojo.RecInfoDO">

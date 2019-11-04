@@ -4,9 +4,6 @@
     <sql id="user_col">
         phone,name,gender,email,postal_code,password,create_time
     </sql>
-    <sql id="logistics_user_col">
-        phone,name,address,postal_code
-    </sql>
     <insert id="insertUser" parameterType="com.dongni.dongnimall.pojo.UserDO">
         insert into `user`(phone,name,password,create_time)
         values

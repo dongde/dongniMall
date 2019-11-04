@@ -29,4 +29,6 @@ public class OrderDO implements Serializable {
     private String complete_time;
     //收货人信息ID
     private String rec_info_id;
+    //收货人信息
+    private RecInfoDO recInfoDO;
 }

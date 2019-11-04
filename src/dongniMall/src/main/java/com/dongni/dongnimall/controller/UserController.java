@@ -185,7 +185,11 @@ public class UserController extends BaseController {
         if (StringUtils.isBlank(recInfoDO.getUser_phone())) {
             return JsonResult.errorMsg("添加出错");
         }
-        System.out.println(recInfoDO);
+        if (recInfoService.queryRecInfoListByUserPhone(recInfoDO.getUser_phone()).size() == 0) {
+            recInfoDO.setStatus(1);
+        } else {
+            recInfoDO.setStatus(0);
+        }
         recInfoDO.setId(sid.nextShort());
         recInfoService.addRecInfo(recInfoDO);
         return JsonResult.ok();
@@ -222,9 +226,9 @@ public class UserController extends BaseController {
     }
 
     @PostMapping("/modifyRecInfoDefaultStatus")
-    public JsonResult modifyRecInfoDefaultStatus(@RequestBody JSONObject jsonObject ){
+    public JsonResult modifyRecInfoDefaultStatus(@RequestBody JSONObject jsonObject) {
         String id = jsonObject.getString("id");
-        if(StringUtils.isBlank(id)){
+        if (StringUtils.isBlank(id)) {
             return JsonResult.errorMsg("设置出错");
         }
         recInfoService.modifyRecInfoDefaultStatus(id);
@@ -234,14 +238,14 @@ public class UserController extends BaseController {
     //获取收货人信息列表
     @GetMapping("/queryRecInfo")
     public JsonResult queryRecInfo(String user_phone) {
-        if(StringUtils.isBlank(user_phone)){
+        if (StringUtils.isBlank(user_phone)) {
             return JsonResult.errorMsg("查询出错");
         }
         return JsonResult.ok(recInfoService.queryRecInfoListByUserPhone(user_phone));
     }
 
     @GetMapping("/queryRecInfoById")
-    public JsonResult queryRecInfoById(String rec_info_id){
+    public JsonResult queryRecInfoById(String rec_info_id) {
         return JsonResult.ok(recInfoService.queryRecInfoById(rec_info_id));
     }
 }

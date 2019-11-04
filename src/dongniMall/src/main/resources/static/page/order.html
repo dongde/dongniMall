@@ -58,7 +58,7 @@
              */
             table.render({
                 elem: '#order-table'
-                , url: '/order/queryOrderList'
+                , url: '/order/queryOrderAllList'
                 , toolbar: '#toolbar'
                 , title: '订单数据表'
                 , cellMinWidth: 80
@@ -115,149 +115,133 @@
                 switch (obj.event) {
                     case 'view':
                         var logistics = null;
-                        var rec_info = null;
                         var goods = null;
+
                         $.ajax({
                             method: 'GET',
-                            url: "/user/queryRecInfoById?rec_info_id=" + data.rec_info_id,
-                            success: function (recRes) {
-                                if (recRes.status === 200) {
-                                    rec_info = recRes.data;
+                            url: "/order/queryOrderGoods?order_number=" + data.order_number,
+                            success: function (goodsRes) {
+                                if (goodsRes.status === 200) {
+                                    goods = goodsRes.data;
+
                                     $.ajax({
                                         method: 'GET',
-                                        url: "/order/queryOrderGoods?order_number=" + data.order_number,
-                                        success: function (goodsRes) {
-                                            if (goodsRes.status === 200) {
-                                                goods = goodsRes.data;
-
-                                                $.ajax({
-                                                    method: 'GET',
-                                                    url: "/order/queryLogistics?order_number=" + data.order_number,
-                                                    success: function (logisticsRes) {
-                                                        if (logisticsRes.status === 200) {
-                                                            logistics = logisticsRes.data;
-                                                            layer.open({
-                                                                type: 2,
-                                                                title: '订单详情',
-                                                                shadeClose: true,
-                                                                shade: 0.8,
-                                                                area: ['70%', '90%'],
-                                                                offset: 'auto',
-                                                                content: '/page/order-info.html', //iframe的url，no代表不显示滚动条
-                                                                success: function (layero, index) {
-                                                                    var order_number = data.order_number;
-                                                                    var user_phone = data.user_phone;
-                                                                    var order_status;
-                                                                    switch (data.order_status) {
-                                                                        case 0:
-                                                                            order_status = "未支付";
-                                                                            break;
-                                                                        case 1:
-                                                                            order_status = "待发货";
-                                                                            break;
-                                                                        case 2:
-                                                                            order_status = "已发货";
-                                                                            break;
-                                                                        case 3:
-                                                                            order_status = "已完成";
-                                                                            break;
-                                                                    }
-                                                                    var order_create_time = data.create_time;
-                                                                    var payment_method;
-                                                                    switch (data.payment_method) {
-                                                                        case 0:
-                                                                            payment_method = "未支付";
-                                                                            break;
-                                                                        case 1:
-                                                                            payment_method = "支付宝";
-                                                                            break;
-                                                                        case 2:
-                                                                            payment_method = "微信";
-                                                                            break;
-                                                                    }
-                                                                    var logistics_number;
-                                                                    var delivery_method;
-                                                                    var logistics_create_time;
-                                                                    if (logistics == null) {
-                                                                        logistics_number = "未发货";
-                                                                        delivery_method = "未发货";
-                                                                        logistics_create_time = "未发货";
-                                                                    } else {
-                                                                        logistics_number = logistics.logistics_number;
-                                                                        switch (logistics.delivery_method) {
-                                                                            case 0:
-                                                                                delivery_method = "申通";
-                                                                                break;
-                                                                            case 1:
-                                                                                delivery_method = "顺丰";
-                                                                                break;
-                                                                            case 2:
-                                                                                delivery_method = "中通";
-                                                                                break;
-                                                                            case 3:
-                                                                                delivery_method = "圆通";
-                                                                                break;
-                                                                        }
-
-                                                                        logistics_create_time = logistics.create_time;
-                                                                    }
-                                                                    var rec_info_name = rec_info.name;
-                                                                    var rec_phone = rec_info.rec_phone;
-                                                                    var address = rec_info.address;
-
-                                                                    var body = layer.getChildFrame('body', index);
-                                                                    body.contents().find(".tb1").html("  <tr>\n" +
-                                                                        "                <td>" + order_number + "</td>\n" +
-                                                                        "                <td>" + user_phone + "</td>\n" +
-                                                                        "                <td>" + order_status + "</td>\n" +
-                                                                        "                <td>" + order_create_time + "</td>\n" +
-                                                                        "            </tr>");
-                                                                    body.contents().find(".tb2").html("  <tr>\n" +
-                                                                        "                <td>" + payment_method + "</td>\n" +
-                                                                        "                <td>" + logistics_number + "</td>\n" +
-                                                                        "                <td>" + delivery_method + "</td>\n" +
-                                                                        "                <td>" + logistics_create_time + "</td>\n" +
-                                                                        "            </tr>");
-
-                                                                    body.contents().find(".tb3").html("  <tr>\n" +
-                                                                        "                <td>" + rec_info_name + "</td>\n" +
-                                                                        "                <td>" + rec_phone + "</td>\n" +
-                                                                        "                <td>" + address + "</td>\n" +
-                                                                        "            </tr>");
-
-                                                                    $.each(goods, function (key, val) {
-                                                                        body.contents().find(".tb4").html(body.contents().find(".tb4").html() + "  <tr>\n" +
-                                                                            "                <td><a lay-event='pic_show' target='_blank' href=\'" + val.goods_img + "\'><img alt='商品图' style='width: 80px;height: 40px'src=\'" + val.goods_img + "\'></a></td>\n" +
-                                                                            "                <td>" + val.goods_name + "</td>\n" +
-                                                                            "                <td>¥" + val.goods_price + "</td>\n" +
-                                                                            "                <td>" + val.goods_count + "</td>\n" +
-                                                                            "                <td>¥" + val.subtotal + "</td>\n" +
-                                                                            "            </tr>");
-                                                                    })
-                                                                }
-
-                                                            })
+                                        url: "/order/queryLogistics?order_number=" + data.order_number,
+                                        success: function (logisticsRes) {
+                                            if (logisticsRes.status === 200) {
+                                                logistics = logisticsRes.data;
+                                                layer.open({
+                                                    type: 2,
+                                                    title: '订单详情',
+                                                    shadeClose: true,
+                                                    shade: 0.8,
+                                                    area: ['70%', '90%'],
+                                                    offset: 'auto',
+                                                    content: '/page/order-info.html', //iframe的url，no代表不显示滚动条
+                                                    success: function (layero, index) {
+                                                        var order_number = data.order_number;
+                                                        var user_phone = data.user_phone;
+                                                        var order_status;
+                                                        switch (data.order_status) {
+                                                            case 0:
+                                                                order_status = "未支付";
+                                                                break;
+                                                            case 1:
+                                                                order_status = "待发货";
+                                                                break;
+                                                            case 2:
+                                                                order_status = "已发货";
+                                                                break;
+                                                            case 3:
+                                                                order_status = "已完成";
+                                                                break;
                                                         }
+                                                        var order_create_time = data.create_time;
+                                                        var payment_method;
+                                                        switch (data.payment_method) {
+                                                            case 0:
+                                                                payment_method = "未支付";
+                                                                break;
+                                                            case 1:
+                                                                payment_method = "支付宝";
+                                                                break;
+                                                            case 2:
+                                                                payment_method = "微信";
+                                                                break;
+                                                        }
+                                                        var logistics_number;
+                                                        var delivery_method;
+                                                        var logistics_create_time;
+                                                        if (logistics == null) {
+                                                            logistics_number = "未发货";
+                                                            delivery_method = "未发货";
+                                                            logistics_create_time = "未发货";
+                                                        } else {
+                                                            logistics_number = logistics.logistics_number;
+                                                            switch (logistics.delivery_method) {
+                                                                case 0:
+                                                                    delivery_method = "申通";
+                                                                    break;
+                                                                case 1:
+                                                                    delivery_method = "顺丰";
+                                                                    break;
+                                                                case 2:
+                                                                    delivery_method = "中通";
+                                                                    break;
+                                                                case 3:
+                                                                    delivery_method = "圆通";
+                                                                    break;
+                                                            }
+
+                                                            logistics_create_time = logistics.create_time;
+                                                        }
+                                                        var rec_info_name = data.recInfoDO.name;
+                                                        var rec_phone = data.recInfoDO.rec_phone;
+                                                        var address = data.recInfoDO.address;
+
+                                                        var body = layer.getChildFrame('body', index);
+                                                        body.contents().find(".tb1").html("  <tr>\n" +
+                                                            "                <td>" + order_number + "</td>\n" +
+                                                            "                <td>" + user_phone + "</td>\n" +
+                                                            "                <td>" + order_status + "</td>\n" +
+                                                            "                <td>" + order_create_time + "</td>\n" +
+                                                            "            </tr>");
+                                                        body.contents().find(".tb2").html("  <tr>\n" +
+                                                            "                <td>" + payment_method + "</td>\n" +
+                                                            "                <td>" + logistics_number + "</td>\n" +
+                                                            "                <td>" + delivery_method + "</td>\n" +
+                                                            "                <td>" + logistics_create_time + "</td>\n" +
+                                                            "            </tr>");
+
+                                                        body.contents().find(".tb3").html("  <tr>\n" +
+                                                            "                <td>" + rec_info_name + "</td>\n" +
+                                                            "                <td>" + rec_phone + "</td>\n" +
+                                                            "                <td>" + address + "</td>\n" +
+                                                            "            </tr>");
+
+                                                        $.each(goods, function (key, val) {
+                                                            body.contents().find(".tb4").html(body.contents().find(".tb4").html() + "  <tr>\n" +
+                                                                "                <td><a lay-event='pic_show' target='_blank' href=\'" + val.goods_img + "\'><img alt='商品图' style='width: 80px;height: 40px'src=\'" + val.goods_img + "\'></a></td>\n" +
+                                                                "                <td>" + val.goods_name + "</td>\n" +
+                                                                "                <td>¥" + val.goods_price + "</td>\n" +
+                                                                "                <td>" + val.goods_count + "</td>\n" +
+                                                                "                <td>¥" + val.subtotal + "</td>\n" +
+                                                                "            </tr>");
+                                                        })
                                                     }
-                                                });
-                                            } else {
-                                                layer.msg(goodsRes.msg);
+
+                                                })
                                             }
-                                        },
-                                        error: function () {
-                                            layer.msg("查询信息出错");
                                         }
                                     });
                                 } else {
-                                    layer.msg(userRes.msg);
+                                    layer.msg(goodsRes.msg);
                                 }
                             },
                             error: function () {
                                 layer.msg("查询信息出错");
                             }
                         });
-
-
                         break;
                     case 'delete':
                         layer.confirm('确定删除？', function (index) {
@@ -266,39 +250,21 @@
                         });
                         break;
                     case 'ship':
-                        $.ajax({
-                            method: 'POST',
-                            url: "/user/queryUserByPhone",
-                            data: {
-                                phone: data.user_phone
-                            },
-                            success: function (res) {
-                                if (res.status === 200) {
-                                    console.log(res);
-                                    var user = res.data;
-                                    layer.open({
-                                        type: 2,
-                                        title: '发货信息',
-                                        shadeClose: true,
-                                        shade: 0.8,
-                                        area: ['800px', '600px'],
-                                        offset: 'auto',
-                                        content: '/page/logistics-info.html', //iframe的url，no代表不显示滚动条
-                                        success: function (layero, index) {
-                                            var body = layer.getChildFrame('body', index);
-                                            body.contents().find("#order_number").val(data.order_number);
-                                            body.contents().find("#userName").val(user.name);
-                                            body.contents().find('#userPhone').val(user.phone);
-                                            // body.contents().find("#userPostalCode").val(user.postal_code);
-                                            body.contents().find("#userAddress").val(user.address);
-                                        }
-                                    })
-                                } else {
-                                    layer.msg(res.msg);
-                                }
-                            },
-                            error: function () {
-                                layer.msg("查询信息出错");
+                        layer.open({
+                            type: 2,
+                            title: '发货信息',
+                            shadeClose: true,
+                            shade: 0.8,
+                            area: ['800px', '600px'],
+                            offset: 'auto',
+                            content: '/page/logistics-info.html', //iframe的url，no代表不显示滚动条
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                body.contents().find("#order_number").val(data.order_number);
+                                body.contents().find("#userName").val(data.recInfoDO.name);
+                                body.contents().find('#userPhone').val(data.recInfoDO.rec_phone);
+                                // body.contents().find("#userPostalCode").val(user.postal_code);
+                                body.contents().find("#userAddress").val(data.recInfoDO.address);
                             }
                         });
                         break;
@@ -310,7 +276,7 @@
 
             //根据ID删除行
             function deleteOrders(order_numbers) {
-                if(order_numbers.length==0){
+                if (order_numbers.length == 0) {
                     layer.msg("请选择删除内容!");
                 }
                 $.ajax({
