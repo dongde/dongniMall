@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dongni.dongnimall.dao.SearchRecordMapper">
+    <sql id="search_record_col">
+        id,word
+    </sql>
+    <insert id="insertSearchRecord" parameterType="com.dongni.dongnimall.pojo.SearchRecordDO">
+        insert into search_record(<include refid="search_record_col"></include>)
+        values (#{hotSearchDO.id},#{hotSearchDO.word})
+    </insert>
+
+    <select id="selectSearchRecordList" resultType="com.dongni.dongnimall.pojo.SearchRecordDO">
+        select
+        <include refid="search_record_col"></include>
+        from search_record
+        order by count(word) desc
+    </select>
+</mapper>
