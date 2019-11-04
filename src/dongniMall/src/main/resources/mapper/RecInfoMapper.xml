@@ -5,7 +5,7 @@
         id,name,user_phone,rec_phone,address,status
     </sql>
     <insert id="insertRecInfo" parameterType="com.dongni.dongnimall.pojo.RecInfoDO">
-        insert into rec_info(<include refid="rec_info_col"></include>)
+        insert into rec_info(id,name,user_phone,rec_phone,address)
         values (#{recInfoDO.id},#{recInfoDO.name},#{recInfoDO.user_phone},#{recInfoDO.rec_phone},#{recInfoDO.address})
     </insert>
 
@@ -32,23 +32,27 @@
         update rec_info
         <set>
             <if test="recInfoDO.name!=null and recInfoDO.name!=''">
-                name=#{recInfoDO.name}
+                name=#{recInfoDO.name},
             </if>
             <if test="recInfoDO.rec_phone!=null and recInfoDO.rec_phone!=''">
-                rec_phone=#{recInfoDO.rec_phone}
+                rec_phone=#{recInfoDO.rec_phone},
             </if>
             <if test="recInfoDO.address!=null and recInfoDO.address!=''">
-                address=#{recInfoDO.address}
-            </if>
-            <if test="recInfoDO.status!=null and recInfoDO.status!=''">
-                status=#{recInfoDO.status}
+                address=#{recInfoDO.address},
             </if>
         </set>
-        where id=#{id}
+        where id=#{recInfoDO.id}
     </update>
 
-    <update id="updateRecInfoToNoDefault">
+    <update id="updateRecInfoToNoDefault" parameterType="String">
         update rec_info
         set status=0
+        where id!=#{id}
+    </update>
+
+    <update id="updateRecInfoToDefault" parameterType="String">
+        update rec_info
+        set status=1
+        where id=#{id}
     </update>
 </mapper>

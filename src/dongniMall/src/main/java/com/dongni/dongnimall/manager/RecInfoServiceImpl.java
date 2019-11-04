@@ -38,9 +38,12 @@ public class RecInfoServiceImpl implements RecInfoService {
 
     @Override
     public void modifyRecInfoById(RecInfoDO recInfoDO) {
-        if (recInfoDO.getStatus().equals(1)) {
-            recInfoMapper.updateRecInfoToNoDefault();
-        }
         recInfoMapper.updateRecInfoById(recInfoDO);
+    }
+
+    @Override
+    public void modifyRecInfoDefaultStatus(String id) {
+        recInfoMapper.updateRecInfoToNoDefault(id);
+        recInfoMapper.updateRecInfoToDefault(id);
     }
 }

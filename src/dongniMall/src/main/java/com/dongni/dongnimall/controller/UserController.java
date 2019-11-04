@@ -185,6 +185,8 @@ public class UserController extends BaseController {
         if (StringUtils.isBlank(recInfoDO.getUser_phone())) {
             return JsonResult.errorMsg("添加出错");
         }
+        System.out.println(recInfoDO);
+        recInfoDO.setId(sid.nextShort());
         recInfoService.addRecInfo(recInfoDO);
         return JsonResult.ok();
     }
@@ -216,6 +218,16 @@ public class UserController extends BaseController {
             return JsonResult.errorMsg("收货人地址不能为空");
         }
         recInfoService.modifyRecInfoById(recInfoDO);
+        return JsonResult.ok();
+    }
+
+    @PostMapping("/modifyRecInfoDefaultStatus")
+    public JsonResult modifyRecInfoDefaultStatus(@RequestBody JSONObject jsonObject ){
+        String id = jsonObject.getString("id");
+        if(StringUtils.isBlank(id)){
+            return JsonResult.errorMsg("设置出错");
+        }
+        recInfoService.modifyRecInfoDefaultStatus(id);
         return JsonResult.ok();
     }
 

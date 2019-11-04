@@ -41,4 +41,10 @@ public interface RecInfoService {
      * @param recInfoDO
      */
     void modifyRecInfoById(RecInfoDO recInfoDO);
+
+    /**
+     * 设置默认收货地址
+     * @param id
+     */
+    void modifyRecInfoDefaultStatus(String id);
 }

@@ -22,5 +22,7 @@ public interface RecInfoMapper {
 
     void updateRecInfoById(@Param("recInfoDO") RecInfoDO recInfoDO);
 
-    void updateRecInfoToNoDefault();
+    void updateRecInfoToNoDefault(String id);
+
+    void updateRecInfoToDefault(String id);
 }
