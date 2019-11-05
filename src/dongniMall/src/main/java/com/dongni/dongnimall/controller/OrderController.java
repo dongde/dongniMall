@@ -128,7 +128,7 @@ public class OrderController {
     }
 
     @PostMapping("/orderConfirmReceipt")
-    public JsonResult orderConfirmReceipt(JSONObject jsonObject) {
+    public JsonResult orderConfirmReceipt(@RequestBody JSONObject jsonObject) {
         String order_number = jsonObject.getString("order_number");
         orderService.orderConfirmReceipt(order_number);
         return JsonResult.ok();

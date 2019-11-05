@@ -53,7 +53,7 @@ public class orderServiceImpl implements OrderService {
                     orderVO.setStatus("待收货");
                     break;
                 case 3:
-                    orderVO.setStatus("已收货");
+                    orderVO.setStatus("待评价");
                     break;
             }
             orderVO.setRec_info_name(orderDO.getRecInfoDO().getName());

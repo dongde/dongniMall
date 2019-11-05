@@ -1,5 +1,6 @@
 package com.dongni.dongnimall.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dongni.dongnimall.base.storage.FileUploadManager;
 import com.dongni.dongnimall.base.storage.Response;
 import com.dongni.dongnimall.manager.TeachVideoService;
@@ -9,9 +10,7 @@ import com.dongni.dongnimall.vo.PageData;
 import org.n3r.idworker.Sid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -46,9 +45,10 @@ public class MenuController extends BaseController {
         return JsonResult.ok();
     }
 
-    @RequestMapping("/addTeachVideoCount")
-    public JsonResult addTeachVideoCount(String id){
-        if(StringUtils.isBlank(id)){
+    @PostMapping("/addTeachVideoCount")
+    public JsonResult addTeachVideoCount(@RequestBody JSONObject jsonObject) {
+        String id = jsonObject.getString("id");
+        if (StringUtils.isBlank(id)) {
             return JsonResult.errorMsg("访问错误");
         }
         TeachVideoDO teachVideoDO = new TeachVideoDO();

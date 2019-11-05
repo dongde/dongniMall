@@ -13,7 +13,7 @@
         select
         <include refid="rec_info_col"></include>
         from rec_info
-        where user_phone=#{user_phone}
+        where user_phone=#{user_phone} and del_status=0
     </select>
 
     <select id="selectRecInfoById" parameterType="String" resultType="com.dongni.dongnimall.pojo.RecInfoDO">
@@ -23,10 +23,11 @@
         where id=#{id}
     </select>
 
-    <delete id="deleteRecInfoById" parameterType="String">
-        delete from rec_info
+    <update id="deleteRecInfoById" parameterType="String">
+        update rec_info
+        set del_status=1
         where id=#{id}
-    </delete>
+    </update>
 
     <update id="updateRecInfoById" parameterType="com.dongni.dongnimall.pojo.RecInfoDO">
         update rec_info
