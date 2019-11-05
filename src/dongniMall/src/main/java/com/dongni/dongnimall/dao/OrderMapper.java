@@ -23,4 +23,6 @@ public interface OrderMapper {
     List<OrderDO> selectOrderAllList();
 
     void updateOrder(@Param("orderDO") OrderDO orderDO);
+
+    void updateByOrderNumber(String order_number);
 }

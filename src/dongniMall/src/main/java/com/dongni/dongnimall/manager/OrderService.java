@@ -45,4 +45,10 @@ public interface OrderService {
      * @Description: 修改订单信息
      */
     void modifyOrder(OrderDO orderDO);
+
+    /**
+     * 订单确认收货
+     * @param order_number
+     */
+    void orderConfirmReceipt(String order_number);
 }

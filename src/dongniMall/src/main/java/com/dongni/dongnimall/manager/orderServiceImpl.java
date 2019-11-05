@@ -85,4 +85,9 @@ public class orderServiceImpl implements OrderService {
     public void modifyOrder(OrderDO orderDO) {
         orderMapper.updateOrder(orderDO);
     }
+
+    @Override
+    public void orderConfirmReceipt(String order_number) {
+        orderMapper.updateByOrderNumber(order_number);
+    }
 }

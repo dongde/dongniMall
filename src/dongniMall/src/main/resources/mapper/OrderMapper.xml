@@ -7,7 +7,8 @@
     <resultMap id="orderResultMap" type="com.dongni.dongnimall.pojo.OrderDO">
         <id column="order_number" property="order_number"/>
         <result column="rec_info_id" property="rec_info_id"/>
-        <association property="recInfoDO" column="rec_info_id" select="com.dongni.dongnimall.dao.RecInfoMapper.selectRecInfoById"/>
+        <association property="recInfoDO" column="rec_info_id"
+                     select="com.dongni.dongnimall.dao.RecInfoMapper.selectRecInfoById"/>
     </resultMap>
 
     <insert id="insertOrder" parameterType="com.dongni.dongnimall.pojo.OrderDO">
@@ -44,5 +45,11 @@
             </if>
         </set>
         where order_number=#{orderDO.order_number}
+    </update>
+
+    <update id="updateByOrderNumber" parameterType="String">
+        update `order`
+        set order_status=3
+        where order_number=#{order_number}
     </update>
 </mapper>
