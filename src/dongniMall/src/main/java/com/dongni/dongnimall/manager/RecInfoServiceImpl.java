@@ -49,6 +49,14 @@ public class RecInfoServiceImpl implements RecInfoService {
     @Override
     public void removeRecInfoById(String id) {
         recInfoMapper.deleteRecInfoById(id);
+        RecInfoDO recInfoDO = recInfoMapper.selectRecInfoById(id);
+        if(recInfoDO.getStatus()==1){
+            List<RecInfoDO> list = recInfoMapper.selectRecInfoListByUserPhone(recInfoDO.getUser_phone());
+            if(list.size()>0){
+                RecInfoDO recInfoDO1 = list.get(0);
+                recInfoMapper.updateRecInfoToDefault(recInfoDO1.getId());
+            }
+        }
     }
 
     @Override

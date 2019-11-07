@@ -263,6 +263,7 @@ public class UserController extends BaseController {
             return JsonResult.errorMsg("请选择街道");
         }
         RecInfoDO recInfoDO = new RecInfoDO();
+        recInfoDO.setId(id);
         recInfoDO.setName(name);
         recInfoDO.setRec_phone(rec_phone);
         recInfoDO.setUser_phone(user_phone);
