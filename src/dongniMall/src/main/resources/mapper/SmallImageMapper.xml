@@ -41,14 +41,12 @@
     <update id="updateSmallImage" parameterType="com.dongni.dongnimall.pojo.SmallImageDO">
         update smallimage
         <set>
+            url=#{smallImageDO.url},
             <if test="smallImageDO.smallImage_img!=null and smallImageDO.smallImage_img!=''">
                 smallImage_img=#{smallImageDO.smallImage_img},
             </if>
             <if test="smallImageDO.is_used!=null">
                 is_used=#{smallImageDO.is_used},
-            </if>
-            <if test="smallImageDO.url!=null and smallImageDO.url!=''">
-                url=#{smallImageDO.url},
             </if>
             <if test="smallImageDO.create_time!=null and smallImageDO.create_time!=''">
                 create_time = #{smallImageDO.create_time},

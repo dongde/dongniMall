@@ -1,6 +1,7 @@
 package com.dongni.dongnimall.manager;
 
 import com.dongni.dongnimall.pojo.RecInfoDO;
+import com.dongni.dongnimall.vo.RecInfoVO;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface RecInfoService {
      * @param user_phone
      * @return
      */
-    List<RecInfoDO> queryRecInfoListByUserPhone(String user_phone);
+    List<RecInfoVO> queryRecInfoListByUserPhone(String user_phone);
 
     /**
      * 查询收货人信息

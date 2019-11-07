@@ -205,16 +205,16 @@ public class HomeController extends BaseController {
         }
     }
 
-    @RequestMapping("/modifySmallImagePosition")
-    public JsonResult modifySmallImagePosition(String id, Integer position) {
-        if (StringUtils.isBlank(id) || position == null) {
-            return JsonResult.errorMsg("修改出错");
-        } else {
-            SmallImageDO smallImageDO = new SmallImageDO();
-            smallImageDO.setId(id);
-            smallImageDO.setPosition(position);
-            smallImageService.modifySmallImage(smallImageDO);
-            return JsonResult.ok();
-        }
-    }
+//    @RequestMapping("/modifySmallImagePosition")
+//    public JsonResult modifySmallImagePosition(String id, Integer position) {
+//        if (StringUtils.isBlank(id) || position == null) {
+//            return JsonResult.errorMsg("修改出错");
+//        } else {
+//            SmallImageDO smallImageDO = new SmallImageDO();
+//            smallImageDO.setId(id);
+//            smallImageDO.setPosition(position);
+//            smallImageService.modifySmallImage(smallImageDO);
+//            return JsonResult.ok();
+//        }
+//    }
 }

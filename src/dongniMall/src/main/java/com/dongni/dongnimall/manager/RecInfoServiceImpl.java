@@ -2,9 +2,12 @@ package com.dongni.dongnimall.manager;
 
 import com.dongni.dongnimall.dao.RecInfoMapper;
 import com.dongni.dongnimall.pojo.RecInfoDO;
+import com.dongni.dongnimall.vo.RecInfoVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +25,20 @@ public class RecInfoServiceImpl implements RecInfoService {
     }
 
     @Override
-    public List<RecInfoDO> queryRecInfoListByUserPhone(String user_phone) {
-        return recInfoMapper.selectRecInfoListByUserPhone(user_phone);
+    public List<RecInfoVO> queryRecInfoListByUserPhone(String user_phone) {
+        List<RecInfoDO> recInfoDOList = recInfoMapper.selectRecInfoListByUserPhone(user_phone);
+        List<RecInfoVO> recInfoVOList = new ArrayList<>();
+        for(RecInfoDO recInfoDO:recInfoDOList){
+            RecInfoVO recInfoVO = new RecInfoVO();
+            BeanUtils.copyProperties(recInfoDO,recInfoVO);
+            String[] address = recInfoDO.getAddress().split("/");
+            recInfoVO.setProvince(address[0]);
+            recInfoVO.setCity(address[1]);
+            recInfoVO.setArea(address[2]);
+            recInfoVO.setStreet(address[3]);
+            recInfoVOList.add(recInfoVO);
+        }
+        return recInfoVOList;
     }
 
     @Override

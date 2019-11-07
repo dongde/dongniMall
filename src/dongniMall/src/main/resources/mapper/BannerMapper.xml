@@ -41,14 +41,12 @@
     <update id="updateBanner" parameterType="com.dongni.dongnimall.pojo.BannerDO">
         update banner
         <set>
+            url=#{bannerDO.url},
             <if test="bannerDO.banner_img!=null and bannerDO.banner_img!=''">
                 banner_img=#{bannerDO.banner_img},
             </if>
             <if test="bannerDO.is_used!=null">
                 is_used=#{bannerDO.is_used},
-            </if>
-            <if test="bannerDO.url!=null and bannerDO.url!=''">
-                url=#{bannerDO.url},
             </if>
             <if test="bannerDO.create_time!=null and bannerDO.create_time!=''">
                 create_time = #{bannerDO.create_time}

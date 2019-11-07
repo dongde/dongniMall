@@ -172,19 +172,40 @@ public class UserController extends BaseController {
 
     //添加收货人信息
     @PostMapping("/addRecInfo")
-    public JsonResult addRecInfo(@RequestBody RecInfoDO recInfoDO) {
-        if (StringUtils.isBlank(recInfoDO.getName())) {
+    public JsonResult addRecInfo(@RequestBody JSONObject jsonObject) {
+        String name = jsonObject.getString("name");
+        String rec_phone = jsonObject.getString("rec_phone");
+        String user_phone = jsonObject.getString("user_phone");
+        String province = jsonObject.getString("province");
+        String city = jsonObject.getString("city");
+        String area = jsonObject.getString("area");
+        String street = jsonObject.getString("street");
+        if (StringUtils.isBlank(name)) {
             return JsonResult.errorMsg("收货人昵称不能为空");
         }
-        if (StringUtils.isBlank(recInfoDO.getRec_phone())) {
+        if (StringUtils.isBlank(rec_phone)) {
             return JsonResult.errorMsg("收货人手机号不能为空");
         }
-        if (StringUtils.isBlank(recInfoDO.getAddress())) {
-            return JsonResult.errorMsg("收货人地址不能为空");
-        }
-        if (StringUtils.isBlank(recInfoDO.getUser_phone())) {
+        if (StringUtils.isBlank(user_phone)) {
             return JsonResult.errorMsg("添加出错");
         }
+        if (StringUtils.isBlank(province)) {
+            return JsonResult.errorMsg("请选择省份");
+        }
+        if (StringUtils.isBlank(city)) {
+            return JsonResult.errorMsg("请选择市");
+        }
+        if (StringUtils.isBlank(area)) {
+            return JsonResult.errorMsg("请选择区");
+        }
+        if (StringUtils.isBlank(street)) {
+            return JsonResult.errorMsg("请选择街道");
+        }
+        RecInfoDO recInfoDO = new RecInfoDO();
+        recInfoDO.setName(name);
+        recInfoDO.setRec_phone(rec_phone);
+        recInfoDO.setUser_phone(user_phone);
+        recInfoDO.setAddress(province+"/"+city+"/"+area+"/"+street);
         if (recInfoService.queryRecInfoListByUserPhone(recInfoDO.getUser_phone()).size() == 0) {
             recInfoDO.setStatus(1);
         } else {
@@ -208,19 +229,44 @@ public class UserController extends BaseController {
 
     //修改收货人信息
     @PostMapping("/modifyRecInfo")
-    public JsonResult modifyRecInfo(@RequestBody RecInfoDO recInfoDO) {
-        if (StringUtils.isBlank(recInfoDO.getId()) || StringUtils.isBlank(recInfoDO.getUser_phone())) {
+    public JsonResult modifyRecInfo(@RequestBody JSONObject jsonObject) {
+        String id = jsonObject.getString("id");
+        String name = jsonObject.getString("name");
+        String rec_phone = jsonObject.getString("rec_phone");
+        String user_phone = jsonObject.getString("user_phone");
+        String province = jsonObject.getString("province");
+        String city = jsonObject.getString("city");
+        String area = jsonObject.getString("area");
+        String street = jsonObject.getString("street");
+        if (StringUtils.isBlank(id)) {
             return JsonResult.errorMsg("修改出错");
         }
-        if (StringUtils.isBlank(recInfoDO.getName())) {
+        if (StringUtils.isBlank(name)) {
             return JsonResult.errorMsg("收货人昵称不能为空");
         }
-        if (StringUtils.isBlank(recInfoDO.getRec_phone())) {
+        if (StringUtils.isBlank(rec_phone)) {
             return JsonResult.errorMsg("收货人手机号不能为空");
         }
-        if (StringUtils.isBlank(recInfoDO.getAddress())) {
-            return JsonResult.errorMsg("收货人地址不能为空");
+        if (StringUtils.isBlank(user_phone)) {
+            return JsonResult.errorMsg("添加出错");
         }
+        if (StringUtils.isBlank(province)) {
+            return JsonResult.errorMsg("请选择省份");
+        }
+        if (StringUtils.isBlank(city)) {
+            return JsonResult.errorMsg("请选择市");
+        }
+        if (StringUtils.isBlank(area)) {
+            return JsonResult.errorMsg("请选择区");
+        }
+        if (StringUtils.isBlank(street)) {
+            return JsonResult.errorMsg("请选择街道");
+        }
+        RecInfoDO recInfoDO = new RecInfoDO();
+        recInfoDO.setName(name);
+        recInfoDO.setRec_phone(rec_phone);
+        recInfoDO.setUser_phone(user_phone);
+        recInfoDO.setAddress(province+"%&%"+city+"%&%"+area+"%&%"+street);
         recInfoService.modifyRecInfoById(recInfoDO);
         return JsonResult.ok();
     }
