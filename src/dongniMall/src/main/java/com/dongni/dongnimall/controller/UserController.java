@@ -266,7 +266,7 @@ public class UserController extends BaseController {
         recInfoDO.setName(name);
         recInfoDO.setRec_phone(rec_phone);
         recInfoDO.setUser_phone(user_phone);
-        recInfoDO.setAddress(province+"%&%"+city+"%&%"+area+"%&%"+street);
+        recInfoDO.setAddress(province+"/"+city+"/"+area+"/"+street);
         recInfoService.modifyRecInfoById(recInfoDO);
         return JsonResult.ok();
     }

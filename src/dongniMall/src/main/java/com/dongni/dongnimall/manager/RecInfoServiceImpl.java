@@ -31,7 +31,7 @@ public class RecInfoServiceImpl implements RecInfoService {
         for(RecInfoDO recInfoDO:recInfoDOList){
             RecInfoVO recInfoVO = new RecInfoVO();
             BeanUtils.copyProperties(recInfoDO,recInfoVO);
-            String[] address = recInfoDO.getAddress().split("/");
+            String[] address = recInfoDO.getAddress().split("/",4);
             recInfoVO.setProvince(address[0]);
             recInfoVO.setCity(address[1]);
             recInfoVO.setArea(address[2]);
