@@ -53,8 +53,8 @@ layui.define(['jquery', 'layer', 'cropper'], function (exports) {
             $('body').append(html);
             var self = this,
                 elem = e.elem,
-                saveW = e.saveW*10,
-                saveH = e.saveH*10,
+                saveW = e.saveW*5,
+                saveH = e.saveH*5,
                 mark = e.mark,
                 area = e.area,
                 url = e.url,

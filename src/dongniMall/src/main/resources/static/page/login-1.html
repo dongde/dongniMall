@@ -152,7 +152,7 @@
                     <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住密码">
                 </div>
                 <div class="layui-form-item">
-                    <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="login">登 入</button>
+                    <button class="layui-btn layui-btn-fluid" id="submit" lay-submit="" lay-filter="login">登 入</button>
                 </div>
             </form>
         </div>
@@ -198,6 +198,7 @@
                 layer.msg('验证码不能为空');
                 return false;
             }
+            $("#submit").attr("disabled", "disabled");
             $.ajax({
                 method: 'POST',
                 data: data,
@@ -205,19 +206,23 @@
                 success: function (res) {
                     getCode();
                     if (res.status === 200) {
-                        console.log(res)
                         //设置当前登录用户
                         window.localStorage.setItem("currentManagerInfo", JSON.stringify(res.data));
                         //设置请求token
-                        document.cookie = 'token = '+res.data.token;
+                        document.cookie = 'token = ' + res.data.token;
                         layer.msg('登录成功', {
                             time: 1000
                         }, function () {
                             window.location = '/index.html';
                         });
                     } else {
+                        $("#submit").removeAttr("disabled");
                         layer.msg(res.msg);
                     }
+                },
+                error: function () {
+                    $("#submit").removeAttr("disabled");
+                    layer.msg("登入出错");
                 }
             });
             return false;
@@ -225,7 +230,7 @@
     });
 
     function getCode() {
-        $("#captchaPic").attr("src","/getCode?time=" + new Date().getTime());
+        $("#captchaPic").attr("src", "/getCode?time=" + new Date().getTime());
     }
 </script>
 </body>
