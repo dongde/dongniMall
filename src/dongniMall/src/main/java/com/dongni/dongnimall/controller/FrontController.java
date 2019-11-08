@@ -9,11 +9,9 @@ import com.dongni.dongnimall.vo.JsonResult;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -63,7 +61,7 @@ public class FrontController {
     }
 
     @PostMapping("/login")
-    public JsonResult login(@RequestBody JSONObject jsonObject) {
+    public JsonResult login(@RequestBody JSONObject jsonObject, HttpServletRequest request) {
         String phone = jsonObject.getString("phone");
         String password = jsonObject.getString("password");
         if (StringUtils.isBlank(phone)) {
@@ -74,9 +72,23 @@ public class FrontController {
         }
         UserDO userDO = userService.queryUserByPhoneAndPassword(phone, MD5Util.getMD5(password));
         if (userDO != null) {
-            return JsonResult.ok(userDO);
+            //保存登录用户信息
+            request.getSession().setMaxInactiveInterval(1800);
+            request.getSession().setAttribute("user", userDO);
+            return JsonResult.ok();
         } else {
             return JsonResult.errorMsg("用户不存在");
         }
+    }
+
+    @GetMapping("/logout")
+    public JsonResult logout(HttpServletRequest request) {
+        request.getSession().removeAttribute("user");
+        return JsonResult.ok();
+    }
+
+    @GetMapping("/getUser")
+    public JsonResult getUser(HttpServletRequest request) {
+        return JsonResult.ok(request.getSession().getAttribute("user"));
     }
 }
