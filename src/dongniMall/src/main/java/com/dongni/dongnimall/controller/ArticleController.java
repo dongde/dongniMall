@@ -109,7 +109,7 @@ public class ArticleController {
     }
 
     //上传图片接口
-    @RequestMapping("/uploadBanner")
+    @RequestMapping("/uploadFile")
     public EditUploadDTO uploadBanner(MultipartFile file) throws IOException {
         Response response = fileUploadManager.upload(file.getInputStream());
         Map<String,String> map = new HashMap<>();

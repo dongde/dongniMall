@@ -71,7 +71,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">内容</label>
         <div class="layui-input-block">
-            <textarea id="contents" style="display: none;" placeholder="请输入内容" name="content"></textarea>
+            <textarea id="contents" style="display: none;" placeholder="请输入内容" name="content" content=""></textarea>
         </div>
     </div>
     <div class="layui-form-item">
@@ -87,10 +87,28 @@
         //富文本编辑器的图片上传
         layedit.set({
             uploadImage: {
-                url: '/article/uploadBanner' //接口url
+                url: '/article/uploadFile' //接口url
                 , type: 'post' //默认post
                 , size: 50
             }
+            , uploadVideo: {
+                url: '/article/uploadFile',
+                accept: 'video',
+                acceptMime: 'video/*',
+                exts: 'mp4|flv|avi|rm|rmvb',
+                size: '20480'
+            }
+            //开发者模式 --默认为false
+            , devmode: true
+            //插入代码设置
+            , codeConfig: {
+                hide: true,  //是否显示编码语言选择框
+                default: 'javascript' //hide为true时的默认语言格式
+            }
+            , tool: [
+                'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'colorpicker', 'face'
+                , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'image_alt', 'video', 'anchors'
+            ]
         });
 
         var index = layedit.build('contents'); //建立富文本编辑器
