@@ -26,7 +26,7 @@
     </style>
 </head>
 <body>
-<form class="layui-form" style="padding-top: 20px">
+<form class="layui-form" style="padding: 50px">
     <div class="layui-form-item" hidden>
         <label class="layui-form-label">ID：</label>
         <div class="layui-input-block">
@@ -111,7 +111,9 @@
             ]
         });
 
-        var index = layedit.build('contents'); //建立富文本编辑器
+        var index = layedit.build('contents',{
+            height: 600 //设置编辑器高度
+        }); //建立富文本编辑器
         var layer = layui.layer,
             $ = layui.jquery,
             croppers = layui.croppers;
