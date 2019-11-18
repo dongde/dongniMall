@@ -78,4 +78,7 @@ public interface ArticleMapper {
      */
     @Select("select * from newsinformation where title like concat(concat('%',#{title}),'%')")
     List<ActicleDO> queryByTitle(@Param("title") String title);
+
+    @Select("select * from newsinformation where title like concat(concat('%',#{key}),'%') or content like concat(concat('%',#{key}),'%')")
+    List<ActicleDO> queryByKey(@Param("key")String key);
 }

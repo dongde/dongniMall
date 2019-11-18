@@ -41,6 +41,13 @@ public class ArticleController {
 
     }
 
+    //文章数据总览
+    @RequestMapping("/search")
+    public PageData search(Integer page, Integer limit, @RequestParam(value = "key",required = false) String key){
+        return articleService.selectByKey(page,limit,key);
+
+    }
+
     //详情
     @RequestMapping("/details")
     public List findByID(String id){

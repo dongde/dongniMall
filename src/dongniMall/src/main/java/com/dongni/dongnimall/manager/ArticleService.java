@@ -14,6 +14,8 @@ public interface ArticleService {
     PageData selectAll(Integer page, Integer limit, String title, String source);
     List<ActicleDO> selectAll();
 
+
+    PageData selectByKey(Integer page, Integer limit, String key);
     /**
      * 插入文章
      * @param acticleDO
